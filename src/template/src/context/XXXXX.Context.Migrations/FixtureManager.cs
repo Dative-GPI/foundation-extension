@@ -116,6 +116,23 @@ namespace XXXXX.Context.Migrations
             dto.Value = prop.Value;
             return dto;
           });
+
+      Add<PageDTO, Page>(
+          PageProvider.GetAllPages,
+          fixture => new PageDTO()
+          {
+            Id = Guid.NewGuid(),
+            Code = fixture.Code,
+            LabelDefault = fixture.LabelDefault,
+            ShowOnDrawer = fixture.ShowOnDrawer
+          },
+          (prop, dto) =>
+          {
+            dto.LabelDefault = prop.LabelDefault;
+            dto.ShowOnDrawer = prop.ShowOnDrawer;
+            return dto;
+          });
     }
   }
+}
 }

@@ -39,6 +39,7 @@ namespace Foundation.Extension.Admin.DI
             services.AddApplicationTranslations();
             services.AddDispositions();
             services.AddEntities();
+            services.AddPages();
 
             services.AddScoped<IPermissionProvider, PermissionProvider>();
             services.AddScoped<IApplicationTableProvider, ApplicationTableProvider>();

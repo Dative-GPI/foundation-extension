@@ -3,10 +3,9 @@ using Foundation.Clients.Core.FoundationModels;
 
 namespace XXXXX.Core.Kernel.ViewModels
 {
-    public class BookDeviceInfosViewModel : LanguageInfosFoundationModel
-    {
-        public Guid Id { get; set; }
-        public string Category { get; set; }
-        public string Value { get; set; }
-    }
+  public class BookDeviceInfosViewModel : LanguageInfosFoundationModel
+  {
+    public string Category { get; set; }
+    public string Value { get; set; }
+  }
 }

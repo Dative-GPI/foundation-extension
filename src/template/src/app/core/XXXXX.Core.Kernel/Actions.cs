@@ -1,14 +1,13 @@
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 
 using Foundation.Shared;
-
-using XXXXX.Core.Kernel.Models;
-
-using Microsoft.Extensions.DependencyInjection;
 using Foundation.Extension.Core.Abstractions;
 using Foundation.Extension.Domain.Abstractions;
+
+using XXXXX.Core.Kernel.Models;
 
 namespace XXXXX.Core.Kernel
 {

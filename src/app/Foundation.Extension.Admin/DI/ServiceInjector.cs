@@ -12,6 +12,8 @@ namespace Foundation.Extension.Admin.DI
             services.AddScoped<IRouteService, RouteService>();
             services.AddScoped<IActionService, ActionService>();
 
+            services.AddScoped<IPageService, PageService>();
+
             services.AddScoped<IPermissionOrganisationTypeService, PermissionOrganisationTypeService>();
             services.AddScoped<IPermissionOrganisationService, PermissionOrganisationService>();
             services.AddScoped<IPermissionOrganisationCategoryService, PermissionOrganisationCategoryService>();

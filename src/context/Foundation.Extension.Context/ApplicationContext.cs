@@ -13,6 +13,10 @@ namespace Foundation.Extension.Context
         public DbSet<ApplicationDTO> Applications { get; set; }
         #endregion
 
+        #region Pages
+        public DbSet<PageDTO> Pages { get; set; }
+        #endregion
+
         #region PermissionOrganisations
         public DbSet<PermissionOrganisationDTO> PermissionOrganisations { get; set; }
         public DbSet<PermissionOrganisationTypeDTO> PermissionOrganisationTypes { get; set; }
@@ -43,6 +47,7 @@ namespace Foundation.Extension.Context
         #endregion
 
 
+
         public BaseApplicationContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -66,6 +71,13 @@ namespace Foundation.Extension.Context
             modelBuilder.Entity<ApplicationDTO>(m =>
             {
                 m.HasKey(a => a.Id);
+            });
+            #endregion
+
+            #region Pages
+            modelBuilder.Entity<PageDTO>(m =>
+            {
+                m.HasKey(p => p.Id);
             });
             #endregion
 

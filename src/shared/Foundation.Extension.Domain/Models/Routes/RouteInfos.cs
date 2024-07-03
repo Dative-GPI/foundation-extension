@@ -5,6 +5,7 @@ namespace Foundation.Extension.Domain.Models
 {
     public class RouteInfos
     {
+        public Guid PageId { get; set; }
         public bool ShowOnDrawer { get; set; }
         public string DrawerIcon { get; set; }
         public string DrawerCategory { get; set; }

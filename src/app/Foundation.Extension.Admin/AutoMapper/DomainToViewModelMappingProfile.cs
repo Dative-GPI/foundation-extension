@@ -32,6 +32,8 @@ namespace Foundation.Extension.Admin.AutoMapper
       CreateMap<RolePermissionOrganisationDetails, RolePermissionOrganisationDetailsViewModel>()
           .ForMember(vm => vm.PermissionIds, opt => opt.MapFrom(r => r.Permissions.Select(p => p.Id).ToList()));
 
+      CreateMap<Page, PageViewModel>();
+
       CreateMap<EntityProperty, EntityPropertyViewModel>();
       CreateMap<EntityPropertyTranslation, EntityPropertyTranslationViewModel>();
 

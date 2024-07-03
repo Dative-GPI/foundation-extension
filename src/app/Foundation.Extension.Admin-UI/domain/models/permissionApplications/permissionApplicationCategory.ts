@@ -12,3 +12,8 @@ export interface PermissionApplicationCategoryDTO {
     label: string;
     prefix: string;
 }
+
+
+export interface PermissionApplicationCategoriesFilter {
+    search?: string
+}

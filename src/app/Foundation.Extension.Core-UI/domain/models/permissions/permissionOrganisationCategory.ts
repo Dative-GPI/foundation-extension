@@ -12,3 +12,7 @@ export interface PermissionOrganisationCategoryDTO {
     label: string;
     prefix: string;
 }
+
+export interface PermissionCategoriesFilter {
+    search?: string
+}

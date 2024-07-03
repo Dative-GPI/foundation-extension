@@ -147,7 +147,7 @@ export default defineComponent({
         },
       ]);
 
-      await getManyPermissionOrganisationCategories({});
+      await getManyPermissionOrganisationCategories();
       await getManyPermissionOrganisations();
 
       await fetchRoleOrganisation();

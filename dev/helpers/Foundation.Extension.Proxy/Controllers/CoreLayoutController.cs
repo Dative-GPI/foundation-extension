@@ -21,6 +21,7 @@ namespace Foundation.Extension.Proxy.Controllers
     private IHttpClientFactory _httpClientFactory;
     private string _foundationPrefix;
     private string _localPrefix;
+    private bool _enableInstalledExtensions;
     private LocalClient _localClient;
 
     public CoreLayoutController(

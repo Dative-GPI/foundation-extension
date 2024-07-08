@@ -19,23 +19,10 @@ services:
     ports:
       - 5400:80
 
-  proxy-core:
+  proxy:
     extends:
       file: ../src/template/dev/docker-compose.yml
-      service: proxy-core
-    build: 
-      context: ..
-      dockerfile: dev/dockerfiles/dotnet.dockerfile
-      args:
-        PROJECT: dev/helpers/Foundation.Extension.Proxy
-    environment:
-      DOTNET_ENVIRONMENT: Development
-      DOTNET_URLS: http://+:80
-
-  proxy-admin:
-    extends:
-      file: ../src/template/dev/docker-compose.yml
-      service: proxy-admin
+      service: proxy
     build: 
       context: ..
       dockerfile: dev/dockerfiles/dotnet.dockerfile

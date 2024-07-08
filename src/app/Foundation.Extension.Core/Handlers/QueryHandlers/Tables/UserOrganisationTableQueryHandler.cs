@@ -108,6 +108,8 @@ namespace Foundation.Extension.Core.Handlers
         TableId = table.Id
       });
 
+      Console.WriteLine("AOIID " + _context.ActorOrganisationId);
+
       var userOrganisationColumns = await _userOrganisationColumnRepository.GetMany(new UserOrganisationColumnsFilter()
       {
         UserOrganisationId = _context.ActorOrganisationId.Value,

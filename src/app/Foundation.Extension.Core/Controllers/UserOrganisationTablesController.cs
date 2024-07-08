@@ -13,7 +13,7 @@ namespace Foundation.Extension.Core.API.Controllers
   public class UserOrganisationTablesController : ControllerBase
   {
     private readonly IUserOrganisationTableService _tableService;
-    public UserOrganisationTablesController(Abstractions.IUserOrganisationTableService tableService)
+    public UserOrganisationTablesController(IUserOrganisationTableService tableService)
     {
       _tableService = tableService;
     }

@@ -28,6 +28,7 @@
 import { computed, defineComponent, onUnmounted, type PropType, watch } from "vue";
 
 import { useDebounce, useTables } from "@dative-gpi/foundation-shared-components/composables";
+import { useDataTables } from "@dative-gpi/foundation-core-services/composables";
 
 import { useUpdateUserOrganisationTable, useUserOrganisationTable } from "../composables";
 

@@ -1,7 +1,11 @@
 <template>
-  <v-app style="background-color: transparent">
+  <v-app
+    style="background-color: transparent"
+  >
     <v-main>
-      <router-view v-if="ready" />
+      <router-view
+        v-if="done"
+      />
     </v-main>
   </v-app>
 </template>
@@ -12,11 +16,11 @@ import { defineComponent } from "vue";
 import { useCoreExtension } from "@dative-gpi/foundation-extension-core-ui";
 
 export default defineComponent({
-  setup(_props) {
-    const { ready } = useCoreExtension();
+  setup() {
+    const { done } = useCoreExtension();
 
     return {
-      ready
+      done
     }
   }
 });

@@ -3,9 +3,9 @@ using XXXXX.Core.Kernel.Models;
 
 namespace XXXXX.Core.Kernel
 {
-    public static class Routes
-    {
-        private static readonly RouteDefinition[] ROUTES = new RouteDefinition[] {
+  public static class Routes
+  {
+    private static readonly RouteDefinition[] ROUTES = new RouteDefinition[] {
             new RouteDefinition()
             {
                 Authorizations = new string[] {},
@@ -22,7 +22,7 @@ namespace XXXXX.Core.Kernel
             new RouteDefinition()
             {
                 Authorizations = new string[] {},
-                Path = (ctx)=>"/XXXXX/examples/drawer",
+                Path = (ctx)=> "/XXXXX/examples/drawer",
                 Name = "apps.example.drawer",
                 DrawerCategoryLabelDefault = null,
                 DrawerCategoryCode = null,
@@ -47,9 +47,9 @@ namespace XXXXX.Core.Kernel
             },
         };
 
-        public static IEnumerable<RouteDefinition> GetRoutes()
-        {
-            return ROUTES;
-        }
+    public static IEnumerable<RouteDefinition> GetRoutes()
+    {
+      return ROUTES;
     }
+  }
 }

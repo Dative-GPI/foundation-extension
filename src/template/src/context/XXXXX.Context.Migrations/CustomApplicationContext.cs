@@ -40,17 +40,4 @@ namespace XXXXX.Context.Migrations
       _fixtureHelper.Feed<PageDTO>(modelBuilder);
     }
   }
-
-  protected override void OnModelCreating(ModelBuilder modelBuilder)
-  {
-    base.OnModelCreating(modelBuilder);
-
-    _fixtureHelper.Feed<PermissionOrganisationDTO>(modelBuilder);
-    _fixtureHelper.Feed<PermissionOrganisationCategoryDTO>(modelBuilder);
-    _fixtureHelper.Feed<PermissionApplicationDTO>(modelBuilder);
-    _fixtureHelper.Feed<PermissionApplicationCategoryDTO>(modelBuilder);
-    _fixtureHelper.Feed<TranslationDTO>(modelBuilder);
-    _fixtureHelper.Feed<TableDTO>(modelBuilder);
-    _fixtureHelper.Feed<EntityPropertyDTO>(modelBuilder);
-  }
 }

@@ -6,6 +6,6 @@ export const routes: RouteRecordRaw[] = [
         name: "role-organisation",
         components: {
             default: () => import("../views/RolePermissionOrganisations.vue")
-        },
+        }
     },
 ]

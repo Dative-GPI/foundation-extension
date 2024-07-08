@@ -35,7 +35,7 @@ namespace XXXXX.Core.Kernel
                 ComputePath = async (dico, sp) => {
                     var ctx = sp.GetRequiredService<IRequestContextProvider>().Context;
                     var client = await sp.GetRequiredService<IFoundationClientFactory>().CreateAuthenticated(ctx.ApplicationId, ctx.LanguageCode, ctx.Jwt);
-                    var device = await client.Core.DeviceOrganisations.Get(ctx.OrganisationId.Value, Guid.Parse(dico["deviceId"]));
+                    var device = await client.Core.DeviceOrganisations.Get(ctx.OrganisationId.Value, Guid.Parse(dico["deviceId"]).ToString());
                     return $"{device.Code}&{device.ArticleCode}";
                 }
             }

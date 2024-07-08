@@ -1,21 +1,19 @@
-import { onMounted, onUnmounted, provide, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { ServiceFactory } from '@dative-gpi/bones-ui';
+import { useAppLanguageCode } from "@dative-gpi/foundation-shared-services/composables";
 
 import { useExtensionCommunicationBridge } from './useExtensionCommunicationBridge';
-import { ACCESS_TOKEN, LANGUAGE_CODE } from '../config';
+import { useAppToken } from './useAppToken';
 
-let extensionHostInitialized = false;
+const done = ref(false);
 
 const token = ref<string | null>(null);
 const languageCode = ref<string | null>(null);
 
-export function useExtensionHost() {
+export const useExtensionHost = () => {
     onMounted(() => {
-        if (extensionHostInitialized) {return;}
-        extensionHostInitialized = true;
-
+        if (done.value) {return;}
         token.value = new URL(window.location.toString())
             .searchParams.get("token")
 
@@ -23,6 +21,8 @@ export function useExtensionHost() {
             .searchParams.get("languageCode")
 
         const { goTo, setHeight } = useExtensionCommunicationBridge();
+        const { setAppLanguageCode } = useAppLanguageCode();
+        const { setAppToken } = useAppToken();
 
         const router = useRouter();
         const route = useRoute();
@@ -44,22 +44,24 @@ export function useExtensionHost() {
             );
         }, 10)
 
-        ServiceFactory.http.interceptors.request.use((config) => {
-            config.headers.common['Authorization'] = `Bearer ${token.value}`;
-            config.headers.common['Accept-Language'] = languageCode.value;
-            return config;
-        });
+        if(languageCode.value){
+            setAppLanguageCode(languageCode.value);
+        }
 
-        provide(ACCESS_TOKEN, token);
-        provide(LANGUAGE_CODE, languageCode);
+        if(token.value){
+            setAppToken(token.value);
+        }
 
         onUnmounted(() => {
             unsubscribeRouterHook();
             clearInterval(intervalId);
         })
+
+        done.value = true;
     })
 
     return {
+        done,
         token,
         languageCode
     }

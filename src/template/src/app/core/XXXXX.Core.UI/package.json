@@ -2,7 +2,7 @@
   "name": "xxxxx-core-ui",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite --host",
+    "dev": "vite --host --base=/organisations/",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview"
   },

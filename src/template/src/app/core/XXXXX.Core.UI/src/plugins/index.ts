@@ -5,26 +5,16 @@
  */
 
 // Plugins
+import { PermissionPlugin, TranslationPlugin } from "@dative-gpi/bones-ui";
+import { LanguagePlugin, TokenPlugin } from "@dative-gpi/foundation-extension-shared-ui";
 import { loadFonts } from './webfontloader'
 import vuetify from './vuetify'
-import { LanguagePlugin } from './language';
 import router from '../router'
 
-import { PermissionPlugin, TranslationPlugin } from "@dative-gpi/bones-ui";
+import { OrganisationPlugin } from './organisation';
 
 // Types
 import type { App } from 'vue'
-import { OrganisationPlugin } from './organisation';
-import { TokenPlugin } from './token';
-
-/* const permissionOptions: PermissionOptions = {
-  permissionsProvider: usePermissionsProvider()
-}
-
-const translationOptions: TranslationOptions = {
-  translationsProvider: useTranslationsProvider()
-} */
-
 export function registerPlugins(app: App) {
   loadFonts()
   app

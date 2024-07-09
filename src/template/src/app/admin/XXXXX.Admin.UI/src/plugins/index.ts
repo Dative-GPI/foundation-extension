@@ -6,21 +6,14 @@
 
 // Plugins
 //import { loadFonts } from './webfontloader'
+import { LanguagePlugin, TokenPlugin } from "@dative-gpi/foundation-extension-shared-ui";
+import { PermissionPlugin, TranslationPlugin } from "@dative-gpi/bones-ui";
+
 import vuetify from './vuetify'
 import router from '../router'
 
-import { PermissionPlugin, TranslationPlugin } from "@dative-gpi/bones-ui";
-
 // Types
 import type { App } from 'vue'
-
-/* const permissionOptions: PermissionOptions = {
-  permissionsProvider: usePermissionsProvider()
-}
-
-const translationOptions: TranslationOptions = {
-  translationsProvider: useTranslationsProvider()
-} */
 
 export function registerPlugins(app: App) {
   // loadFonts()
@@ -29,4 +22,6 @@ export function registerPlugins(app: App) {
     .use(router)
     .use(PermissionPlugin)
     .use(TranslationPlugin)
+    .use(LanguagePlugin)
+    .use(TokenPlugin)
 }

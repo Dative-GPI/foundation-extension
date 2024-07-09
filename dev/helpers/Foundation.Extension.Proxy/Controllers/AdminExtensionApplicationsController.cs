@@ -92,7 +92,7 @@ namespace Foundation.Extension.Proxy.Controllers
       {
         id = Guid.NewGuid(),
         applicationId = applicationId,
-        extensionId = Guid.Empty,
+        extensionId = (Guid?)null,
         label = "Local extension",
         description = "Added automatically by Foundation.Extension.Proxy",
       });

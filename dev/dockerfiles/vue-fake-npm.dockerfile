@@ -4,11 +4,11 @@ WORKDIR /app
 
 RUN pwd
 
-COPY src/app/Foundation.Template.Admin-UI/package.json /app/lib/Foundation.Template.Admin-UI/package.json
+COPY src/app/Foundation.Extension.Admin-UI/package.json /app/lib/Foundation.Extension.Admin-UI/package.json
 
-COPY src/app/Foundation.Template.Core-UI/package.json /app/lib/Foundation.Template.Core-UI/package.json
+COPY src/app/Foundation.Extension.Core-UI/package.json /app/lib/Foundation.Extension.Core-UI/package.json
 
-COPY src/shared/Foundation.Template.Shared-UI/package.json /app/lib/Foundation.Template.Shared-UI/package.json
+COPY src/shared/Foundation.Extension.Shared-UI/package.json /app/lib/Foundation.Extension.Shared-UI/package.json
 
 COPY dev/helpers/package.json /app/package.json
 

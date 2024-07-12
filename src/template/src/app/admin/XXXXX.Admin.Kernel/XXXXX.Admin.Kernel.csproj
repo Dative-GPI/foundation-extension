@@ -9,11 +9,11 @@
     <PackageReference Include="Bones" Version="0.0.55" />
     <PackageReference Include="Bones.Flow" Version="0.0.55" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="Foundation.Shared" Version="0.0.3" />
-    <PackageReference Include="Foundation.Template.Admin" Version="$(TEMPLATE_VERSION)" />
-    <PackageReference Include="Foundation.Template.Domain" Version="$(TEMPLATE_VERSION)" />
+    <PackageReference Include="Foundation.Extension.Admin" Version="$(TEMPLATE_VERSION)" />
+    <PackageReference Include="Foundation.Extension.Domain" Version="$(TEMPLATE_VERSION)" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,9 +1,9 @@
 {
   "private": true,
   "workspaces": [
-    "lib/Foundation.Template.Shared-UI",
-    "lib/Foundation.Template.Admin-UI",
-    "lib/Foundation.Template.Core-UI",
+    "lib/Foundation.Extension.Shared-UI",
+    "lib/Foundation.Extension.Admin-UI",
+    "lib/Foundation.Extension.Core-UI",
     "src/app/core/XXXXX.Core.UI",
     "src/app/admin/XXXXX.Admin.UI"
   ],

@@ -1,7 +1,7 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router'
 
-import { routes as templateRoutes } from "@dative-gpi/foundation-template-core-ui"
+import { routes as templateRoutes } from "@dative-gpi/foundation-extension-core-ui"
 
 const routes = [
   {

@@ -9,7 +9,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-import { useExtensionHost } from "@dative-gpi/foundation-template-shared-ui";
+import { useExtensionHost } from "@dative-gpi/foundation-extension-shared-ui";
 
 export default defineComponent({
   setup(_props) {

@@ -4,22 +4,22 @@ using Microsoft.Extensions.DependencyInjection;
 using Bones.Flow;
 
 using XXXXX.Admin.Kernel.Services;
-using Foundation.Template.Admin.Abstractions;
+using Foundation.Extension.Admin.Abstractions;
 
 namespace XXXXX.Admin.Kernel.DI
 {
-    public static class DependencyInjector
+  public static class DependencyInjector
+  {
+    public static IServiceCollection AddKernel(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection AddKernel(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddFlow();
+      services.AddFlow();
 
-            services.AddScoped<IRoutesProvider, RoutesProvider>();
-            services.AddScoped<IActionsProvider, ActionsProvider>();
+      services.AddScoped<IRoutesProvider, RoutesProvider>();
+      services.AddScoped<IActionsProvider, ActionsProvider>();
 
-            services.AddAutoMapper(typeof(DependencyInjector).Assembly);
+      services.AddAutoMapper(typeof(DependencyInjector).Assembly);
 
-            return services;
-        }
+      return services;
     }
+  }
 }

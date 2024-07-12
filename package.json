@@ -1,10 +1,11 @@
 {
   "private": true,
+  "type": "module",
   "workspaces": [
-    "src/shared/Foundation.Template.Shared-UI",
-    "src/app/Foundation.Template.Admin-UI",
-    "src/app/Foundation.Template.Core-UI",
-    "tests/app/Foundation.Template.Core-UI.Tests"
+    "src/shared/Foundation.Extension.Shared-UI",
+    "src/app/Foundation.Extension.Admin-UI",
+    "src/app/Foundation.Extension.Core-UI",
+    "tests/app/Foundation.Extension.Core-UI.Tests"
   ],
   "dependencies": {},
   "devDependencies": {

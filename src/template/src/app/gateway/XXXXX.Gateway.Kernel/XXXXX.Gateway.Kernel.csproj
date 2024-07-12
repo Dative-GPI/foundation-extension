@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Foundation.Template.Gateway" Version="$(TEMPLATE_VERSION)" />
+    <PackageReference Include="Foundation.Extension.Gateway" Version="$(TEMPLATE_VERSION)" />
   </ItemGroup>
 
   <PropertyGroup>

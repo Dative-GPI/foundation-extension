@@ -1,6 +1,6 @@
 # Helpers
 
-## Foundation.Template.Proxy
+## Foundation.Extension.Proxy
 
 This project is used to create a small proxy that will help you develop your extension without the need for DAT'Foundation to have access to your local development server.
 More over it enables you to develop your extensions without adding your extension to DAT'Foundation.

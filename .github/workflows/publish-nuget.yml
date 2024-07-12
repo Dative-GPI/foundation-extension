@@ -11,14 +11,14 @@ jobs:
     strategy:
       matrix:
         folder:
-          - "src/app/Foundation.Template.Admin"
-          - "src/app/Foundation.Template.Gateway"
-          - "src/app/Foundation.Template.Core"
-          - "src/context/Foundation.Template.Context"
-          - "src/context/Foundation.Template.Fixtures"
-          - "src/shared/Foundation.Template.CrossCutting"
-          - "src/shared/Foundation.Template.Domain"
-  
+          - "src/app/Foundation.Extension.Admin"
+          - "src/app/Foundation.Extension.Gateway"
+          - "src/app/Foundation.Extension.Core"
+          - "src/context/Foundation.Extension.Context"
+          - "src/context/Foundation.Extension.Fixtures"
+          - "src/shared/Foundation.Extension.CrossCutting"
+          - "src/shared/Foundation.Extension.Domain"
+
     steps:
       # Checking out repository
       - uses: actions/checkout@v3

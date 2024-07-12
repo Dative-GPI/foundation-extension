@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Foundation.Template.Admin" Version="$(TEMPLATE_VERSION)" />
-    <PackageReference Include="Foundation.Template.CrossCutting" Version="$(TEMPLATE_VERSION)" />
+    <PackageReference Include="Foundation.Extension.Admin" Version="$(TEMPLATE_VERSION)" />
+    <PackageReference Include="Foundation.Extension.CrossCutting" Version="$(TEMPLATE_VERSION)" />
   </ItemGroup>
 
 </Project>

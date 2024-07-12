@@ -24,7 +24,7 @@ services:
     ports:
       - 5433:5432
   
-  proxy-core:
+  proxy:
     image: dativegpi/foundation-template-proxy:0.0.75
     environment:
       CUSTOMCONNSTR_FOUNDATION: https://products.dative-gpi.io
@@ -38,22 +38,7 @@ services:
       - "traefik.http.routers.proxy-core.rule=Host(`foundation.localhost`)"
       - "traefik.http.routers.proxy-core.entrypoints=websecure"
       - "traefik.http.routers.proxy-core.tls=true"
-    
-  proxy-admin:
-    image: dativegpi/foundation-template-proxy:0.0.75
-    environment:
-      CUSTOMCONNSTR_FOUNDATION: https://products-admin.dative-gpi.io
-      CUSTOMCONNSTR_LOCAL: https://extension.localhost
-      ENABLEINSTALLEDEXTENSIONS: "false"
-    extra_hosts:
-      - "extension.localhost:172.17.0.1"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.proxy-admin.loadbalancer.server.port=80"
-      - "traefik.http.routers.proxy-admin.rule=Host(`foundation-admin.localhost`)"
-      - "traefik.http.routers.proxy-admin.entrypoints=websecure"
-      - "traefik.http.routers.proxy-admin.tls=true"
-
+      
   core:
     build: 
       context: ..
@@ -95,7 +80,7 @@ services:
       - 'custom.label=extension'
       - "traefik.enable=true"
       - "traefik.http.services.extension-backend.loadbalancer.server.port=80"
-      - "traefik.http.routers.extension-backend.rule=(Host(`extension-admin.localhost`)|| Host(`extension.localhost`)) && (PathPrefix(`/api`))"
+      - "traefik.http.routers.extension-backend.rule=(Host(`extension.localhost`) && PathPrefix(`/api`))"
       - "traefik.http.routers.extension-backend.entrypoints=websecure"
       - "traefik.http.routers.extension-backend.tls=true"
 

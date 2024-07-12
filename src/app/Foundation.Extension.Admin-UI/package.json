@@ -1,0 +1,28 @@
+{
+  "name": "@dative-gpi/foundation-extension-admin-ui",
+  "version": "1.0.0",
+  "description": "",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@dative-gpi/foundation-extension-shared-ui": "1.0.0",
+    "@dative-gpi/foundation-admin-components": "0.0.193",
+    "@dative-gpi/foundation-core-components": "0.0.193",
+    "@dative-gpi/foundation-shared-components": "0.0.193",
+    "@dative-gpi/foundation-shared-loader": "0.0.193"
+  },
+  "peerDependencies": {
+    "axios": "^1.7.2",
+    "lodash": "^4.17.21",
+    "typescript": "^5.0.0",
+    "vue-router": "^4.0.0",
+    "vue": "^3.4.29"
+  }
+}

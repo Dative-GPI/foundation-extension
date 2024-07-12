@@ -69,6 +69,8 @@ WORKDIR /app
 
 COPY --from=nuget-build /out /nuget
 
+RUN ls /nuget
+
 RUN dotnet nuget add source /nuget
 
 WORKDIR /app/$PROJECT

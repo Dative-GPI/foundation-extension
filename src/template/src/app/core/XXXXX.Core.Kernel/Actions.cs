@@ -1,21 +1,20 @@
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 
 using Foundation.Shared;
+using Foundation.Extension.Core.Abstractions;
+using Foundation.Extension.Domain.Abstractions;
 
 using XXXXX.Core.Kernel.Models;
 
-using Microsoft.Extensions.DependencyInjection;
-using Foundation.Template.Core.Abstractions;
-using Foundation.Template.Domain.Abstractions;
-
 namespace XXXXX.Core.Kernel
 {
-    public static class Actions
+  public static class Actions
+  {
+    private static readonly ActionDefinition[] ACTIONS = new ActionDefinition[]
     {
-        private static readonly ActionDefinition[] ACTIONS = new ActionDefinition[]
-        {
             new ActionDefinition()
             {
                 LabelCode = "ui.devices.add-connected",
@@ -36,15 +35,15 @@ namespace XXXXX.Core.Kernel
                 ComputePath = async (dico, sp) => {
                     var ctx = sp.GetRequiredService<IRequestContextProvider>().Context;
                     var client = await sp.GetRequiredService<IFoundationClientFactory>().CreateAuthenticated(ctx.ApplicationId, ctx.LanguageCode, ctx.Jwt);
-                    var device = await client.Core.DeviceOrganisations.Get(ctx.OrganisationId.Value, Guid.Parse(dico["deviceId"]));
+                    var device = await client.Core.DeviceOrganisations.Get(ctx.OrganisationId.Value, Guid.Parse(dico["deviceId"]).ToString());
                     return $"{device.Code}&{device.ArticleCode}";
                 }
             }
-        };
+    };
 
-        public static IEnumerable<ActionDefinition> GetActions()
-        {
-            return ACTIONS;
-        }
+    public static IEnumerable<ActionDefinition> GetActions()
+    {
+      return ACTIONS;
     }
+  }
 }

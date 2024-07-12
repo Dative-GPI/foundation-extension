@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Foundation.Template.Fixtures" Version="$(TEMPLATE_VERSION)" />
+    <PackageReference Include="Foundation.Extension.Fixtures" Version="$(TEMPLATE_VERSION)" />
   </ItemGroup>
 
   <PropertyGroup>

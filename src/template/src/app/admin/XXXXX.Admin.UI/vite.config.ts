@@ -40,7 +40,7 @@ export default defineConfig({
     port: 3000,
   },
   optimizeDeps: {
-    include: ["ajv", "axios/lib/helpers/buildURL", "axios", "lodash", "color", "@lexical/selection"],
+    include: ["ajv", "axios", "lodash", "color", "@lexical/selection"],
   },
   build: {
     commonjsOptions: {

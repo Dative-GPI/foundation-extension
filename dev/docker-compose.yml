@@ -19,28 +19,15 @@ services:
     ports:
       - 5400:80
 
-  proxy-core:
+  proxy:
     extends:
       file: ../src/template/dev/docker-compose.yml
-      service: proxy-core
+      service: proxy
     build: 
       context: ..
       dockerfile: dev/dockerfiles/dotnet.dockerfile
       args:
-        PROJECT: dev/helpers/Foundation.Template.Proxy
-    environment:
-      DOTNET_ENVIRONMENT: Development
-      DOTNET_URLS: http://+:80
-
-  proxy-admin:
-    extends:
-      file: ../src/template/dev/docker-compose.yml
-      service: proxy-admin
-    build: 
-      context: ..
-      dockerfile: dev/dockerfiles/dotnet.dockerfile
-      args:
-        PROJECT: dev/helpers/Foundation.Template.Proxy
+        PROJECT: dev/helpers/Foundation.Extension.Proxy
     environment:
       DOTNET_ENVIRONMENT: Development
       DOTNET_URLS: http://+:80
@@ -88,8 +75,8 @@ services:
     environment:
       PROJECT: xxxxx-core-ui
     volumes:
-      - ../src/app/Foundation.Template.Core-UI:/app/lib/Foundation.Template.Core-UI:delegated
-      - ../src/shared/Foundation.Template.Shared-UI:/app/lib/Foundation.Template.Shared-UI:delegated
+      - ../src/app/Foundation.Extension.Core-UI:/app/lib/Foundation.Extension.Core-UI:delegated
+      - ../src/shared/Foundation.Extension.Shared-UI:/app/lib/Foundation.Extension.Shared-UI:delegated
   
   admin-ui:
     extends:
@@ -101,8 +88,8 @@ services:
     environment:
       PROJECT: xxxxx-admin-ui
     volumes:
-      - ../src/app/Foundation.Template.Admin-UI:/app/lib/Foundation.Template.Admin-UI:delegated
-      - ../src/shared/Foundation.Template.Shared-UI:/app/lib/Foundation.Template.Shared-UI:delegated
+      - ../src/app/Foundation.Extension.Admin-UI:/app/lib/Foundation.Extension.Admin-UI:delegated
+      - ../src/shared/Foundation.Extension.Shared-UI:/app/lib/Foundation.Extension.Shared-UI:delegated
   
   migrations:
     extends:

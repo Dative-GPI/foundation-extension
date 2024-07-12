@@ -3,19 +3,19 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Bones.Flow;
 
-using Foundation.Template.Context.DI;
+using Foundation.Extension.Context.DI;
 
 namespace XXXXX.Context.Kernel.DI
 {
-    public static class DependencyInjector
+  public static class DependencyInjector
+  {
+    public static IServiceCollection AddContext(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection AddContext(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddContextTemplate<ApplicationContext>(configuration);
+      services.AddContextExtension<ApplicationContext>(configuration);
 
-            services.AddRepositories();
+      services.AddRepositories();
 
-            return services;
-        }
+      return services;
     }
+  }
 }

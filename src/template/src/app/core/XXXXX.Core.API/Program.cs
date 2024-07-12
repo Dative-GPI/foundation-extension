@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-using Foundation.Template.Core.DI;
-using Foundation.Template.CrossCutting.DI;
+using Foundation.Extension.Core.DI;
+using Foundation.Extension.CrossCutting.DI;
 
-using Foundation.Template.Core.Extensions;
+using Foundation.Extension.Core.Extensions;
 
 using XXXXX.Core.Kernel.DI;
 using XXXXX.Context.Kernel.DI;
@@ -20,7 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddKernel(builder.Configuration);
-builder.Services.AddCoreTemplate(builder.Configuration);
+builder.Services.AddCoreExtension(builder.Configuration);
 builder.Services.AddContext(builder.Configuration);
 builder.Services.AddCrossCutting(builder.Configuration);
 
@@ -28,8 +28,8 @@ builder.Services.AddCrossCutting(builder.Configuration);
 builder.Services.AddHttpClient(string.Empty, c => { }).ConfigurePrimaryHttpMessageHandler(() =>
     new HttpClientHandler
     {
-        ClientCertificateOptions = ClientCertificateOption.Manual,
-        ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, certChain, policyErrors) => true
+      ClientCertificateOptions = ClientCertificateOption.Manual,
+      ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, certChain, policyErrors) => true
     }
 );
 
@@ -38,12 +38,12 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
+  app.UseDeveloperExceptionPage();
 }
 
-app.UseCoreTemplate();
+app.UseCoreExtension();
 
 app.MapControllers();
-app.MapCoreTemplateControllers();
+app.MapCoreExtensionControllers();
 
 app.Run();

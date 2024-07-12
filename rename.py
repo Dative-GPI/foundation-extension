@@ -31,9 +31,9 @@ def rename_folders(root_dir, old_text, new_text):
             os.rename(foldername, new_foldername)
 
 def main():
-    root_dir = "src/template/src/app/admin/XXXXX.Admin.UI"
-    old_text = "Core"
-    new_text = "Admin"
+    root_dir = "tests"
+    old_text = "Template"
+    new_text = "Extension"
     
     replace_in_files(root_dir, old_text, new_text)
     rename_files(root_dir, old_text, new_text)

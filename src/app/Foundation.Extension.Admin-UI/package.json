@@ -13,10 +13,10 @@
   "license": "ISC",
   "dependencies": {
     "@dative-gpi/foundation-extension-shared-ui": "1.0.0",
-    "@dative-gpi/foundation-admin-components": "0.0.193",
-    "@dative-gpi/foundation-core-components": "0.0.193",
-    "@dative-gpi/foundation-shared-components": "0.0.193",
-    "@dative-gpi/foundation-shared-loader": "0.0.193"
+    "@dative-gpi/foundation-admin-components": "0.0.206",
+    "@dative-gpi/foundation-core-components": "0.0.206",
+    "@dative-gpi/foundation-shared-components": "0.0.206",
+    "@dative-gpi/foundation-shared-loader": "0.0.206"
   },
   "peerDependencies": {
     "axios": "^1.7.2",

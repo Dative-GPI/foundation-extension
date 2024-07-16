@@ -31,8 +31,7 @@ export function useExtensionCommunicationBridge() {
   }
 
   const setHeight = (height: number, path: string) => {
-    if (_height == height) return
-
+    if (_height == height) {return}
     _height = height;
     notifyDebounced({
       height: height,
@@ -40,19 +39,32 @@ export function useExtensionCommunicationBridge() {
     });
   }
 
-  const setWidth = (width: number, path: string) => {
+  const setDialogWidth = (dialogWidth: number, path: string) => {
     notify({
-      width,
+      dialogWidth,
+      path,
+    });
+  }
+  const setDialogHeight = (dialogHeight: number, path: string) => {
+    notify({
+      dialogHeight,
       path,
     });
   }
 
   const openDialog = (path: string) => {
-    throw new Error("Method not implemented.");
+    notify({
+      path,
+      dialog: true,
+    });
   }
 
-  const closeDialog = (path: string) => {
-    throw new Error("Method not implemented.");
+  const closeDialog = (path: string, success: boolean = false) => {
+    notify({
+      path,
+      success,
+      drawer: false,
+    });
   }
 
   const openDrawer = (path: string) => {
@@ -72,14 +84,15 @@ export function useExtensionCommunicationBridge() {
 
   return {
     goTo,
+    notify,
     setTitle,
     setCrumbs,
     setHeight,
-    setWidth,
     openDialog,
-    closeDialog,
     openDrawer,
     closeDrawer,
-    notify
+    closeDialog,
+    setDialogWidth,
+    setDialogHeight
   }
 }

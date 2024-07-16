@@ -22,8 +22,8 @@ namespace XXXXX.Core.Kernel
             new RouteDefinition()
             {
                 Authorizations = new string[] {},
-                Path = (ctx)=> "/XXXXX/examples/drawer",
-                Name = "apps.example.drawer",
+                Path = (ctx)=> $"/organisations/{ctx.OrganisationId.Value}/XXXXX/examples",
+                Name = "apps.example.dialog",
                 DrawerCategoryLabelDefault = null,
                 DrawerCategoryCode = null,
                 DrawerIcon = null,

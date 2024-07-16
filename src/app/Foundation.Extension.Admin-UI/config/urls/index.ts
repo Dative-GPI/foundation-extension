@@ -1,5 +1,4 @@
 export * from "./image";
-export * from "./organisation";
 export * from "./organisationTypeTables";
 export * from "./permissionApplications";
 export * from "./permissionOrganisationTypes";

@@ -11,6 +11,10 @@
     <FSSpan
       font="text-button"
     >{{ $tr("ui.commmon.label", "Label") }}</FSSpan>
+    <FSButton
+      label="open a dialog"
+      @click="openDialog('organisations/41ea29a1-bbfe-4f4a-86b3-425963471053/XXXXX/examples/drawer')"
+    />
     <FSSpan
       font="text-h1"
     >Table Test</FSSpan>
@@ -18,12 +22,15 @@
       :tableCode="tableCode"
       :items="items"
     />
+
+
   </FSCol>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 
+import { useExtensionCommunicationBridge } from "@dative-gpi/foundation-extension-shared-ui/composables";
 import FEDataTable from "@dative-gpi/foundation-extension-core-ui/components/FEDataTable.vue";
 
 export default defineComponent({
@@ -32,6 +39,8 @@ export default defineComponent({
     FEDataTable
   },
   setup() {
+    const { openDialog } = useExtensionCommunicationBridge();
+
     const tableCode = "ui.tables.test";
 
     const items = [
@@ -54,7 +63,8 @@ export default defineComponent({
 
     return {
       tableCode,
-      items
+      items,
+      openDialog
     };
   },
 });

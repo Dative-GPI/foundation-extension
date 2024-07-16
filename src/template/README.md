@@ -11,6 +11,17 @@ It contains the basic functionnalities required for an extension. This includes:
 - Common routes, repositories, models, ...
 
 ## Initializing your extension
+First install the template locally : 
+```
+dotnet new install Foundation.Extension.Template::VERSION
+```
+with VERSION the last Foundation.Extension.Template tag
+The create de project with template and custom name using : 
+```
+dotnet new dativegpiextension -o PROJECT_NAME
+```
+
+### Old way (depricated) :
 
 To initialize your extension before coding, launch the following command : `bash rename.sh <YOUR_PROJECT_NAME>`.
 

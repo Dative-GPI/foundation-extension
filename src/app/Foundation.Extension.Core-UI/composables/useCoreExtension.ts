@@ -5,7 +5,7 @@ import { useExtensionHost, useTranslations } from "@dative-gpi/foundation-extens
 import { usePermissions as useAppPermissions, useTranslations as useAppTranslations } from "@dative-gpi/bones-ui";
 import { Single } from "@dative-gpi/foundation-shared-domain/tools";
 
-import { useAppOrganisationId } from "./useAppOrganisationId";
+import { useAppOrganisationId } from "@dative-gpi/foundation-core-services/composables";
 import { useCurrentPermissions } from "./useCurrentPermissions";
 import { ORGANISATION_ID } from "../config/literals";
 import { extractParams } from "../tools";
@@ -14,7 +14,7 @@ const single = new Single();
 
 export const useCoreExtension = () => {
   return single.call(() => {
-    const { initialized: organisationIdInitialized, setAppOrganisationId } = useAppOrganisationId();
+    const { setAppOrganisationId } = useAppOrganisationId();
     const { done: hostReady } = useExtensionHost();
     
     const { getMany: getCurrentPermission, entities: permissions } = useCurrentPermissions();
@@ -29,6 +29,7 @@ export const useCoreExtension = () => {
       return (hostReady.value && organisationIdInitialized.value);
     })
 
+    const organisationIdInitialized = ref(false);
     const done = ref(false);
 
     watch(ready, async () => {
@@ -49,6 +50,7 @@ export const useCoreExtension = () => {
       const routeOrganisationId = params ? params[ORGANISATION_ID] : null;
       if (routeOrganisationId) {
         setAppOrganisationId(routeOrganisationId);
+        organisationIdInitialized.value = true;
       }
     });
     

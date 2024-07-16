@@ -1,6 +1,6 @@
 import type { Plugin } from "vue";
 import { ServiceFactory } from "@dative-gpi/bones-ui/core";
-import { useAppOrganisationId } from "@dative-gpi/foundation-extension-core-ui";
+import { useAppOrganisationId } from "@dative-gpi/foundation-core-services/composables";
 
 const { organisationId } = useAppOrganisationId();
 

@@ -1,12 +1,14 @@
 {
   "$schema": "http://json.schemastore.org/template",
   "author": "Dative",
-  "classifications": [ "Web", "ASP.NET" ],
-  "identity": "Foundation.Template",
+  "classifications": [
+    "Web",
+    "ASP.NET"
+  ],
+  "identity": "Foundation.Extension.Template",
   "name": "Application Dative-gpi extension",
   "shortName": "dativegpiextension",
-  "tags": 
-  {
+  "tags": {
     "language": "C#, ASP.NET, Vue.js",
     "type": "project"
   },

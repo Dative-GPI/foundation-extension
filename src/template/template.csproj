@@ -3,7 +3,7 @@
   <PropertyGroup>
     <PackageType>Template</PackageType>
     <PackageVersion>$(TEMPLATE_VERSION)</PackageVersion>
-    <PackageId>Foundation.Template</PackageId>
+    <PackageId>Foundation.Extension.Template</PackageId>
     <Title>Application Dative-gpi extension</Title>
     <Authors>Dative</Authors>
     <Description>Templates to use when creating an application extension for Dative Foundation</Description>

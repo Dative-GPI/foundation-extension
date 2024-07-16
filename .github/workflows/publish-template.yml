@@ -19,13 +19,13 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
 
-      # Replace the version of Foundation.Template  projects
+      # Replace the version of Foundation.Extension.Template  projects
       - name: Replace version in csproj 🔧
         run: |
           cd ${{matrix.folder}}
           find . -type f -not -path '*/\.*' -exec sed -i 's/$(TEMPLATE_VERSION)/${{ github.ref_name}}/g' {} +
 
-      # Replace the version of Foundation.Template ui  npm package
+      # Replace the version of Foundation.Extension.Template ui  npm package
       - name: Replace version in package.json 🔧
         run: |
           cd ${{matrix.folder}}
@@ -47,4 +47,4 @@ jobs:
       - name: Publishing to NuGet 🚀
         run: |
           cd ${{ matrix.folder}}
-          dotnet nuget push Foundation.Template.${{ github.ref_name}}.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
+          dotnet nuget push Foundation.Extension.Template.${{ github.ref_name}}.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json

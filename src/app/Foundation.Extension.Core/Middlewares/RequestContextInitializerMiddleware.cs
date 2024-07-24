@@ -70,7 +70,7 @@ namespace Foundation.Extension.Core.Middlewares
         organisationAdminId = organisation.AdminId;
         organisationTypeId = organisation.OrganisationTypeId;
 
-        var userOrganisations = await foundationClient.Core.UserOrganisations.GetMany(organisationId.ToString(), new UserOrganisationsFilterFoundationModel()
+        var userOrganisations = await foundationClient.Core.UserOrganisations.GetMany(organisationId, new UserOrganisationsFilterFoundationModel()
         {
         });
 

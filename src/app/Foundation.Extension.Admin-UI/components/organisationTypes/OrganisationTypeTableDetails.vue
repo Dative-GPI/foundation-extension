@@ -58,8 +58,10 @@ import { defineComponent, ref, computed, onMounted, watch } from "vue";
 import _ from "lodash";
 
 import { useExtensionCommunicationBridge } from "@dative-gpi/foundation-extension-shared-ui";
-import { useOrganisationTypeTable, useTable, useUpdateOrganisationTypeTable } from "../../composables";
+import { useTranslations } from "@dative-gpi/bones-ui/composables";
+
 import type { Column, UpdateOrganisationTypeDispositionDTO, UpdateOrganisationTypeTableDTO } from "../../domain";
+import { useOrganisationTypeTable, useTable, useUpdateOrganisationTypeTable } from "../../composables";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
@@ -81,9 +83,11 @@ export default defineComponent({
   setup(props) {
     const { setTitle, setCrumbs } = useExtensionCommunicationBridge();
     const { currentRoute } = useRouter();
-    const { get, entity: table, getting } = useTable();
+    const { $tr } = useTranslations();
+
     const { fetch: getOrganisationTypeTable, entity: organisationTypeTable } = useOrganisationTypeTable();
     const { fetch: update } = useUpdateOrganisationTypeTable();
+    const { get, entity: table } = useTable();
 
     const search = ref<string | undefined>();
     const columns = ref<Column[]>([]);

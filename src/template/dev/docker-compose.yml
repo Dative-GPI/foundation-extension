@@ -25,7 +25,7 @@ services:
       - 5433:5432
   
   proxy:
-    image: dativegpi/foundation-template-proxy:0.0.75
+    image: dativegpi/foundation-template-proxy:latest
     environment:
       CUSTOMCONNSTR_FOUNDATION: https://products.dative-gpi.io
       CUSTOMCONNSTR_LOCAL: https://extension.localhost

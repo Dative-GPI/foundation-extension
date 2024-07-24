@@ -71,7 +71,7 @@ namespace Foundation.Extension.Core.Tools
 
     private async Task<IEnumerable<string>> GetFoundationPermissions(IFoundationClient client, Guid organisationId)
     {
-      var permissions = await client.Core.Permissions.GetCurrent(organisationId.ToString());
+      var permissions = await client.Core.Permissions.GetCurrent(organisationId);
       return permissions.Select(permission => permission.Code).ToList();
     }
 
@@ -97,7 +97,7 @@ namespace Foundation.Extension.Core.Tools
     private async Task<Clients.Core.FoundationModels.UserOrganisationInfosFoundationModel> GetUserOrganisation(IFoundationClient client, Guid organisationId, Guid userId)
     {
       var userOrganisations = await client.Core.UserOrganisations.GetMany(
-          organisationId.ToString(),
+          organisationId,
           new Clients.Core.FoundationModels.UserOrganisationsFilterFoundationModel()
           {
           }

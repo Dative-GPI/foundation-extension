@@ -84,6 +84,7 @@ import { defineComponent, computed, onMounted, ref } from "vue";
 import _ from "lodash";
 
 import { useExtensionCommunicationBridge } from "@dative-gpi/foundation-extension-shared-ui";
+import { useTranslations } from "@dative-gpi/bones-ui/composables";
 
 import type { EntityPropertyInfos } from "../../domain";
 import {
@@ -99,6 +100,7 @@ export default defineComponent({
   components: {},
   setup() {
     const extension = useExtensionCommunicationBridge();
+    const { $tr } = useTranslations();
 
     const {
       getMany: getEntityPropertyTranslations,

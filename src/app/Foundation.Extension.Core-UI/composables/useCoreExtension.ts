@@ -14,7 +14,7 @@ const single = new Single();
 
 export const useCoreExtension = () => {
   return single.call(() => {
-    const { setAppOrganisationId } = useAppOrganisationId();
+    const { setAppOrganisationId, ready: organisationIdInitialized } = useAppOrganisationId();
     const { done: hostReady } = useExtensionHost();
     
     const { getMany: getCurrentPermission, entities: permissions } = useCurrentPermissions();
@@ -29,7 +29,6 @@ export const useCoreExtension = () => {
       return (hostReady.value && organisationIdInitialized.value);
     })
 
-    const organisationIdInitialized = ref(false);
     const done = ref(false);
 
     watch(ready, async () => {
@@ -50,7 +49,6 @@ export const useCoreExtension = () => {
       const routeOrganisationId = params ? params[ORGANISATION_ID] : null;
       if (routeOrganisationId) {
         setAppOrganisationId(routeOrganisationId);
-        organisationIdInitialized.value = true;
       }
     });
     

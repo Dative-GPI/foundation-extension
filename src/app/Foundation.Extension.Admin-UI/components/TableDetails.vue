@@ -105,15 +105,17 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted, watch } from "vue";
+import { useRouter } from "vue-router";
 
 import _ from "lodash";
 
 import TableSynchronizer from "./TableSynchronizer.vue";
 
 import { useExtensionCommunicationBridge } from "@dative-gpi/foundation-extension-shared-ui";
+import { useTranslations } from "@dative-gpi/bones-ui/composables";
+
 import { useTable, useUpdateTable } from "../composables";
 import { Column } from "../domain";
-import { useRouter } from "vue-router";
 
 export default defineComponent({
   components: {
@@ -131,9 +133,10 @@ export default defineComponent({
   },
   setup(props) {
     const { setTitle, setCrumbs } = useExtensionCommunicationBridge();
+    const { get, entity: table } = useTable();
     const { currentRoute } = useRouter();
-    const { get, entity: table, getting } = useTable();
     const { update } = useUpdateTable();
+    const { $tr } = useTranslations();
 
     const search = ref<string | undefined>();
     const items = ref<Column[]>([]);

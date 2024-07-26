@@ -63,7 +63,7 @@ export function useExtensionCommunicationBridge() {
     notify({
       path,
       success,
-      drawer: false,
+      dialog: false,
     });
   }
 

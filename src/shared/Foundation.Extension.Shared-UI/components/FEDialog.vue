@@ -1,20 +1,49 @@
 <template>
-  <FSCol>
-    <slot></slot>
-  </FSCol>
+  <FSDialogContent
+    :title="$props.title"
+    :subtitle="$props.subtitle"
+    :width="$props.width"
+    :modelValue="true"
+    @update:modelValue="$emit('update:modelValue', $event)"
+  >
+    <template
+      v-for="(_, name) in $slots"
+      v-slot:[name]="slotData"
+    >
+      <slot
+        :name="name"
+        v-bind="slotData"
+      />
+    </template>
+  </FSDialogContent>
 </template>
 
 <script lang="ts">
 import { defineComponent, watch, onMounted } from "vue";
+import type { PropType } from "vue";
 
 import { useExtensionCommunicationBridge } from "@dative-gpi/foundation-extension-shared-ui";
+import FSDialogContent from "@dative-gpi/foundation-shared-components/components/FSDialogContent.vue";
 
 export default defineComponent({
   name: "FEDialog",
+  components: {
+    FSDialogContent
+  },
   props: {
-    value: {
+    modelValue: {
       type: Boolean,
       required: true,
+    },
+    title: {
+      type: String as PropType<string | null>,
+      required: false,
+      default: null
+    },
+    subtitle: {
+      type: String as PropType<string | null>,
+      required: false,
+      default: null
     },
     height: {
       type: Number,
@@ -39,7 +68,7 @@ export default defineComponent({
     };
 
     const close = (success: boolean) => {
-      extension.closeDrawer(location.pathname, success);
+      extension.closeDialog(location.pathname, success);
     };
 
     onMounted(() => {
@@ -49,8 +78,8 @@ export default defineComponent({
 
     watch(
       () => props.width,
-      (value) => {
-        if (value) {
+      (newVal) => {
+        if (newVal) {
           setWidth();
         }
       }
@@ -58,17 +87,17 @@ export default defineComponent({
 
     watch(
       () => props.height,
-      (value) => {
-        if (value) {
+      (newVal) => {
+        if (newVal) {
           setHeight();
         }
       }
     );
 
     watch(
-      () => props.value,
-      (value) => {
-        if (value) {
+      () => props.modelValue,
+      (newVal) => {
+        if (newVal == false) {
           close(true);
         }
       }

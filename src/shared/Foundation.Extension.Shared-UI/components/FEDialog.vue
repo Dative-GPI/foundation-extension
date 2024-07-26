@@ -1,5 +1,6 @@
 <template>
   <FSDialogContent
+    height="100%"
     :title="$props.title"
     :subtitle="$props.subtitle"
     :width="$props.width"

@@ -1,10 +1,9 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { useAppLanguageCode } from "@dative-gpi/foundation-shared-services/composables";
+import { useAppLanguageCode, useExtensionJwt } from "@dative-gpi/foundation-shared-services/composables";
 
 import { useExtensionCommunicationBridge } from './useExtensionCommunicationBridge';
-import { useAppToken } from './useAppToken';
 
 const done = ref(false);
 
@@ -22,7 +21,7 @@ export const useExtensionHost = () => {
 
         const { goTo, setHeight } = useExtensionCommunicationBridge();
         const { setAppLanguageCode } = useAppLanguageCode();
-        const { setAppToken } = useAppToken();
+        const { setExtensionJwt } = useExtensionJwt();
 
         const router = useRouter();
         const route = useRoute();
@@ -49,7 +48,7 @@ export const useExtensionHost = () => {
         }
 
         if(token.value){
-            setAppToken(token.value);
+            setExtensionJwt(token.value);
         }
 
         onUnmounted(() => {

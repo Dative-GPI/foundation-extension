@@ -1,14 +1,14 @@
 import type { Plugin } from "vue";
 import { ServiceFactory } from "@dative-gpi/bones-ui/core";
-import { useAppToken } from "@dative-gpi/foundation-extension-shared-ui";
+import { useExtensionJwt } from "@dative-gpi/foundation-shared-services/composables";
 
-const { token } = useAppToken();
+const { jwt } = useExtensionJwt();
 
 export const TokenPlugin: Plugin = {
   install: () => {
     ServiceFactory.http.interceptors.request.use(config => {
       // Ajouter votre en-tête ici
-      config.headers.Authorization = `Bearer ${token.value}`;
+      config.headers.Authorization = `Bearer ${jwt.value}`;
       return config;
     }, error => {
       return Promise.reject(error);

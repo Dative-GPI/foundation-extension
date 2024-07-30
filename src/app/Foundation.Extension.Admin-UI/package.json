@@ -11,8 +11,10 @@
   },
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "@dative-gpi/foundation-extension-shared-ui": "1.0.0"
+  },
   "peerDependencies": {
-    "@dative-gpi/foundation-extension-shared-ui": "1.0.0",
     "@dative-gpi/foundation-admin-components": "0.0.229",
     "@dative-gpi/foundation-core-components": "0.0.229",
     "@dative-gpi/foundation-shared-components": "0.0.229",

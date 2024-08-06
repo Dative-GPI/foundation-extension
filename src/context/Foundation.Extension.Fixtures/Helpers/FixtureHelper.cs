@@ -17,8 +17,9 @@ namespace Foundation.Extension.Fixtures
     public class FixtureHelper : IFixtureHelper
     {
         private ILogger<FixtureHelper> _logger;
-        const string FIXTURES_DIRECTORY = "Fixtures";
-        static readonly string BASE_DIRECTORY = Directory.GetCurrentDirectory();
+        
+        public static string FIXTURES_DIRECTORY = "Fixtures";
+        public static string BASE_DIRECTORY = Directory.GetCurrentDirectory();
 
         public FixtureHelper(ILogger<FixtureHelper> logger)
         {

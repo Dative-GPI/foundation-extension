@@ -8,7 +8,7 @@ using System.Reflection;
 
 using Foundation.Clients.Fixtures.Services;
 
-namespace XXXXX.Context.Migrations
+namespace XXXXX.Context.Migrations.Shared
 {
   public static class EntityPropertyProvider
   {

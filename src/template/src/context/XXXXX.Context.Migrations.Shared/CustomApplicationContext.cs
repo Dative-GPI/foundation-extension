@@ -8,7 +8,7 @@ using Foundation.Extension.Fixtures.Abstractions;
 
 using XXXXX.Context.Kernel;
 
-namespace XXXXX.Context.Migrations
+namespace XXXXX.Context.Migrations.Shared
 {
   public class CustomApplicationContext : ApplicationContext
   {

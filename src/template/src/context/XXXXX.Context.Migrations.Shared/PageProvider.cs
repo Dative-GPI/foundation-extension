@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Foundation.Extension.Fixtures;
 using System.Linq;
-namespace XXXXX.Context.Migrations
+namespace XXXXX.Context.Migrations.Shared
 {
   public static class PageProvider
   {

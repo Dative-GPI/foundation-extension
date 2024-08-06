@@ -6,7 +6,7 @@ using Foundation.Extension.Fixtures.Abstractions;
 
 using Microsoft.Extensions.Logging;
 
-namespace XXXXX.Context.Migrations
+namespace XXXXX.Context.Migrations.Shared
 {
   public class FixtureManager : BaseFixtureManager
   {

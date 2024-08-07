@@ -50,7 +50,7 @@ export const useCoreExtension = () => {
       if (routeOrganisationId) {
         setAppOrganisationId(routeOrganisationId);
       }
-    });
+    }, { immediate: true });
     
     return {
       done

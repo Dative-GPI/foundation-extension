@@ -1,8 +1,9 @@
 <template>
-  <FSImageUI
-    :blurhash="image"
+  <FSEditImageUI
+    :blurHash="image"
     :source="source"
     @error="onError"
+    @update:source="$emit('update:imageId', $event)"
     v-bind="$attrs"
   />
 </template>
@@ -16,7 +17,7 @@ import { useImage } from "../composables";
 import { useExtensionJwt } from "@dative-gpi/foundation-shared-services/composables";
 
 export default defineComponent({
-  name: "FEImage",
+  name: "FEEditImage",
   components: {
   },
   props: {
@@ -26,6 +27,7 @@ export default defineComponent({
       default: null
     }
   },
+  emits: ["update:imageId"],
   setup(props) {
     const { get: getImage, entity: image } = useImage();
     const { jwt } = useExtensionJwt();
@@ -41,8 +43,8 @@ export default defineComponent({
     };
 
     return {
-      image,
       source,
+      image,
       onError
     };
   }

@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using Bones.Flow;
-
+using Foundation.Extension.Domain.Models;
 using Foundation.Extension.Gateway.Abstractions;
 using Foundation.Extension.Gateway.Models;
 using Foundation.Extension.Gateway.ViewModels;

@@ -11,6 +11,16 @@ namespace Foundation.Extension.Gateway.DI
     {
         public static IServiceCollection AddImages(this IServiceCollection services)
         {
+            services.AddScoped<ImageQueryHandler>();
+            services.AddScoped<IQueryHandler<ImageQuery, ImageDetails>>(sp =>
+            {
+                var pipeline = sp.GetPipelineFactory<ImageQuery, ImageDetails>()
+                    .Add<ImageQueryHandler>()
+                    .Build();
+
+                return pipeline;
+            });
+
             services.AddScoped<RawImageQueryHandler>();
             services.AddScoped<IQueryHandler<RawImageQuery, byte[]>>(sp =>
             {
@@ -20,7 +30,6 @@ namespace Foundation.Extension.Gateway.DI
 
                 return pipeline;
             });
-
 
             services.AddScoped<ThumbnailImageQueryHandler>();
             services.AddScoped<IQueryHandler<ThumbnailImageQuery, byte[]>>(sp =>

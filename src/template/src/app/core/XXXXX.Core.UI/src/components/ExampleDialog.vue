@@ -37,6 +37,8 @@
 import { defineComponent,ref } from "vue";
 
 import { TextRules } from "@dative-gpi/foundation-shared-components/models";
+import { useExtensionCommunicationBridge } from "@dative-gpi/foundation-extension-shared-ui/composables";
+
 
 import FEDialog from "@dative-gpi/foundation-extension-shared-ui/components/FEDialog.vue";
 
@@ -46,10 +48,27 @@ export default defineComponent({
     FEDialog
   },
   setup() {
+    const { notify } = useExtensionCommunicationBridge();
     const fieldValue = ref("");
     const dialog = ref(true);
 
     const onSubmit = () => {
+      let program = {
+        messageType: "stepProgram",
+        stepNumber: undefined,
+        program: {
+          createId: "uuidv4()",
+          modelCode: "currentModel.value!.code",
+          optionIds: "electedOptionIds.value",
+          optionCodes: "selectedOptionCodes.value",
+          duration: "duration.value",
+          informations: "informations.value",
+          phases: "phases.value"
+        }
+      };
+
+      console.log("notif")
+      notify(program);
       console.log("Good job you submitted your first extension form !");
       dialog.value = false;
     };

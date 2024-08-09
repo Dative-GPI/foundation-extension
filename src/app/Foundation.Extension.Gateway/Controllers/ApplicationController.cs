@@ -8,7 +8,7 @@ using Foundation.Extension.Gateway.ViewModels;
 
 namespace Foundation.Extension.Gateway.Controllers
 {
-    [Route("api")]
+    [Route("api/shared/v1")]
     public class ApplicationController : ControllerBase
     {
         private readonly IApplicationService _applicationService;

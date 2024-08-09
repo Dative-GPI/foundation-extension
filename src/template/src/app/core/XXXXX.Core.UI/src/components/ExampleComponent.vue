@@ -28,7 +28,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted } from "vue";
+import Ajv from "ajv";
 
 import { useExtensionCommunicationBridge } from "@dative-gpi/foundation-extension-shared-ui/composables";
 import FEDataTable from "@dative-gpi/foundation-extension-core-ui/components/FEDataTable.vue";
@@ -39,7 +40,7 @@ export default defineComponent({
     FEDataTable
   },
   setup() {
-    const { openDialog } = useExtensionCommunicationBridge();
+    const { openDialog, subscribeUnsafe } = useExtensionCommunicationBridge();
 
     const tableCode = "ui.tables.test";
 
@@ -60,6 +61,26 @@ export default defineComponent({
         description: "Description 3",
       },
     ];
+
+    let programSchema = {
+      type: "object",
+      properties: {
+        messageType: { enum: ["stepProgram"] },
+        stepNumber: { type: "string" },
+        program: { type: "object" },
+      },
+      required: ["messageType", "program"],
+    };
+
+    onMounted(() => {
+      subscribeUnsafe(
+        location.href,
+        (payload: any) => {
+          console.trace()
+          console.log(payload)
+        },
+        new Ajv().compile(programSchema))
+    });
 
     return {
       tableCode,

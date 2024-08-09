@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Bones.Repository.Interfaces;
@@ -11,6 +10,7 @@ namespace Foundation.Extension.Domain.Repositories.Interfaces
 {
     public interface IImageRepository
     {
+        Task<ImageDetails> Get(Guid imageId);
         Task<byte[]> GetRaw(Guid imageId);
         Task<byte[]> GetThumbnail(Guid imageId);
         Task<IEntity<Guid>> Create(CreateImage payload);

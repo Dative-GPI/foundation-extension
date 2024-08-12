@@ -20,7 +20,7 @@ namespace Foundation.Extension.Gateway.Controllers
         }
 
         [HttpGet("api/translations")]
-        [HttpGet("api/gateway/v1/translations")]
+        [HttpGet("api/shared/v1/translations")]
         public async Task<IActionResult> GetMany()
         {
             var translations = await _applicationTranslationService.GetMany();

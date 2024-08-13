@@ -1,6 +1,5 @@
 <template>
-  <FSEntityViewUI
-    :imageSource="source"
+  <FSEntityView
     v-bind="$attrs"
   >
     <template
@@ -12,39 +11,42 @@
         v-bind="{ ...slotData }"
       />
     </template>
-  </FSEntityViewUI>
+    <template
+      #image="{ imageSize }"
+    >
+      <FEImage
+        :imageId="$props.imageId"
+        :cover="$props.imageCover"
+        :height="imageSize"
+        :width="imageSize"
+      />
+    </template>
+  </FSEntityView>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, type PropType } from "vue";
+import { defineComponent, type PropType } from "vue";
 
-import FSEntityViewUI from "@dative-gpi/foundation-shared-components/components/views/FSEntityViewUI.vue";
-import { useExtensionJwt } from "@dative-gpi/foundation-shared-services/composables";
-
-import { IMAGE_RAW_SOURCE_URL } from "../config";
+import FSEntityView from "@dative-gpi/foundation-shared-components/components/views/FSEntityView.vue";
 
 export default defineComponent({
   name: "FEEntityView",
   components: {
-    FSEntityViewUI
+    FSEntityView
   },
   props: {
     imageId: {
       type: String as PropType<string | null>,
       required: false,
       default: null
+    },
+    imageCover: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
-  setup(props) {
-    const { jwt } = useExtensionJwt();
-
-    const source = computed(() => {
-      return (props.imageId && jwt.value) ? IMAGE_RAW_SOURCE_URL(props.imageId, jwt.value) : null;
-    });
-
-    return {
-      source
-    };
+  setup() {
   }
 });
 </script>

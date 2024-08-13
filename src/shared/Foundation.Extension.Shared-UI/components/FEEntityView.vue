@@ -19,6 +19,7 @@
       <FEImage
         :imageId="$props.imageId"
         :cover="$props.imageCover"
+        :imageB64="$props.imageB64"
         :height="imageSize"
         :width="imageSize"
       />
@@ -48,6 +49,11 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false
+    },
+    imageB64: {
+      type: String as PropType<string | null>,
+      required: false,
+      default: null
     }
   },
   setup() {

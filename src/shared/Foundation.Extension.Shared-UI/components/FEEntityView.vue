@@ -1,5 +1,7 @@
 <template>
   <FSEntityView
+    :imageCover="$props.imageCover"
+    :imageId="$props.imageId"
     v-bind="$attrs"
   >
     <template

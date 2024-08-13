@@ -28,11 +28,13 @@
 import { defineComponent, type PropType } from "vue";
 
 import FSEntityView from "@dative-gpi/foundation-shared-components/components/views/FSEntityView.vue";
+import FEImage from "./FEImage.vue";
 
 export default defineComponent({
   name: "FEEntityView",
   components: {
-    FSEntityView
+    FSEntityView,
+    FEImage
   },
   props: {
     imageId: {

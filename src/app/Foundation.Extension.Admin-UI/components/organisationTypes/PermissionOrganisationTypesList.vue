@@ -90,8 +90,6 @@ import { defineComponent, ref, onMounted, computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import _ from "lodash";
 
-import { useExtensionCommunicationBridge } from "@dative-gpi/foundation-extension-shared-ui";
-
 import { usePermissionOrganisations, usePermissionOrganisationTypes, useUpsertPermissionOrganisationTypes, usePermissionOrganisationCategories } from "../../composables";
 
 export default defineComponent({
@@ -108,7 +106,6 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { setTitle, setCrumbs } = useExtensionCommunicationBridge();
     const { getMany: getPermissionOrganisations, entities: permissionOrganisations } = usePermissionOrganisations();
     const { fetch: getPermissionOrganisationCategories, entity: categories } = usePermissionOrganisationCategories();
     const { getMany: getPermissionOrganisationTypes, entities: permissionOrganisationTypes } = usePermissionOrganisationTypes();
@@ -123,15 +120,6 @@ export default defineComponent({
     const permissionIds = ref<string[]>([]);
 
     const init = async () => {
-      setTitle("Permissions");
-      setCrumbs([
-        {
-          to: route.path,
-          text: "Permissions",
-          disabled: true,
-        },
-      ]);
-
       await getPermissionOrganisations();
       await getPermissionOrganisationCategories();
 

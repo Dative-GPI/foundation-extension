@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Foundation.Extension.Fixtures" Version="1.0.1" />
+    <PackageReference Include="Foundation.Extension.Fixtures" Version="$(TEMPLATE_VERSION)" />
   </ItemGroup>
 
   <ItemGroup>

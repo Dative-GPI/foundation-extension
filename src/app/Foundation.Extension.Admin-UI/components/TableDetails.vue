@@ -111,7 +111,6 @@ import _ from "lodash";
 
 import TableSynchronizer from "./TableSynchronizer.vue";
 
-import { useExtensionCommunicationBridge } from "@dative-gpi/foundation-extension-shared-ui";
 import { useTranslations } from "@dative-gpi/bones-ui/composables";
 
 import { useTable, useUpdateTable } from "../composables";
@@ -132,7 +131,6 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { setTitle, setCrumbs } = useExtensionCommunicationBridge();
     const { get, entity: table } = useTable();
     const { currentRoute } = useRouter();
     const { update } = useUpdateTable();
@@ -186,16 +184,6 @@ export default defineComponent({
     });
 
     const init = async () => {
-      setCrumbs([
-        {
-          to: currentRoute.value.path,
-          text: "Table",
-          disabled: true,
-        },
-      ]);
-      await get(props.tableId);
-      reset();
-      setTitle($tr("ui.xxxxx.table", "Table"));
     };
 
     const up = (item: Column) => {

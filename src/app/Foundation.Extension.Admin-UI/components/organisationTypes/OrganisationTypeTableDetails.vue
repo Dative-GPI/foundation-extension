@@ -57,7 +57,6 @@ import { defineComponent, ref, computed, onMounted, watch } from "vue";
 
 import _ from "lodash";
 
-import { useExtensionCommunicationBridge } from "@dative-gpi/foundation-extension-shared-ui";
 import { useTranslations } from "@dative-gpi/bones-ui/composables";
 
 import type { Column, UpdateOrganisationTypeDispositionDTO, UpdateOrganisationTypeTableDTO } from "../../domain";
@@ -81,7 +80,6 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { setTitle, setCrumbs } = useExtensionCommunicationBridge();
     const { currentRoute } = useRouter();
     const { $tr } = useTranslations();
 
@@ -126,15 +124,6 @@ export default defineComponent({
     });
 
     const init = async () => {
-      setTitle($tr("ui.xxxxx.table", "Table"));
-      setCrumbs([
-        {
-          to: currentRoute.value.path,
-          text: "Table",
-          disabled: true,
-        },
-      ]);
-
       await get(props.tableId);
       await getOrganisationTypeTable(props.organisationTypeId, props.tableId);
       reset();

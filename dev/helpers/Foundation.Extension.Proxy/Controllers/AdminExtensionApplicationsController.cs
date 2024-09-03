@@ -83,7 +83,7 @@ namespace Foundation.Extension.Proxy.Controllers
           host = host,
           adminJWT = jwt
         }),
-        RequestUri = new Uri($"{_localPrefix}/api/applications")
+        RequestUri = new Uri($"{_localPrefix}/api/shared/v1/applications")
       });
 
       response.EnsureSuccessStatusCode();

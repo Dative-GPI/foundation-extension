@@ -1,8 +1,8 @@
 import type { Plugin } from "vue";
 import { ServiceFactory } from "@dative-gpi/bones-ui/core";
-import { useExtensionJwt } from "@dative-gpi/foundation-shared-services/composables";
+import { useAppAuthToken } from "@dative-gpi/foundation-shared-services/composables";
 
-const { jwt } = useExtensionJwt();
+const { jwt } = useAppAuthToken();
 
 export const TokenPlugin: Plugin = {
   install: () => {

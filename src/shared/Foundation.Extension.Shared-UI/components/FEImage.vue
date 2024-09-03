@@ -13,7 +13,7 @@ import { computed, defineComponent, type PropType } from "vue";
 import { IMAGE_RAW_SOURCE_URL } from "../config";
 import { useImage } from "../composables";
 
-import { useExtensionJwt } from "@dative-gpi/foundation-shared-services/composables";
+import { useAppAuthToken } from "@dative-gpi/foundation-shared-services/composables";
 
 export default defineComponent({
   name: "FEImage",
@@ -28,7 +28,7 @@ export default defineComponent({
   },
   setup(props) {
     const { get: getImage, entity: image } = useImage();
-    const { jwt } = useExtensionJwt();
+    const { jwt } = useAppAuthToken();
 
     const source = computed(() => {
       return (props.imageId && jwt.value) ? IMAGE_RAW_SOURCE_URL(props.imageId, jwt.value) : null;

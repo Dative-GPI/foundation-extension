@@ -28,10 +28,10 @@ export default defineComponent({
   },
   setup(props) {
     const { get: getImage, entity: image } = useImage();
-    const { jwt } = useAppAuthToken();
+    const { authToken } = useAppAuthToken();
 
     const source = computed(() => {
-      return (props.imageId && jwt.value) ? IMAGE_RAW_SOURCE_URL(props.imageId, jwt.value) : null;
+      return (props.imageId && authToken.value) ? IMAGE_RAW_SOURCE_URL(props.imageId, authToken.value) : null;
     });
 
     const onError = (): void => {

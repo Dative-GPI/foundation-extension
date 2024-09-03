@@ -21,7 +21,7 @@ export const useExtensionHost = () => {
 
         const { goTo, setHeight } = useExtensionCommunicationBridge();
         const { setAppLanguageCode } = useAppLanguageCode();
-        const { setExtensionJwt } = useAppAuthToken();
+        const { setAppAuthToken } = useAppAuthToken();
 
         const router = useRouter();
         const route = useRoute();
@@ -48,7 +48,7 @@ export const useExtensionHost = () => {
         }
 
         if(token.value){
-            setExtensionJwt(token.value);
+            setAppAuthToken(token.value);
         }
 
         onUnmounted(() => {

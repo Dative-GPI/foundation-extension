@@ -35,7 +35,7 @@ namespace XXXXX.Core.Kernel
             new RouteDefinition()
             {
                 Authorizations = new string[] {},
-                Path = (ctx) => $"/organisations/{ctx.OrganisationId.Value}/role-organisations/{ctx.RoleId.Value}",
+                Path = (ctx) => $"/organisations/{ctx.OrganisationId.Value}/role-organisations/:roleId",
                 Name = "organisation-role-permissions",
                 DrawerCategoryLabelDefault = null,
                 DrawerCategoryCode = null,

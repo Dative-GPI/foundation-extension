@@ -8,4 +8,11 @@ export const routes: RouteRecordRaw[] = [
             default: () => import("../views/RolePermissionOrganisations.vue")
         }
     },
+    {
+      path: "/organisations/:organisationId/dialogs/remove",
+      name: "dialog-remove",
+      components: {
+          default: () => import("../views/dialogs/Remove.vue")
+      }
+    }
 ]

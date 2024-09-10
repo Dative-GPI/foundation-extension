@@ -22,25 +22,35 @@
       :tableCode="tableCode"
       :items="items"
     />
+    <FEButtonRemove
+      :removeTotal="1"
+      :removeCurrent="fakeRemove"
+      @remove="fakeRemove = 8"
+    />
 
 
   </FSCol>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import Ajv from "ajv";
 
 import { useExtensionCommunicationBridge } from "@dative-gpi/foundation-extension-shared-ui/composables";
+
+import FEButtonRemove from "@dative-gpi/foundation-extension-core-ui/components/FEButtonRemove.vue";
 import FEDataTable from "@dative-gpi/foundation-extension-core-ui/components/FEDataTable.vue";
 
 export default defineComponent({
   name: "ExampleComponent",
   components: {
+    FEButtonRemove,
     FEDataTable
   },
   setup() {
     const { openDialog, subscribeUnsafe } = useExtensionCommunicationBridge();
+
+    const fakeRemove = ref(0);
 
     const tableCode = "ui.tables.test";
 
@@ -83,6 +93,7 @@ export default defineComponent({
     });
 
     return {
+      fakeRemove,
       tableCode,
       items,
       openDialog
@@ -90,5 +101,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped></style>

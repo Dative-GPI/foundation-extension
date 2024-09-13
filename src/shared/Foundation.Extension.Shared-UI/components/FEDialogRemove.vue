@@ -112,6 +112,9 @@ export default defineComponent({
           if(payload.dialogId !== dialogId.value) {return;}
           removeTotal.value = payload.removeTotal;
           removeCurrent.value = payload.removeCurrent;
+          if(removeCurrent.value === removeTotal.value) {
+            dialog.value = false;
+          }
         }
       );
     })

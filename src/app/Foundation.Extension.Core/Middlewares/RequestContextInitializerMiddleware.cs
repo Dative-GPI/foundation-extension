@@ -30,7 +30,7 @@ namespace Foundation.Extension.Core.Middlewares
 
       var actorId = new Guid(request.Headers["X-User-Id"].ToString());
       var applicationId = new Guid(request.Headers["X-Application-Id"].ToString());
-      var languageCode = request.Headers["Accept-Language"].ToString();
+      var languageCode = request.Headers["X-Language-Code"].ToString();
 
       var isAuthenticated = request.Headers.ContainsKey(HeaderNames.Authorization);
       var jwt = isAuthenticated ? request.Headers[HeaderNames.Authorization].ToString().Substring(7) : null;
@@ -70,11 +70,7 @@ namespace Foundation.Extension.Core.Middlewares
         organisationAdminId = organisation.AdminId;
         organisationTypeId = organisation.OrganisationTypeId;
 
-        var userOrganisations = await foundationClient.Core.UserOrganisations.GetMany(organisationId, new UserOrganisationsFilterFoundationModel()
-        {
-        });
-
-        var userOrganisation = userOrganisations.FirstOrDefault();
+        var userOrganisation = await foundationClient.Core.UserOrganisations.GetCurrent(organisationId);
 
         if (userOrganisation == null)
         {

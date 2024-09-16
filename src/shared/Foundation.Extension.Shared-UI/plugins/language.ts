@@ -8,7 +8,7 @@ export const LanguagePlugin: Plugin = {
   install: () => {
     ServiceFactory.http.interceptors.request.use(config => {
       // Ajouter votre en-tête ici
-      config.headers['Accept-Language'] = `${languageCode.value}`;
+      config.headers['X-Language-Code'] = `${languageCode.value}`;
       return config;
     }, error => {
       return Promise.reject(error);

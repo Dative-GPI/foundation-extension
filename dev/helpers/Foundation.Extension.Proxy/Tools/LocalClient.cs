@@ -90,6 +90,8 @@ namespace Foundation.Extension.Proxy.Tools
       _logger.LogInformation("Token acquired : {jwt}", jwt);
 
       _localClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + jwt);
+	  _localClient.DefaultRequestHeaders.Add("X-Language-Code", context.Request.Headers["X-Language-Code"].ToString());
+	  _localClient.DefaultRequestHeaders.Add("X-Requested-With", context.Request.Headers["X-Requested-With"].ToString());
     }
   }
 }

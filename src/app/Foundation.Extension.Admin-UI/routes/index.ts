@@ -35,7 +35,7 @@ export const routes: RouteRecordRaw[] = [
         component: () => import('../views/OrganisationTypeTables.vue'),
     },
     {
-        path: "/admin/extension/organisation-types/:organisationTypeId/tables/:tableId",
+        path: "/admin/v1/organisation-types/:organisationTypeId/tables/:tableId",
         name: "organisation-type-table",
         component: () => import('../views/OrganisationTypeTable.vue'),
     },
@@ -45,7 +45,7 @@ export const routes: RouteRecordRaw[] = [
         component: () => import('../views/Tables.vue'),
     },
     {
-        path: "/admin/extension/tables/:tableId",
+        path: "/admin/v1/tables/:tableId",
         name: "table",
         component: () => import('../views/Table.vue'),
     },

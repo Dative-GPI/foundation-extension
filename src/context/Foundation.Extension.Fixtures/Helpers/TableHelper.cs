@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
+using Humanizer;
+
 namespace Foundation.Extension.Fixtures
 {
     public static class TableHelper
@@ -13,7 +15,7 @@ namespace Foundation.Extension.Fixtures
 
         // de la forme "***" ou avec simple quote
         // [^'] = tout sauf simple quote (utilisé à l'intérieur d'un bloc de simple quote), pareil pour les doubles
-        const string REGEX_PATTERN = @"(?:[']([^']*)[']|[""]([^""]*)[""])";
+        const string REGEX_PATTERN = @"=\s*(?:[']([^']*)[']|[""]([^""]*)[""])";
 
         // static readonly List<string> TablesFiles = new () {
         //     "../../../app/admin/Foundation.Extension.Admin-UI/config/literals/tables.ts",
@@ -22,7 +24,7 @@ namespace Foundation.Extension.Fixtures
 
         static readonly Regex Regex = new(REGEX_PATTERN);
 
-        public static async Task<List<Fixture>> GetTables(params string[] projects)
+        public static async Task<List<Table>> GetTables(params string[] projects)
         {
             HashSet<string> result = new HashSet<string>();
 
@@ -40,14 +42,20 @@ namespace Foundation.Extension.Fixtures
                         result.Add(match.Groups[1].Value + match.Groups[2].Value);
                     }
                 }
-
             }
 
             return result
-                .Select(table => new Fixture()
+                .Select(table => new Table()
                 {
                     Code = table,
-                    Value = "A REMPLIR MANUELLEMENT"
+                    EntityType = table.Replace("ui.admin.table.", " ")
+                        .Replace("ui.tables.", " ")
+                        .Split(".")
+                        .First()
+                        .Replace("-organisation-type", "").Replace("-organisation", "")
+                        .Replace("-", " ")
+                        .Trim()
+                        .Pascalize()
                 })
                 .ToList();
         }

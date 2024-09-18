@@ -15,7 +15,6 @@
     @click="editMode = false"
   >
   </FSButton>
-  {{ tableId }}
   <TableDetails
     v-if="tableId"
     :edit-mode="editMode"

@@ -16,101 +16,101 @@ using Foundation.Extension.Fixtures;
 
 namespace XXXXX.Context.Migrations.Shared
 {
-  public class BaseProgram
-  {
-    public static async Task Main(string[] args, string migrationsAssembly)
+    public class BaseProgram
     {
-      var ServiceProvider = GetServiceProvider(migrationsAssembly);
-
-      var logger = ServiceProvider.GetRequiredService<ILogger<BaseProgram>>();
-
-      if (EF.IsDesignTime)
-      {
-        logger.LogInformation("Design time detected");
-        return;
-      }
-
-      if (args.Contains("fixtures"))
-      {
-        var fixtureManager = ServiceProvider.GetRequiredService<FixtureManager>();
-        if (args.Contains("generate"))
+        public static async Task Main(string[] args, string migrationsAssembly)
         {
-          await fixtureManager.Generate(args.Contains("--dry-run"));
-          return;
-        }
-        if (args.Contains("list"))
-        {
-          await fixtureManager.List();
-          return;
-        }
-        logger.LogError("Command unknown {command}", args);
-        return;
-      }
+            var ServiceProvider = GetServiceProvider(migrationsAssembly);
 
-      logger.LogInformation("Applying migrations");
+            var logger = ServiceProvider.GetRequiredService<ILogger<BaseProgram>>();
 
-      IEnumerable<DbContext> contexts = new List<DbContext>()
+            if (EF.IsDesignTime)
+            {
+                logger.LogInformation("Design time detected");
+                return;
+            }
+
+            if (args.Contains("fixtures"))
+            {
+                var fixtureManager = ServiceProvider.GetRequiredService<FixtureManager>();
+                if (args.Contains("generate"))
+                {
+                    await fixtureManager.Generate(args.Contains("--dry-run"));
+                    return;
+                }
+                if (args.Contains("list"))
+                {
+                    await fixtureManager.List();
+                    return;
+                }
+                logger.LogError("Command unknown {command}", args);
+                return;
+            }
+
+            logger.LogInformation("Applying migrations");
+
+            IEnumerable<DbContext> contexts = new List<DbContext>()
             {
                 ServiceProvider.GetRequiredService<CustomApplicationContext>()
             };
 
-      foreach (var context in contexts)
-      {
-        logger.LogInformation("Applying migrations {migrations} for {context}", context.Database.GetPendingMigrations(), context);
-        context.Database.Migrate();
-      }
-    }
-
-    internal static IServiceProvider GetServiceProvider(string migrationsAssembly)
-    {
-      var host = new Microsoft.Extensions.Hosting.HostBuilder()
-          .ConfigureHostConfiguration(configHost =>
-          {
-            configHost.SetBasePath(Directory.GetCurrentDirectory());
-            configHost.AddJsonFile("appsettings.json", optional: true);
-            configHost.AddEnvironmentVariables();
-          })
-          .ConfigureServices((hostContext, services) =>
-          {
-            services.AddFixtures();
-
-            services.AddScoped<FixtureManager>();
-
-            // apparemment quand on est en design time, dotnet ef rajoute tout seul un logger
-            if (!EF.IsDesignTime)
+            foreach (var context in contexts)
             {
-              services.AddLogging(opt => opt.AddSerilog(
-                            new LoggerConfiguration()
-                                .ReadFrom.Configuration(hostContext.Configuration)
-                                .CreateLogger()
-                        )
-                    );
+                logger.LogInformation("Applying migrations {migrations} for {context}", context.Database.GetPendingMigrations(), context);
+                context.Database.Migrate();
             }
+        }
 
-            services.AddDbContext<CustomApplicationContext>(options =>
+        internal static IServiceProvider GetServiceProvider(string migrationsAssembly)
+        {
+            var host = new Microsoft.Extensions.Hosting.HostBuilder()
+                .ConfigureHostConfiguration(configHost =>
+                {
+                    configHost.SetBasePath(Directory.GetCurrentDirectory());
+                    configHost.AddJsonFile("appsettings.json", optional: true);
+                    configHost.AddEnvironmentVariables();
+                })
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddFixtures();
+
+                    services.AddScoped<FixtureManager>();
+
+                    // apparemment quand on est en design time, dotnet ef rajoute tout seul un logger
+                    if (!EF.IsDesignTime)
                     {
-                        var connectionString = hostContext.Configuration.GetConnectionString("PGSQL").Trim(';');
+                        services.AddLogging(opt => opt.AddSerilog(
+                                new LoggerConfiguration()
+                                    .ReadFrom.Configuration(hostContext.Configuration)
+                                    .CreateLogger()
+                            )
+                        );
+                    }
 
-                        connectionString += ";Include Error Detail=true";
+                    services.AddDbContext<CustomApplicationContext>(options =>
+                      {
+                              var connectionString = hostContext.Configuration.GetConnectionString("PGSQL").Trim(';');
 
-                        options.EnableSensitiveDataLogging();
-                        options.EnableDetailedErrors();
+                              connectionString += ";Include Error Detail=true";
 
-                        options.UseNpgsql(connectionString, otp =>
+                              options.EnableSensitiveDataLogging();
+                              options.EnableDetailedErrors();
+
+                              options.UseNpgsql(connectionString, otp =>
                         {
-                            otp.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-                            otp.MigrationsAssembly(migrationsAssembly);
-                            otp.CommandTimeout(60 * 60);
-                        });
-                    });
+                                otp.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                                otp.MigrationsAssembly(migrationsAssembly);
+                                otp.CommandTimeout(60 * 60);
+                            });
+                          });
 
-          }).Build();
+                }).Build();
 
-      var services = host.Services;
+            var services = host.Services;
 
-      services.GetRequiredService<ILogger<BaseProgram>>().LogInformation("Services configured");
+            services.GetRequiredService<ILogger<BaseProgram>>().LogInformation("Services configured");
 
-      return services;
+            return services;
+        }
     }
-  }
 }

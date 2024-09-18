@@ -1,24 +1,32 @@
 <template>
-  <FSButton label="Edit"
+  <FSButton
+    label="Edit"
     color="primary"
     prepend-icon="mdi-pencil"
     v-if="!editMode"
-    @click="editMode = true">
+    @click="editMode = true"
+  >
   </FSButton>
-  <FSButton label="Save"
+  <FSButton
+    label="Save"
     color="primary"
     prepend-icon="mdi-content-save-outline"
     v-if="editMode"
-    @click="editMode = false">
+    @click="editMode = false"
+  >
   </FSButton>
-  <table-details :edit-mode="editMode"
-    :table-id="tableId" />
+  {{ tableId }}
+  <TableDetails
+    v-if="tableId"
+    :edit-mode="editMode"
+    :table-id="tableId"
+  />
 </template>
 
 <script lang="ts">
 import TableDetails from "../components/TableDetails.vue";
 
-import { defineComponent, computed, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import { useRoute } from "vue-router";
 
 export default defineComponent({
@@ -26,7 +34,7 @@ export default defineComponent({
   components: {
     TableDetails,
   },
-  setup(props) {
+  setup() {
     const route = useRoute();
     const editMode = ref<boolean>(false);
 

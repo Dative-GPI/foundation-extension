@@ -6,6 +6,7 @@
     <FSButton
       variant="standard"
       color="primary"
+      :load="synchronizing"
       v-on:click="synchronize(tableId)"
     >
       Synchronize Columns
@@ -18,9 +19,7 @@ import { defineComponent } from "vue";
 
 import _ from "lodash";
 
-import { useExtensionCommunicationBridge } from "@dative-gpi/foundation-extension-shared-ui";
 import { useSynchronizeTable } from "../composables";
-import { useRouter } from "vue-router";
 
 export default defineComponent({
   components: {},
@@ -35,12 +34,11 @@ export default defineComponent({
     },
   },
   setup() {
-    const extension = useExtensionCommunicationBridge();
-    const router = useRouter();
-    const { fetch: synchronize, fetching: synchronizing, entity: synchronized  } = useSynchronizeTable();
+    const { fetch: synchronize, fetching: synchronizing  } = useSynchronizeTable();
 
     return {
-      synchronize
+      synchronize,
+      synchronizing
     };
   },
 });

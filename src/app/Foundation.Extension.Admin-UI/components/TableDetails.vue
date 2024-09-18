@@ -96,7 +96,7 @@
         />
       </template>
     </v-data-table>
-    <table-synchronizer
+    <TableSynchronizer
       :edit-mode="editMode"
       :table-id="tableId"
     />
@@ -104,7 +104,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onMounted, watch } from "vue";
+import { defineComponent, ref, computed, watch } from "vue";
 import { useRouter } from "vue-router";
 
 import _ from "lodash";
@@ -183,9 +183,6 @@ export default defineComponent({
       ];
     });
 
-    const init = async () => {
-    };
-
     const up = (item: Column) => {
       let index = items.value.indexOf(item);
       items.value.splice(index, 1);
@@ -247,11 +244,16 @@ export default defineComponent({
       }
     };
 
-    onMounted(init);
-
     const debouncedUpdateTable = _.debounce(onItemsDebounced, 500);
 
     watch(items, debouncedUpdateTable, { deep: true });
+
+    watch(
+      () => props.tableId, () => {
+        if(props.tableId) {
+          get(props.tableId);
+        }
+      }, { immediate: true });
 
     watch(
       () => props.editMode,
@@ -263,7 +265,7 @@ export default defineComponent({
     );
 
     watch(
-      () => table,
+      () => table.value,
       () => {
         reset();
       }

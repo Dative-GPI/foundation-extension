@@ -26,7 +26,21 @@ namespace Foundation.Extension.Admin.Middlewares
 
             var actorId = new Guid(request.Headers["X-User-Id"].ToString());
             var applicationId = new Guid(request.Headers["X-Application-Id"].ToString());
-            var languageCode = request.Headers["X-Language-Code"].ToString();
+			
+            string languageCode = null;
+            if (request.Headers.TryGetValue("X-Language-Code", out var applicationLanguageCode))
+            {
+                languageCode = applicationLanguageCode.ToString();
+            }
+            else if (request.Headers.TryGetValue("Accept-Language", out var browserLanguageCode))
+            {
+                languageCode = browserLanguageCode.ToString().Split(",")[0].Split(";")[0];
+            }
+            if (string.IsNullOrWhiteSpace(languageCode))
+            {
+                languageCode = "fr-FR";
+            }
+			
             var isAuthenticated = request.Headers.ContainsKey(HeaderNames.Authorization);
             var jwt = isAuthenticated ? request.Headers[HeaderNames.Authorization].ToString().Substring(7) : null;
 

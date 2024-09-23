@@ -24,7 +24,7 @@ namespace Foundation.Extension.Core.AutoMapper
       CreateMap<CompleteUserOrganisationColumnInfos, UserOrganisationColumnInfosViewModel>();
       CreateMap<UserOrganisationTableDetails, UserOrganisationTableDetailsViewModel>();
 
-
+	  CreateMap<PathCrumb, PathCrumbViewModel>();
     }
   }
 }

@@ -14,89 +14,102 @@ using Foundation.Clients.Core.FoundationModels;
 
 namespace Foundation.Extension.Core.Middlewares
 {
-  public class RequestContextInitializerMiddleware
-  {
-    private readonly RequestDelegate _next;
+	public class RequestContextInitializerMiddleware
+	{
+		private readonly RequestDelegate _next;
 
-    public RequestContextInitializerMiddleware(RequestDelegate next)
-    {
-      _next = next;
-    }
+		public RequestContextInitializerMiddleware(RequestDelegate next)
+		{
+			_next = next;
+		}
 
-    public async Task InvokeAsync(HttpContext context)
-    {
-      var request = context.Request;
-      var provider = context.RequestServices.GetRequiredService<RequestContextProvider>();
+		public async Task InvokeAsync(HttpContext context)
+		{
+			var request = context.Request;
+			var provider = context.RequestServices.GetRequiredService<RequestContextProvider>();
 
-      var actorId = new Guid(request.Headers["X-User-Id"].ToString());
-      var applicationId = new Guid(request.Headers["X-Application-Id"].ToString());
-      var languageCode = request.Headers["X-Language-Code"].ToString();
+			var actorId = new Guid(request.Headers["X-User-Id"].ToString());
+			var applicationId = new Guid(request.Headers["X-Application-Id"].ToString());
 
-      var isAuthenticated = request.Headers.ContainsKey(HeaderNames.Authorization);
-      var jwt = isAuthenticated ? request.Headers[HeaderNames.Authorization].ToString().Substring(7) : null;
+			string languageCode = null;
+			if (request.Headers.TryGetValue("X-Language-Code", out var applicationLanguageCode))
+			{
+				languageCode = applicationLanguageCode.ToString();
+			}
+			else if (request.Headers.TryGetValue("Accept-Language", out var browserLanguageCode))
+			{
+				languageCode = browserLanguageCode.ToString().Split(",")[0].Split(";")[0];
+			}
+			if (string.IsNullOrWhiteSpace(languageCode))
+			{
+				languageCode = "fr-FR";
+			}
 
-      Guid organisationId = Guid.Empty;
+			var isAuthenticated = request.Headers.ContainsKey(HeaderNames.Authorization);
+			var jwt = isAuthenticated ? request.Headers[HeaderNames.Authorization].ToString().Substring(7) : null;
 
-      Guid? organisationAdminId = null;
-      Guid? organisationTypeId = null;
-      Guid? userOrganisationId = null;
-      Guid? roleId = null;
+			Guid organisationId = Guid.Empty;
 
-      // Coming from the claims -> common front
-      var hasOrganisationId = request.Headers.TryGetValue("X-Organisation-Id", out var temp) && Guid.TryParse(temp, out organisationId);
-      // Coming from the route  -> extension
-      if (!hasOrganisationId)
-      {
-        hasOrganisationId = request.RouteValues.TryGetValue("organisationId", out var temp2) && Guid.TryParse(temp2.ToString(), out organisationId);
-      }
-      // Coming from the query -> signalr
-      if (!hasOrganisationId)
-      {
-        hasOrganisationId = request.Query.TryGetValue("organisationId", out var temp3) && Guid.TryParse(temp3.ToString(), out organisationId);
-      }
+			Guid? organisationAdminId = null;
+			Guid? organisationTypeId = null;
+			Guid? userOrganisationId = null;
+			Guid? roleId = null;
 
-      if (hasOrganisationId)
-      {
-        var foundationClientFactory = context.RequestServices.GetRequiredService<IFoundationClientFactory>();
-        var foundationClient = await foundationClientFactory.CreateAuthenticated(applicationId, languageCode, jwt);
+			// Coming from the claims -> common front
+			var hasOrganisationId = request.Headers.TryGetValue("X-Organisation-Id", out var temp) && Guid.TryParse(temp, out organisationId);
+			// Coming from the route  -> extension
+			if (!hasOrganisationId)
+			{
+				hasOrganisationId = request.RouteValues.TryGetValue("organisationId", out var temp2) && Guid.TryParse(temp2.ToString(), out organisationId);
+			}
+			// Coming from the query -> signalr
+			if (!hasOrganisationId)
+			{
+				hasOrganisationId = request.Query.TryGetValue("organisationId", out var temp3) && Guid.TryParse(temp3.ToString(), out organisationId);
+			}
 
-        var organisation = await foundationClient.Gateway.Organisations.Get(organisationId);
+			if (hasOrganisationId)
+			{
+				var foundationClientFactory = context.RequestServices.GetRequiredService<IFoundationClientFactory>();
+				var foundationClient = await foundationClientFactory.CreateAuthenticated(applicationId, languageCode, jwt);
 
-        if (organisation == null)
-        {
-          throw new Exception(ErrorCode.MissingOrganisation);
-        }
+				var organisation = await foundationClient.Gateway.Organisations.Get(organisationId);
 
-        organisationAdminId = organisation.AdminId;
-        organisationTypeId = organisation.OrganisationTypeId;
+				if (organisation == null)
+				{
+					throw new Exception(ErrorCode.MissingOrganisation);
+				}
 
-        var userOrganisation = await foundationClient.Core.UserOrganisations.GetCurrent(organisationId);
+				organisationAdminId = organisation.AdminId;
+				organisationTypeId = organisation.OrganisationTypeId;
 
-        if (userOrganisation == null)
-        {
-          throw new Exception(ErrorCode.UserNotInOrganisation);
-        }
+				var userOrganisation = await foundationClient.Core.UserOrganisations.GetCurrent(organisationId);
 
-        userOrganisationId = userOrganisation.Id;
-        roleId = userOrganisation.RoleId;
-      }
+				if (userOrganisation == null)
+				{
+					throw new Exception(ErrorCode.UserNotInOrganisation);
+				}
 
-      provider.Context = new RequestContext()
-      {
-        ApplicationId = applicationId,
-        ActorId = actorId,
-        LanguageCode = languageCode,
+				userOrganisationId = userOrganisation.Id;
+				roleId = userOrganisation.RoleId;
+			}
 
-        OrganisationId = hasOrganisationId ? organisationId : null,
-        OrganisationAdminId = organisationAdminId,
-        OrganisationTypeId = organisationTypeId,
+			provider.Context = new RequestContext()
+			{
+				ApplicationId = applicationId,
+				ActorId = actorId,
+				LanguageCode = languageCode,
 
-        ActorOrganisationId = userOrganisationId,
-        RoleId = roleId,
-        Jwt = jwt
-      };
+				OrganisationId = hasOrganisationId ? organisationId : null,
+				OrganisationAdminId = organisationAdminId,
+				OrganisationTypeId = organisationTypeId,
 
-      await _next(context);
-    }
-  }
+				ActorOrganisationId = userOrganisationId,
+				RoleId = roleId,
+				Jwt = jwt
+			};
+
+			await _next(context);
+		}
+	}
 }

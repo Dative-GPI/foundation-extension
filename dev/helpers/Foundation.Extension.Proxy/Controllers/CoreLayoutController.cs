@@ -15,72 +15,83 @@ using Microsoft.Extensions.Configuration;
 
 namespace Foundation.Extension.Proxy.Controllers
 {
-  [Route("api/foundation/core/v1/organisations/{organisationId}")]
-  public class CoreLayoutController : ControllerBase
-  {
-    private IHttpClientFactory _httpClientFactory;
-    private string _foundationPrefix;
-    private string _localPrefix;
-    private bool _enableInstalledExtensions;
-    private LocalClient _localClient;
-
-    public CoreLayoutController(
-        IHttpClientFactory httpClientFactory,
-        IConfiguration configuration,
-        LocalClient localClient)
+    [Route("api/foundation/core/v1/organisations/{organisationId}")]
+    public class CoreLayoutController : ControllerBase
     {
-      _httpClientFactory = httpClientFactory;
-      _foundationPrefix = configuration.GetConnectionString("Foundation");
-      _localPrefix = configuration.GetConnectionString("Local");
-      _enableInstalledExtensions = configuration.GetValue<bool>("EnableInstalledExtensions", true);
-      _localClient = localClient;
-    }
+        private IHttpClientFactory _httpClientFactory;
+        private string _foundationPrefix;
+        private string _localPrefix;
+        private bool _enableInstalledExtensions;
+        private LocalClient _localClient;
 
-    [HttpGet("layouts/current")]
-    public async Task<IActionResult> GetAsync([FromRoute] Guid organisationId)
-    {
-      var localRoutes = await _localClient.Get<List<RouteInfosFoundationModel>>(HttpContext, "/api/core/v1/organisations/" + organisationId + "/routes");
+        public CoreLayoutController(
+            IHttpClientFactory httpClientFactory,
+            IConfiguration configuration,
+            LocalClient localClient)
+        {
+            _httpClientFactory = httpClientFactory;
+            _foundationPrefix = configuration.GetConnectionString("Foundation");
+            _localPrefix = configuration.GetConnectionString("Local");
+            _enableInstalledExtensions = configuration.GetValue<bool>("EnableInstalledExtensions", true);
+            _localClient = localClient;
+        }
 
-      var foundationClient = _httpClientFactory.CreateClient();
-      var foundationResponse = await foundationClient.GetAsync(HttpContext, _foundationPrefix);
-      var foundationResult = await foundationResponse.Content.ReadFromJsonAsync<LayoutDetailsFoundationModel>();
-      // var foundationResult = JsonSerializer.Deserialize<LayoutDetailsFoundationModel>(foundationContent);
+        [HttpGet("layouts/current")]
+        public async Task<IActionResult> GetAsync([FromRoute] Guid organisationId)
+        {
+            var localRoutes = await _localClient.Get<List<RouteInfosFoundationModel>>(HttpContext, "/api/core/v1/organisations/" + organisationId + "/routes");
 
-      var categories = new List<LayoutCategoryInfosFoundationModel>() {
-        new LayoutCategoryInfosFoundationModel()
+            var foundationClient = _httpClientFactory.CreateClient();
+            var foundationResponse = await foundationClient.GetAsync(HttpContext, _foundationPrefix);
+            var foundationResult = await foundationResponse.Content.ReadFromJsonAsync<LayoutDetailsFoundationModel>();
+
+            if (!_enableInstalledExtensions)
             {
-            Id = Guid.Empty,
-            Index = 10,
-            Icon = "mdi-home-account",
-            Label = "Extensions Category"
+                foundationResult.Pages.RemoveAll( p => foundationResult.ExternalRoutes.Any(r => r.Name == p.PageCode));
+                foundationResult.Categories.RemoveAll(p => !foundationResult.Pages.Any(r => r.LayoutCategoryId == p.Id));
+                foundationResult.ExternalRoutes.Clear();
             }
-      };
-      foundationResult.Categories.AddRange(categories);
 
-      foundationResult.Pages.AddRange(localRoutes.Where(l => l.ShowOnDrawer).Select(l => new LayoutPageInfosFoundationModel
-      {
-        Id = Guid.NewGuid(),
-        LayoutCategoryId = Guid.Empty,
-        Index = 10,
-        Icon = "mdi-home-account",
-        Label = l.DrawerLabel,
-        PageCode = l.Name,
-        PageId = Guid.NewGuid(),
-        PageType = PageType.Extension
-      }));
+            foundationResult.Categories.Add(new LayoutCategoryInfosFoundationModel()
+            {
+                Id = Guid.Empty,
+                Index = 99,
+                Icon = "mdi-home-account",
+                Label = "Extensions Category"
+            });
 
-      foundationResult.ExternalRoutes.AddRange(localRoutes.Select(l => new RouteInfosFoundationModel
-      {
-        DrawerCategory = "Extensions Category",
-        Id = Guid.NewGuid(),
-        Name = l.Name,
-        Path = l.Path,
-        Uri = _localPrefix,
-        ExtensionId = null
-      }));
+            foundationResult.Pages.AddRange(
+                localRoutes
+                .Where(l => l.ShowOnDrawer)
+                .Select(l => new LayoutPageInfosFoundationModel
+                {
+                    Id = Guid.NewGuid(),
+                    LayoutCategoryId = Guid.Empty,
+                    Index = 0,
+                    Icon = "mdi-home-account",
+                    Label = l.DrawerLabel,
+                    PageCode = l.Name,
+                    PageId = Guid.NewGuid(),
+                    PageType = PageType.Extension
+                })
+                .ToList()
+            );
 
+            foundationResult.ExternalRoutes.AddRange(
+                localRoutes
+                .Select(l => new RouteInfosFoundationModel
+                {
+                    DrawerCategory = "Extensions Category",
+                    Id = Guid.NewGuid(),
+                    Name = l.Name,
+                    Path = l.Path,
+                    Uri = _localPrefix,
+                    ExtensionId = null
+                })
+                .ToList()
+            );
 
-      return Ok(foundationResult);
+            return Ok(foundationResult);
+        }
     }
-  }
 }

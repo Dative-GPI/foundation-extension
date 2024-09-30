@@ -2,22 +2,15 @@
   <FSCol
     :gap="24"
   >
-    <FSSpan
-      font="text-h2"
-    >{{ $tr("ui.extension.title", "Title") }}</FSSpan>
-    <FSSpan
-      font="text-body"
-    >{{ $tr("ui.extension.body", "Body") }}</FSSpan>
-    <FSSpan
-      font="text-button"
-    >{{ $tr("ui.commmon.label", "Label") }}</FSSpan>
     <FSButton
       label="open a dialog"
       @click="openDialog('organisations/41ea29a1-bbfe-4f4a-86b3-425963471053/XXXXX/examples/drawer')"
     />
     <FSSpan
       font="text-h1"
-    >Table Test</FSSpan>
+    >
+      Table Test
+    </FSSpan>
     <FEDataTable
       :tableCode="tableCode"
       :items="items"
@@ -27,6 +20,11 @@
       :removeCurrent="fakeRemove"
       @remove="fakeRemove = 8"
     />
+    <FSRow
+      height="1000px"
+    >
+      1000px row for scroll
+    </FSRow>
 
 
   </FSCol>

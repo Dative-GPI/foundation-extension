@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Bones" Version="0.0.55"/>
-    <PackageReference Include="Foundation.Clients" Version="1.0.17-fix03-dev-20240723.11"/>
+    <PackageReference Include="Foundation.Clients" Version="1.0.17-fix03-dev-20240924.8"/>
   </ItemGroup>
 
 </Project>

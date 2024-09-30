@@ -14,14 +14,14 @@
       />
     </template>
     <template
-      #image="{ imageSize }"
+      #image="{ actualImageSize }"
     >
       <FEImage
         :imageId="$props.imageId"
         :cover="$props.imageCover"
         :imageB64="$props.imageB64"
-        :height="imageSize"
-        :width="imageSize"
+        :height="actualImageSize"
+        :width="actualImageSize"
       />
     </template>
   </FSEntityView>

@@ -2,7 +2,9 @@
   <v-app
     style="background-color: transparent"
   >
-    <v-main>
+    <v-main
+      style="height: 100vh;"
+    >
       <router-view
         v-if="done"
       />

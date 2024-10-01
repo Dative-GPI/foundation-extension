@@ -8,6 +8,7 @@ using Foundation.Extension.Domain.Repositories.Filters;
 using Foundation.Extension.Domain.Repositories.Interfaces;
 using Foundation.Extension.Core.Abstractions;
 using Foundation.Extension.Domain.Abstractions;
+using System.Text.Json;
 
 
 namespace Foundation.Extension.Core.Tools
@@ -56,7 +57,7 @@ namespace Foundation.Extension.Core.Tools
       if (organisation.AdminId == context.ActorId)
         return foundationPermissions.Concat(permissionOrganisationTypes).ToList();
 
-      var userOrganisation = await GetUserOrganisation(client, organisationId, context.ActorId);
+      var userOrganisation = await client.Core.UserOrganisations.GetCurrent(organisationId);
       if (userOrganisation == default || !userOrganisation.RoleId.HasValue)
         return foundationPermissions;
 
@@ -92,17 +93,6 @@ namespace Foundation.Extension.Core.Tools
       var role = await _roleOrganisationRepository.Get(roleId);
 
       return role.Permissions.Select(rp => rp.Code).ToList();
-    }
-
-    private async Task<Clients.Core.FoundationModels.UserOrganisationInfosFoundationModel> GetUserOrganisation(IFoundationClient client, Guid organisationId, Guid userId)
-    {
-      var userOrganisations = await client.Core.UserOrganisations.GetMany(
-          organisationId,
-          new Clients.Core.FoundationModels.UserOrganisationsFilterFoundationModel()
-          {
-          }
-      );
-      return userOrganisations.FirstOrDefault();
     }
   }
 }

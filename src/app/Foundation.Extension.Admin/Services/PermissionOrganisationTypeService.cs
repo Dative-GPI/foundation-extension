@@ -12,21 +12,25 @@ using Foundation.Extension.Domain.Repositories.Interfaces;
 
 using Foundation.Extension.Admin.Abstractions;
 using Foundation.Extension.Admin.ViewModels;
+using Foundation.Extension.Domain.Repositories.Filters;
 
 namespace Foundation.Extension.Admin.Services
 {
     public class PermissionOrganisationTypeService : IPermissionOrganisationTypeService
     {
-        private IQueryHandler<PermissionOrganisationTypesQuery, IEnumerable<PermissionOrganisationTypeInfos>> _permissionOrganisationTypesQueryHandler;
+		private IPermissionOrganisationTypeRepository _permissionOrganisationTypeRepository;
+		private IQueryHandler<PermissionOrganisationTypesQuery, IEnumerable<PermissionOrganisationTypeInfos>> _permissionOrganisationTypesQueryHandler;
         private ICommandHandler<UpsertPermissionOrganisationTypesCommand> _updatePermissionOrganisationTypesCommand;
         private IMapper _mapper;
 
         public PermissionOrganisationTypeService(
+			IPermissionOrganisationTypeRepository permissionOrganisationTypeRepository,
             IQueryHandler<PermissionOrganisationTypesQuery, IEnumerable<PermissionOrganisationTypeInfos>> permissionOrganisationTypesQuery,
             ICommandHandler<UpsertPermissionOrganisationTypesCommand> updatePermissionOrganisationTypesCommand,
             IMapper mapper
         )
         {
+			_permissionOrganisationTypeRepository = permissionOrganisationTypeRepository;
             _permissionOrganisationTypesQueryHandler = permissionOrganisationTypesQuery;
             _updatePermissionOrganisationTypesCommand = updatePermissionOrganisationTypesCommand;
             _mapper = mapper;
@@ -44,7 +48,7 @@ namespace Foundation.Extension.Admin.Services
             return _mapper.Map<IEnumerable<PermissionOrganisationTypeInfos>, IEnumerable<PermissionOrganisationTypeInfosViewModel>>(result);
         }
 
-        public async Task Upsert(List<UpsertPermissionOrganisationTypesViewModel> payload)
+        public async Task<IEnumerable<PermissionOrganisationTypeInfosViewModel>> Upsert(List<UpsertPermissionOrganisationTypesViewModel> payload)
         {
             var command = new UpsertPermissionOrganisationTypesCommand()
             {
@@ -56,6 +60,12 @@ namespace Foundation.Extension.Admin.Services
             };
 
             await _updatePermissionOrganisationTypesCommand.HandleAsync(command);
+			var result = await _permissionOrganisationTypeRepository.GetMany(new PermissionOrganisationTypesFilter()
+            {
+				OrganisationTypeIds = payload.Select(x => x.OrganisationTypeId).Distinct().ToList()
+            });
+
+			return _mapper.Map<IEnumerable<PermissionOrganisationTypeInfos>, IEnumerable<PermissionOrganisationTypeInfosViewModel>>(result);
         }
     }
 }

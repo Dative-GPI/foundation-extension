@@ -104,8 +104,11 @@ export default defineComponent({
     },
     roleId: {
       type: String,
-      required: true,
-      default: "",
+      required: true
+    },
+    organisationTypeId: {
+      type: String,
+      required: true
     },
   },
   setup(props) {
@@ -126,7 +129,7 @@ export default defineComponent({
 
     const init = async () => {
       await getPermissionOrganisationCategories();
-      await getPermissionOrganisationTypes();
+      await getPermissionOrganisationTypes({ organisationTypeId: props.organisationTypeId  });
 
       fetchRoleOrganisation();
     };

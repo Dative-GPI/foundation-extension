@@ -25,7 +25,7 @@ export const routes: RouteRecordRaw[] = [
         component: () => import('../views/PermissionOrganisationTypes.vue'),
     },
     {
-        path: "/admin/v1/role-organisation-types/:roleId",
+        path: "/admin/v1/organisation-types/:organisationTypeId/roles/:roleId",
         name: "role-permission-organisations",
         component: () => import('../views/RolePermissionOrganisations.vue'),
     },

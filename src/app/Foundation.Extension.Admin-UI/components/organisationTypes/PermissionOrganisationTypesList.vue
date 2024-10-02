@@ -128,7 +128,7 @@ export default defineComponent({
 
     const fetchPermissionOrganisationTypes = async () => {
       fetching.value = true;
-      await getPermissionOrganisationTypes({ search: search.value, organisationTypeId: props.organisationTypeId });
+      await getPermissionOrganisationTypes({ /*search: search.value,*/ organisationTypeId: props.organisationTypeId });
       permissionIds.value = permissionOrganisationTypes.value.map((p) => p.permissionId);
       fetching.value = false;
     };

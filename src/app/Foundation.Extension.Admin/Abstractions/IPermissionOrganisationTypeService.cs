@@ -9,6 +9,6 @@ namespace Foundation.Extension.Admin.Abstractions
     public interface IPermissionOrganisationTypeService
     {
         Task<IEnumerable<PermissionOrganisationTypeInfosViewModel>> GetMany(PermissionOrganisationTypesFilterViewModel filter);
-        Task Upsert(List<UpsertPermissionOrganisationTypesViewModel> payload);
+        Task<IEnumerable<PermissionOrganisationTypeInfosViewModel>> Upsert(List<UpsertPermissionOrganisationTypesViewModel> payload);
     }
 }

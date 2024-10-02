@@ -1,5 +1,9 @@
 <template>
-  <role-permission-organisations-list :edit-mode="editMode" :role-id="roleId" />
+  <role-permission-organisations-list
+    :organisationTypeId="organisationTypeId"  
+    :edit-mode="editMode"
+    :role-id="roleId"
+  />
 </template>
 
 <script lang="ts">
@@ -21,6 +25,7 @@ export default defineComponent({
     return {
       editMode,
       roleId: route.params.roleId as string,
+      organisationTypeId: route.params.organisationTypeId as string,
     };
   },
 });

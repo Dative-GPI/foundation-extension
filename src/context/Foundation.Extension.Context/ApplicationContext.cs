@@ -135,6 +135,17 @@ namespace Foundation.Extension.Context
             });
             #endregion
 
+			#region Tables
+			modelBuilder.Entity<ColumnDTO>(m =>
+			{
+				m.HasKey(c => c.Id);
+				m.HasOne(c => c.EntityProperty)
+					.WithMany()
+					.HasForeignKey(c => c.EntityPropertyId)
+					.OnDelete(DeleteBehavior.Cascade);
+			});
+			#endregion
+
             #region Translations
             modelBuilder.Entity<TranslationDTO>(m =>
             {

@@ -11,7 +11,7 @@ namespace Foundation.Extension.Admin
 {
     public class EntityPropertyTranslationsQuery : ICoreRequest, IRequest<IEnumerable<EntityPropertyTranslation>>
     {
-        public IEnumerable<string> Authorizations => new[] { ADMIN_ENTITYPROPERTYTRANSLATIONS_INFOS };
+        public IEnumerable<string> Authorizations => new[] { ADMIN_ENTITYPROPERTYAPPLICATIONTRANSLATIONS_INFOS };
         public Guid ApplicationId { get; set; }
 
         public string Prefix { get; set; }

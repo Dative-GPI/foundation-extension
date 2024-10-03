@@ -11,7 +11,7 @@ namespace Foundation.Extension.Admin
 {
     public class ReplaceEntityPropertyTranslationsCommand : ICoreRequest, IRequest<IEntity<Guid>>
     {
-        public IEnumerable<string> Authorizations => new[] { ADMIN_ENTITYPROPERTYTRANSLATIONS_UPDATE };
+        public IEnumerable<string> Authorizations => new[] { ADMIN_ENTITYPROPERTYAPPLICATIONTRANSLATIONS_UPDATE };
         public Guid ApplicationId { get; set; }
         public Guid ActorId { get; set; }
 

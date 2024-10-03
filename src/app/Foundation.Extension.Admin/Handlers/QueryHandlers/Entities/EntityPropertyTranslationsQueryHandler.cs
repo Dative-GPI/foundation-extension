@@ -45,7 +45,7 @@ namespace Foundation.Extension.Admin.Handlers
 
             var adminFoundationClient = await _foundationClientFactory.CreateAdmin(context.ApplicationId, context.LanguageCode);
 
-            var entityPropertyTranslationsFoundation = await adminFoundationClient.Admin.EntityPropertyTranslations.GetMany(new EntityPropertyTranslationsFilterFoundationModel()
+            var entityPropertyTranslationsFoundation = await adminFoundationClient.Admin.EntityPropertyApplicationTranslations.GetMany(new EntityPropertyApplicationTranslationsFilterFoundationModel()
             {
                 EntityPropertyIds = request.EntityPropertyIds,
             });

@@ -9,7 +9,7 @@ namespace Foundation.Extension.Admin
 {
     public class EntityPropertyTranslationsSpreadsheetQuery : ICoreRequest, IRequest<byte[]>
     {
-        public IEnumerable<string> Authorizations => new[] { ADMIN_ENTITYPROPERTY_INFOS, ADMIN_ENTITYPROPERTYTRANSLATIONS_INFOS };
+        public IEnumerable<string> Authorizations => new[] { ADMIN_ENTITYPROPERTY_INFOS, ADMIN_ENTITYPROPERTYAPPLICATIONTRANSLATIONS_INFOS };
         public Guid ApplicationId { get; set; }
         public Guid ActorId { get; set; }
     }

@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Foundation.Clients" Version="2.0.1"/>
+    <PackageReference Include="Foundation.Clients" Version="2.0.1-fix02-dev-20241003.3"/>
   </ItemGroup>
 
   <PropertyGroup>

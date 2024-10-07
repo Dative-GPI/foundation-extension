@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Foundation.Extension.Domain.Models
 {
@@ -12,5 +13,12 @@ namespace Foundation.Extension.Domain.Models
         public string ParentId { get; set; }
         public string EntityType { get; set; }
         public bool Disabled { get; set; }
+        public List<TranslationEntityProperty> Translations { get; set; }
+    }
+
+    public class TranslationEntityProperty
+    {
+        public string LanguageCode { get; set; }
+        public string Label { get; set; }
     }
 }

@@ -2,7 +2,7 @@ using System;
 
 namespace Foundation.Extension.Domain.Repositories.Commands
 {
-    public class CreateEntityPropertyTranslation
+    public class CreateEntityPropertyApplicationTranslation
     {
         public required Guid ApplicationId { get; set; }
         public required Guid EntityPropertyId { get; set; }

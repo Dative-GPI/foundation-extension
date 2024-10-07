@@ -39,7 +39,12 @@ namespace Foundation.Extension.Context.Repositories
                 EntityType = dto.EntityType,
                 ParentId = dto.ParentId,
                 Value = dto.Value,
-                Disabled = dto.Disabled
+                Disabled = dto.Disabled,
+                Translations = dto.Translations?.Select(t => new TranslationEntityProperty()
+                {
+                    LanguageCode = t.LanguageCode,
+                    Label = t.Label
+                }).ToList() ?? new List<TranslationEntityProperty>()
             };
         }
 
@@ -60,11 +65,15 @@ namespace Foundation.Extension.Context.Repositories
                 Id = dto.Id,
                 Code = dto.Code,
                 LabelDefault = dto.LabelDefault,
-                CategoryLabelDefault = dto.CategoryLabelDefault,
                 EntityType = dto.EntityType,
                 Value = dto.Value,
                 ParentId = dto.ParentId,
-                Disabled = dto.Disabled
+                Disabled = dto.Disabled,
+                Translations = dto.Translations?.Select(t => new TranslationEntityProperty()
+                {
+                    LanguageCode = t.LanguageCode,
+                    Label = t.Label
+                }).ToList() ?? new List<TranslationEntityProperty>()
             }).OrderBy(e => e.Code).ToList();
         }
     }

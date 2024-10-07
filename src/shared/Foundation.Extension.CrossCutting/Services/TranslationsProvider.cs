@@ -12,117 +12,145 @@ using Foundation.Extension.Domain.Repositories.Interfaces;
 
 namespace Foundation.Extension.CrossCutting.Services
 {
-    public class TranslationsProvider : ITranslationsProvider
-    {
-        private readonly ITranslationRepository _translationRepository;
-        private readonly IApplicationTranslationRepository _applicationTranslationRepository;
-        private readonly IFoundationClientFactory _foundationClientFactory;
+	public class TranslationsProvider : ITranslationsProvider
+	{
+		private readonly ITranslationRepository _translationRepository;
+		private readonly IApplicationTranslationRepository _applicationTranslationRepository;
+		private readonly IFoundationClientFactory _foundationClientFactory;
+		private readonly IEntityPropertyRepository _entityPropertyRepository;
+		private readonly IEntityPropertyApplicationTranslationRepository _entityPropertyApplicationTranslationRepository;
 
-        public TranslationsProvider(
-            ITranslationRepository translationRepository,
-            IApplicationTranslationRepository applicationTranslationRepository,
-            IFoundationClientFactory foundationClientFactory
-        )
-        {
-            _translationRepository = translationRepository;
-            _applicationTranslationRepository = applicationTranslationRepository;
-            _foundationClientFactory = foundationClientFactory;
-        }
+		public TranslationsProvider(
+			ITranslationRepository translationRepository,
+			IApplicationTranslationRepository applicationTranslationRepository,
+			IFoundationClientFactory foundationClientFactory,
+			IEntityPropertyRepository entityPropertyRepository,
+			IEntityPropertyApplicationTranslationRepository entityPropertyApplicationTranslationRepository
 
+		)
+		{
+			_translationRepository = translationRepository;
+			_applicationTranslationRepository = applicationTranslationRepository;
+			_foundationClientFactory = foundationClientFactory;
 
-        public async Task<IEnumerable<ApplicationTranslation>> GetMany(Guid applicationId, string languageCode)
-        {
-            var defaultTranslations = await FetchDefaultTranslations();
-            var allTranslations = await FetchApplicationTranslations(applicationId, languageCode);
-            var foundationTranslation = await FetchFoundationTranslations(applicationId, languageCode);
-
-            var specificTranslations = SelectMostSpecificTranslations(defaultTranslations, allTranslations, foundationTranslation);
-            return specificTranslations;
-        }
+			_entityPropertyRepository = entityPropertyRepository;
+			_entityPropertyApplicationTranslationRepository = entityPropertyApplicationTranslationRepository;
+		}
 
 
-        private async Task<IEnumerable<Translation>> FetchDefaultTranslations()
-        {
-            var translations = await _translationRepository.GetMany();
-            return translations;
-        }
+		public async Task<IEnumerable<ApplicationTranslation>> GetMany(Guid applicationId, string languageCode)
+		{
+			var defaultTranslations = await _translationRepository.GetMany();
 
+			var filter = new ApplicationTranslationsFilter()
+			{
+				ApplicationId = applicationId,
+				LanguageCode = languageCode
+			};
+			var applicationTranslations = await _applicationTranslationRepository.GetMany(filter);
 
-        private async Task<IEnumerable<ApplicationTranslation>> FetchApplicationTranslations(Guid applicationId, string languageCode)
-        {
-            var filter = new ApplicationTranslationsFilter()
-            {
-                ApplicationId = applicationId,
-                LanguageCode = languageCode
-            };
+			var foundationTranslations = await FetchFoundationTranslations(applicationId, languageCode);
 
-            var allTranslations = await _applicationTranslationRepository.GetMany(filter);
-            return allTranslations;
-        }
+			var defaultEntities = await _entityPropertyRepository.GetMany(new EntityPropertiesFilter());
 
-        private async Task<IEnumerable<ApplicationTranslation>> FetchFoundationTranslations(Guid applicationId, string languageCode)
-        {
-            try
-            {
-                var client = await _foundationClientFactory.CreateAnonymous(applicationId, languageCode);
-                var foundationTranslations = await client.Gateway.Translations.Get(languageCode);
+			var entityApplicationTranslations = await _entityPropertyApplicationTranslationRepository.GetMany(new EntityPropertyApplicationTranslationsFilter()
+			{
+				ApplicationId = applicationId,
+				LanguageCode = languageCode
+			});
 
-                return foundationTranslations.Select(tr => new ApplicationTranslation()
-                {
-                    TranslationCode = tr.Code,
-                    Value = tr.Value
-                });
-            }
-            catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                return Enumerable.Empty<ApplicationTranslation>();
-            }
-        }
+			var translations = defaultTranslations.GroupJoin(
+				applicationTranslations,
+				@default => @default.Code,
+				tr => tr.TranslationCode,
+				(@default, translations) =>
+				{
+					return new ApplicationTranslation()
+					{
+						Id = @default.Id,
+						TranslationCode = @default.Code,
+						Value = GetTranslationValue(languageCode, @default, translations),
+						LanguageCode = languageCode
+					};
+				}
+			).ToList();
 
-        private IEnumerable<ApplicationTranslation> SelectMostSpecificTranslations(
-            IEnumerable<Translation> translations,
-            IEnumerable<ApplicationTranslation> allTranslations,
-            IEnumerable<ApplicationTranslation> foundationTranslations
-        )
-        {
-            var translationsAndAppTranslations = translations.GroupJoin(
-                allTranslations,
-                tr => tr.Code,
-                apptr => apptr.TranslationCode,
-                (tr, appTrs) => (
-                    Translation: tr,
-                    ApplicationTranslation: appTrs.FirstOrDefault() // This will order alphabetically in a descending order with null last
-                )
-            );
+			var entityTranslations = defaultEntities.GroupJoin(
+				entityApplicationTranslations,
+				@default => @default.Code,
+				appTranslation => appTranslation.EntityPropertyCode,
+				(@default, appTranslations) =>
+				{
+					return new ApplicationTranslation()
+					{
+						Id = @default.Id,
+						TranslationCode = @default.Code,
+						Value = GetTranslationValue(languageCode, @default, appTranslations),
+						LanguageCode = languageCode
+					};
+				}
+			).ToList();
 
-            var withFoundationTranslations = translationsAndAppTranslations.GroupJoin(
-                foundationTranslations,
-                tr => tr.Translation.Code,
-                fTr => fTr.TranslationCode,
-                (tr, fTrs) =>
-                {
-                    if (tr.ApplicationTranslation != default)
-                    {
-                        return tr.ApplicationTranslation;
-                    }
-                    else if (fTrs.Any())
-                    {
-                        return fTrs.First();
-                    }
-                    else
-                    {
-                        return new ApplicationTranslation()
-                        {
-                            Id = tr.Translation.Id,
-                            TranslationCode = tr.Translation.Code,
-                            Value = tr.Translation.Value
-                        };
-                    }
-                }
-            );
+			return translations
+				.Concat(entityTranslations)
+				.Concat(foundationTranslations)
+				.DistinctBy(t => new {t.TranslationCode, t.LanguageCode})
+				.ToList();
+		}
 
-            var specificTranslations = withFoundationTranslations.Where(t => t != default);
-            return specificTranslations;
-        }
-    }
+		private async Task<IEnumerable<ApplicationTranslation>> FetchFoundationTranslations(Guid applicationId, string languageCode)
+		{
+			try
+			{
+				var client = await _foundationClientFactory.CreateAnonymous(applicationId, languageCode);
+				var foundationTranslations = await client.Gateway.Translations.Get(languageCode);
+
+				return foundationTranslations.Select(tr => new ApplicationTranslation()
+				{
+					Id = Guid.Empty,
+					TranslationCode = tr.Code,
+					LanguageCode = languageCode,
+					Value = tr.Value
+				});
+			}
+			catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
+			{
+				return Enumerable.Empty<ApplicationTranslation>();
+			}
+		}
+
+		public string GetTranslationValue(string languageCode, Translation defaultTranslation, IEnumerable<ApplicationTranslation> appTranslations)
+		{
+			var result = appTranslations.FirstOrDefault(t => t.LanguageCode == languageCode)?.Value;
+
+			if (result == null)
+			{
+				result = defaultTranslation.Translations.FirstOrDefault(t => t.LanguageCode == languageCode)?.Value;
+			}
+
+			if (result == null)
+			{
+				result = defaultTranslation.Value;
+			}
+
+			return result;
+		}
+
+		public string GetTranslationValue(string languageCode, EntityProperty entityProperty, IEnumerable<EntityPropertyApplicationTranslation> appTranslations)
+		{
+			var result = appTranslations.FirstOrDefault(t => t.LanguageCode == languageCode)?.Label;
+
+			if (result == null)
+			{
+				result = entityProperty.Translations.FirstOrDefault(t => t.LanguageCode == languageCode)?.Label;
+			}
+
+			if (result == null)
+			{
+				result = entityProperty.LabelDefault;
+			}
+
+			return result;
+		}
+	}
 }

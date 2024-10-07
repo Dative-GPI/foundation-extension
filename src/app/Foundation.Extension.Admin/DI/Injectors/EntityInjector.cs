@@ -32,9 +32,9 @@ namespace Foundation.Extension.Admin.DI
         private static IServiceCollection AddEntityPropertyTranslations(this IServiceCollection services)
         {
             services.AddScoped<EntityPropertyTranslationsQueryHandler>();
-            services.AddScoped<IQueryHandler<EntityPropertyTranslationsQuery, IEnumerable<EntityPropertyTranslation>>>(sp =>
+            services.AddScoped<IQueryHandler<EntityPropertyTranslationsQuery, IEnumerable<EntityPropertyApplicationTranslation>>>(sp =>
             {
-                var pipeline = sp.GetPipelineFactory<EntityPropertyTranslationsQuery, IEnumerable<EntityPropertyTranslation>>()
+                var pipeline = sp.GetPipelineFactory<EntityPropertyTranslationsQuery, IEnumerable<EntityPropertyApplicationTranslation>>()
                     .With<PermissionApplicationsMiddleware>()
                     .Add<EntityPropertyTranslationsQueryHandler>()
                     .Build();

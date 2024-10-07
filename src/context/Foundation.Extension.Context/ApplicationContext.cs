@@ -41,7 +41,7 @@ namespace Foundation.Extension.Context
         public DbSet<ColumnDTO> Columns { get; set; }
         public DbSet<OrganisationTypeDispositionDTO> OrganisationTypeDispositions { get; set; }
         public DbSet<EntityPropertyDTO> EntityProperties { get; set; }
-        public DbSet<EntityPropertyTranslationDTO> EntityPropertyTranslations { get; set; }
+        public DbSet<EntityPropertyApplicationTranslationDTO> EntityPropertyTranslations { get; set; }
         public DbSet<UserOrganisationTableDTO> UserOrganisationTables { get; set; }
         public DbSet<UserOrganisationColumnDTO> UserOrganisationColumns { get; set; }
         #endregion
@@ -71,6 +71,29 @@ namespace Foundation.Extension.Context
             modelBuilder.Entity<ApplicationDTO>(m =>
             {
                 m.HasKey(a => a.Id);
+            });
+            #endregion
+
+			#region EntityProperties
+            modelBuilder.Entity<EntityPropertyDTO>(m =>
+            {
+                m.HasKey(ep => ep.Id);
+
+                m.Property(ep => ep.Translations)
+                    .HasColumnType("jsonb");
+            });
+
+            modelBuilder.Entity<EntityPropertyApplicationTranslationDTO>(m =>
+            {
+                m.HasKey(et => et.Id);
+
+                m.HasOne(et => et.EntityProperty)
+                    .WithMany()
+                    .HasForeignKey(et => et.EntityPropertyId);
+
+                m.HasOne(et => et.Application)
+                    .WithMany()
+                    .HasForeignKey(et => et.ApplicationId);
             });
             #endregion
 
@@ -151,6 +174,9 @@ namespace Foundation.Extension.Context
             {
                 m.HasKey(t => t.Id);
                 m.HasIndex(t => t.Code).IsUnique();
+
+                m.Property(t => t.Translations)
+                    .HasColumnType("jsonb");
             });
 
             modelBuilder.Entity<ApplicationTranslationDTO>(m =>

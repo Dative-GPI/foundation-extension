@@ -25,9 +25,9 @@ namespace Foundation.Extension.Core.Tests
           EntityType = "A REMPLIR MANUELLEMENT",
           Label = null
         });
-      var _entityPropertyTranslationRepository = new Mock<IEntityPropertyTranslationRepository>();
-      _entityPropertyTranslationRepository.Setup(repo => repo.GetMany(It.Is<EntityPropertyTranslationsFilter>(command => true)))
-        .ReturnsAsync((EntityPropertyTranslationsFilter filter) => new List<EntityPropertyTranslation>());
+      var _entityPropertyTranslationRepository = new Mock<IEntityPropertyApplicationTranslationRepository>();
+      _entityPropertyTranslationRepository.Setup(repo => repo.GetMany(It.Is<EntityPropertyApplicationTranslationsFilter>(command => true)))
+        .ReturnsAsync((EntityPropertyApplicationTranslationsFilter filter) => new List<EntityPropertyApplicationTranslation>());
       var _columnRepository = new Mock<IColumnRepository>();
       _columnRepository.Setup(repo => repo.GetMany(It.Is<ColumnsFilter>(command => true)))
         .ReturnsAsync((ColumnsFilter filter) => new List<Column>());

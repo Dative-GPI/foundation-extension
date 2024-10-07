@@ -35,7 +35,7 @@ namespace Foundation.Extension.Admin.AutoMapper
       CreateMap<Page, PageViewModel>();
 
       CreateMap<EntityProperty, EntityPropertyViewModel>();
-      CreateMap<EntityPropertyTranslation, EntityPropertyTranslationViewModel>();
+      CreateMap<EntityPropertyApplicationTranslation, EntityPropertyTranslationViewModel>();
 
       #region Tables
       CreateMap<ApplicationTableInfos, ApplicationTableInfosViewModel>();

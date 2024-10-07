@@ -16,19 +16,20 @@ using Foundation.Extension.Domain.Abstractions;
 
 namespace Foundation.Extension.Context.Repositories
 {
-    public class EntityPropertyTranslationRepository : IEntityPropertyTranslationRepository
+    public class EntityPropertyApplicationTranslationRepository : IEntityPropertyApplicationTranslationRepository
     {
-        private readonly DbSet<EntityPropertyTranslationDTO> _dbSet;
+        private readonly DbSet<EntityPropertyApplicationTranslationDTO> _dbSet;
         private readonly IFoundationClientFactory _foundationClientFactory;
 
-        public EntityPropertyTranslationRepository(BaseApplicationContext context)
+        public EntityPropertyApplicationTranslationRepository(BaseApplicationContext context)
         {
             _dbSet = context.EntityPropertyTranslations;
         }
 
-        public async Task<IEnumerable<EntityPropertyTranslation>> GetMany(EntityPropertyTranslationsFilter filter)
+        public async Task<IEnumerable<EntityPropertyApplicationTranslation>> GetMany(EntityPropertyApplicationTranslationsFilter filter)
         {
             var query = _dbSet
+                .Include(e => e.EntityProperty)
                 .AsQueryable();
 
             if (filter.ApplicationId.HasValue)
@@ -46,24 +47,24 @@ namespace Foundation.Extension.Context.Repositories
                 query = query.Where(dto => dto.EntityProperty.EntityType == filter.EntityType);
             }
 
-
             var dtos = await query.AsNoTracking().ToListAsync();
 
-            return dtos.Select(dto => new EntityPropertyTranslation()
+            return dtos.Select(dto => new EntityPropertyApplicationTranslation()
             {
                 Id = dto.Id,
                 Label = dto.Label,
                 ApplicationId = dto.ApplicationId,
                 EntityPropertyId = dto.EntityPropertyId,
+				EntityPropertyCode = dto.EntityProperty.Code,
                 CategoryLabel = dto.CategoryLabel,
                 LanguageCode = dto.LanguageCode,
             });
         }
 
-        public Task CreateRange(IEnumerable<CreateEntityPropertyTranslation> payload)
+        public Task CreateRange(IEnumerable<CreateEntityPropertyApplicationTranslation> payload)
         {
 
-            var dtos = payload.Select(e => new EntityPropertyTranslationDTO()
+            var dtos = payload.Select(e => new EntityPropertyApplicationTranslationDTO()
             {
                 Id = Guid.NewGuid(),
                 Label = e.Label,
@@ -81,7 +82,7 @@ namespace Foundation.Extension.Context.Repositories
 
         public Task RemoveRange(IEnumerable<Guid> entityPropertiesIds)
         {
-            var dtos = entityPropertiesIds.Select(id => new EntityPropertyTranslationDTO()
+            var dtos = entityPropertiesIds.Select(id => new EntityPropertyApplicationTranslationDTO()
             {
                 Id = id
             });

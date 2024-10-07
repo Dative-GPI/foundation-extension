@@ -18,12 +18,12 @@ namespace Foundation.Extension.Admin.Handlers
     public class UploadEntityPropertyTranslationsCommandHandler : IMiddleware<UploadEntityPropertyTranslationsCommand>
     {
         private readonly IEntityPropertyRepository _entityPropertyRepository;
-        private readonly IEntityPropertyTranslationRepository _entityPropertyTranslationRepository;
+        private readonly IEntityPropertyApplicationTranslationRepository _entityPropertyTranslationRepository;
 
         public UploadEntityPropertyTranslationsCommandHandler
         (
             IEntityPropertyRepository entityPropertyRepository,
-            IEntityPropertyTranslationRepository entityPropertyTranslationRepository
+            IEntityPropertyApplicationTranslationRepository entityPropertyTranslationRepository
         )
         {
             _entityPropertyRepository = entityPropertyRepository;
@@ -41,7 +41,7 @@ namespace Foundation.Extension.Admin.Handlers
                 (l, c) => new { l.LanguageCode, LabelIndex = l.Index, CategoryIndex = c.Index })
                 .ToDictionary(l => l.LanguageCode);
 
-            var entityPropertyTranslations = await _entityPropertyTranslationRepository.GetMany(new EntityPropertyTranslationsFilter()
+            var entityPropertyTranslations = await _entityPropertyTranslationRepository.GetMany(new EntityPropertyApplicationTranslationsFilter()
             {
                 ApplicationId = command.ApplicationId
             });
@@ -72,7 +72,7 @@ namespace Foundation.Extension.Admin.Handlers
                     return;
                 }
 
-                var commands = new List<CreateEntityPropertyTranslation>();
+                var commands = new List<CreateEntityPropertyApplicationTranslation>();
 
                 // Skip the first row, it is supposed to be the header
                 foreach (var row in rows.Skip(1))
@@ -117,7 +117,7 @@ namespace Foundation.Extension.Admin.Handlers
                         var category = (categoryCell != null && ((categoryCell.DataType ?? CellValues.String) == CellValues.SharedString) && strings != null) ?
                             strings.ElementAt(Convert.ToInt32(categoryCell.InnerText)).InnerText : categoryCell?.InnerText;
 
-                        commands.Add(new CreateEntityPropertyTranslation()
+                        commands.Add(new CreateEntityPropertyApplicationTranslation()
                         {
                             ApplicationId = command.ApplicationId,
                             LanguageCode = language.Value.LanguageCode,

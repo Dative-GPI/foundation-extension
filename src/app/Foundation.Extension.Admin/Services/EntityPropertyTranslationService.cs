@@ -18,21 +18,21 @@ namespace Foundation.Extension.Admin.Services
 {
     public class EntityPropertyTranslationService : IEntityPropertyTranslationService
     {
-        private readonly IQueryHandler<EntityPropertyTranslationsQuery, IEnumerable<EntityPropertyTranslation>> _entityPropertyTranslationsQueryHandler;
+        private readonly IQueryHandler<EntityPropertyTranslationsQuery, IEnumerable<EntityPropertyApplicationTranslation>> _entityPropertyTranslationsQueryHandler;
         private readonly IQueryHandler<EntityPropertyTranslationsSpreadsheetQuery, byte[]> _entityPropertyTranslationsSpreadsheetQueryHandler;
         private readonly ICommandHandler<ReplaceEntityPropertyTranslationsCommand> _replaceEntityPropertyTranslationCommandHandler;
         private readonly ICommandHandler<UploadEntityPropertyTranslationsCommand> _uploadEntityPropertyTranslationsCommandHandler;
-        private readonly IEntityPropertyTranslationRepository _entityPropertyTranslationRepository;
+        private readonly IEntityPropertyApplicationTranslationRepository _entityPropertyTranslationRepository;
 
         private readonly IRequestContextProvider _requestContextProvider;
         private readonly IMapper _mapper;
 
         public EntityPropertyTranslationService(
-            IQueryHandler<EntityPropertyTranslationsQuery, IEnumerable<EntityPropertyTranslation>> entityPropertyTranslationsQueryHandler,
+            IQueryHandler<EntityPropertyTranslationsQuery, IEnumerable<EntityPropertyApplicationTranslation>> entityPropertyTranslationsQueryHandler,
             IQueryHandler<EntityPropertyTranslationsSpreadsheetQuery, byte[]> entityPropertyTranslationsSpreadsheetQueryHandler,
             ICommandHandler<ReplaceEntityPropertyTranslationsCommand> replaceEntityPropertyTranslationCommandHandler,
             ICommandHandler<UploadEntityPropertyTranslationsCommand> uploadEntityPropertyTranslationsCommandHandler,
-            IEntityPropertyTranslationRepository entityPropertyTranslationRepository,
+            IEntityPropertyApplicationTranslationRepository entityPropertyTranslationRepository,
             IRequestContextProvider requestContextProvider,
             IMapper mapper
         )
@@ -57,7 +57,7 @@ namespace Foundation.Extension.Admin.Services
 
             var result = await _entityPropertyTranslationsQueryHandler.HandleAsync(query);
 
-            return _mapper.Map<IEnumerable<EntityPropertyTranslation>, IEnumerable<EntityPropertyTranslationViewModel>>(result);
+            return _mapper.Map<IEnumerable<EntityPropertyApplicationTranslation>, IEnumerable<EntityPropertyTranslationViewModel>>(result);
         }
 
         public async Task<IEnumerable<EntityPropertyTranslationViewModel>> Replace(Guid entityPropertyId, List<UpdateEntityPropertyTranslationViewModel> payload)
@@ -79,12 +79,12 @@ namespace Foundation.Extension.Admin.Services
 
             await _replaceEntityPropertyTranslationCommandHandler.HandleAsync(command);
 
-            var result = await _entityPropertyTranslationRepository.GetMany(new EntityPropertyTranslationsFilter()
+            var result = await _entityPropertyTranslationRepository.GetMany(new EntityPropertyApplicationTranslationsFilter()
             {
                 EntityPropertyId = entityPropertyId
             });
 
-            return _mapper.Map<IEnumerable<EntityPropertyTranslation>, IEnumerable<EntityPropertyTranslationViewModel>>(result);
+            return _mapper.Map<IEnumerable<EntityPropertyApplicationTranslation>, IEnumerable<EntityPropertyTranslationViewModel>>(result);
         }
 
         public async Task<byte[]> Download()
@@ -121,12 +121,12 @@ namespace Foundation.Extension.Admin.Services
 
             await _uploadEntityPropertyTranslationsCommandHandler.HandleAsync(command);
 
-            var result = await _entityPropertyTranslationRepository.GetMany(new EntityPropertyTranslationsFilter()
+            var result = await _entityPropertyTranslationRepository.GetMany(new EntityPropertyApplicationTranslationsFilter()
             {
                 ApplicationId = _requestContextProvider.Context.ApplicationId
             });
 
-            return _mapper.Map<IEnumerable<EntityPropertyTranslation>, IEnumerable<EntityPropertyTranslationViewModel>>(result);
+            return _mapper.Map<IEnumerable<EntityPropertyApplicationTranslation>, IEnumerable<EntityPropertyTranslationViewModel>>(result);
         }
     }
 }

@@ -15,16 +15,16 @@ using System.Linq;
 
 namespace Foundation.Extension.Admin.Handlers
 {
-    public class EntityPropertyTranslationsQueryHandler : IMiddleware<EntityPropertyTranslationsQuery, IEnumerable<EntityPropertyTranslation>>
+    public class EntityPropertyTranslationsQueryHandler : IMiddleware<EntityPropertyTranslationsQuery, IEnumerable<EntityPropertyApplicationTranslation>>
     {
-        private IEntityPropertyTranslationRepository _entityPropertyTranslationRepository;
+        private IEntityPropertyApplicationTranslationRepository _entityPropertyTranslationRepository;
 
         private readonly IFoundationClientFactory _foundationClientFactory;
         private readonly IRequestContextProvider _requestContextProvider;
 
 
         public EntityPropertyTranslationsQueryHandler(
-            IEntityPropertyTranslationRepository entityPropertyTranslationRepository,
+            IEntityPropertyApplicationTranslationRepository entityPropertyTranslationRepository,
             IFoundationClientFactory foundationClientFactory,
             IRequestContextProvider requestContextProvider)
         {
@@ -33,11 +33,11 @@ namespace Foundation.Extension.Admin.Handlers
             _requestContextProvider = requestContextProvider;
         }
 
-        public async Task<IEnumerable<EntityPropertyTranslation>> HandleAsync(EntityPropertyTranslationsQuery request, Func<Task<IEnumerable<EntityPropertyTranslation>>> next, CancellationToken cancellationToken)
+        public async Task<IEnumerable<EntityPropertyApplicationTranslation>> HandleAsync(EntityPropertyTranslationsQuery request, Func<Task<IEnumerable<EntityPropertyApplicationTranslation>>> next, CancellationToken cancellationToken)
         {
             var context = _requestContextProvider.Context;
 
-            var entityPropertyTranslations = await _entityPropertyTranslationRepository.GetMany(new EntityPropertyTranslationsFilter()
+            var entityPropertyTranslations = await _entityPropertyTranslationRepository.GetMany(new EntityPropertyApplicationTranslationsFilter()
             {
                 ApplicationId = context.ApplicationId,
                 EntityPropertyId = request.EntityPropertyId,
@@ -51,7 +51,7 @@ namespace Foundation.Extension.Admin.Handlers
             });
 
 
-            return entityPropertyTranslations.Concat(entityPropertyTranslationsFoundation.Select(x => new EntityPropertyTranslation()
+            return entityPropertyTranslations.Concat(entityPropertyTranslationsFoundation.Select(x => new EntityPropertyApplicationTranslation()
             {
                 Id = x.Id,
                 ApplicationId = context.ApplicationId,

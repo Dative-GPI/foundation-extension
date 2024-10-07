@@ -14,12 +14,12 @@ namespace Foundation.Extension.Admin.Handlers
     public class ReplaceEntityPropertyTranslationsCommandHandler : IMiddleware<ReplaceEntityPropertyTranslationsCommand>
     {
         private readonly IEntityPropertyRepository _entityPropertyRepository;
-        private readonly IEntityPropertyTranslationRepository _entityPropertyTranslationRepository;
+        private readonly IEntityPropertyApplicationTranslationRepository _entityPropertyTranslationRepository;
 
         public ReplaceEntityPropertyTranslationsCommandHandler
         (
             IEntityPropertyRepository entityPropertyRepository,
-            IEntityPropertyTranslationRepository entityPropertyTranslationRepository
+            IEntityPropertyApplicationTranslationRepository entityPropertyTranslationRepository
         )
         {
             _entityPropertyRepository = entityPropertyRepository;
@@ -35,7 +35,7 @@ namespace Foundation.Extension.Admin.Handlers
                 throw new Exception(ErrorCode.EntityNotFound);
             }
 
-            var formerEntityPropertys = await _entityPropertyTranslationRepository.GetMany(new EntityPropertyTranslationsFilter()
+            var formerEntityPropertys = await _entityPropertyTranslationRepository.GetMany(new EntityPropertyApplicationTranslationsFilter()
             {
                 ApplicationId = command.ApplicationId,
                 EntityPropertyId = command.EntityPropertyId
@@ -43,7 +43,7 @@ namespace Foundation.Extension.Admin.Handlers
 
             await _entityPropertyTranslationRepository.RemoveRange(formerEntityPropertys.Select(t => t.Id));
 
-            var newEntityPropertys = command.Translations.Select(t => new CreateEntityPropertyTranslation()
+            var newEntityPropertys = command.Translations.Select(t => new CreateEntityPropertyApplicationTranslation()
             {
                 ApplicationId = command.ApplicationId,
                 LanguageCode = t.LanguageCode,

@@ -8,10 +8,10 @@ using Foundation.Extension.Domain.Repositories.Filters;
 
 namespace Foundation.Extension.Domain.Repositories.Interfaces
 {
-    public interface IEntityPropertyTranslationRepository
+    public interface IEntityPropertyApplicationTranslationRepository
     {
-        Task<IEnumerable<EntityPropertyTranslation>> GetMany(EntityPropertyTranslationsFilter filter);
-        Task CreateRange(IEnumerable<CreateEntityPropertyTranslation> payload);
+        Task<IEnumerable<EntityPropertyApplicationTranslation>> GetMany(EntityPropertyApplicationTranslationsFilter filter);
+        Task CreateRange(IEnumerable<CreateEntityPropertyApplicationTranslation> payload);
         Task RemoveRange(IEnumerable<Guid> ids);
     }
 }

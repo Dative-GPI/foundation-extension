@@ -20,7 +20,7 @@ namespace Foundation.Extension.Core.Handlers
     private RequestContext _context;
     private ITableRepository _tableRepository;
     private IColumnRepository _columnRepository;
-    private IEntityPropertyTranslationRepository _entityPropertyTranslationRepository;
+    private IEntityPropertyApplicationTranslationRepository _entityPropertyTranslationRepository;
     private IOrganisationTypeDispositionRepository _organisationTypeDispositionRepository;
     private IUserOrganisationTableRepository _userOrganisationTableRepository;
     private IUserOrganisationColumnRepository _userOrganisationColumnRepository;
@@ -30,7 +30,7 @@ namespace Foundation.Extension.Core.Handlers
         IRequestContextProvider requestContextProvider,
         ITableRepository tableRepository,
         IColumnRepository columnRepository,
-        IEntityPropertyTranslationRepository entityPropertyTranslationRepository,
+        IEntityPropertyApplicationTranslationRepository entityPropertyTranslationRepository,
         IOrganisationTypeDispositionRepository organisationTypeDispositionRepository,
         IUserOrganisationTableRepository userOrganisationTableRepository,
         IUserOrganisationColumnRepository userOrganisationColumnRepository)
@@ -64,7 +64,7 @@ namespace Foundation.Extension.Core.Handlers
 
       //var customPropertyMap = customProperties.ToDictionary(g => g.Id);
 
-      var entityPropertyTranslations = await _entityPropertyTranslationRepository.GetMany(new EntityPropertyTranslationsFilter()
+      var entityPropertyTranslations = await _entityPropertyTranslationRepository.GetMany(new EntityPropertyApplicationTranslationsFilter()
       {
         ApplicationId = _context.ApplicationId,
         EntityType = table.EntityType

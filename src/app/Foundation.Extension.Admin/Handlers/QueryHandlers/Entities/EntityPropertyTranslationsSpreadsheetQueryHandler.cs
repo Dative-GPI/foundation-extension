@@ -21,14 +21,14 @@ namespace Foundation.Extension.Admin.Handlers
     {
         private readonly IEntityPropertyRepository _entityPropertyRepository;
         private readonly IFoundationClientFactory _foundationClientFactory;
-        private readonly IEntityPropertyTranslationRepository _entityPropertyTranslationRepository;
+        private readonly IEntityPropertyApplicationTranslationRepository _entityPropertyTranslationRepository;
         private readonly IRequestContextProvider _requestContextProvider;
 
         public EntityPropertyTranslationsSpreadsheetQueryHandler
         (
             IEntityPropertyRepository entityPropertyRepository,
             IFoundationClientFactory foundationClientFactory,
-            IEntityPropertyTranslationRepository entityPropertyTranslationRepository,
+            IEntityPropertyApplicationTranslationRepository entityPropertyTranslationRepository,
             IRequestContextProvider requestContextProvider
         )
         {
@@ -52,7 +52,7 @@ namespace Foundation.Extension.Admin.Handlers
             var applicationLanguages = await adminFoundationClient.Admin.ApplicationLanguages.GetMany();
 
             // Get all entityProperties for this application
-            var entityPropertyTranslations = await _entityPropertyTranslationRepository.GetMany(new EntityPropertyTranslationsFilter()
+            var entityPropertyTranslations = await _entityPropertyTranslationRepository.GetMany(new EntityPropertyApplicationTranslationsFilter()
             {
                 ApplicationId = command.ApplicationId
             });

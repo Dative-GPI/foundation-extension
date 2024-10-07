@@ -25,13 +25,22 @@ namespace Foundation.Extension.Context.Repositories
 
         public async Task<IEnumerable<Translation>> GetMany()
         {
-            var result = await _dbSet.ToListAsync();
-            return result.Select(r => new Translation()
+            var query = _dbSet
+                .AsQueryable();
+
+            var dtos = await query.AsNoTracking().ToListAsync();
+
+            return dtos.Select(t => new Translation()
             {
-                Id = r.Id,
-                Code = r.Code,
-                Value = r.ValueDefault
-            });
+                Id = t.Id,
+                Code = t.Code,
+                Value = t.ValueDefault,
+                Translations = t.Translations?.Select(t => new TranslationTranslation()
+                {
+                    LanguageCode = t.LanguageCode,
+                    Value = t.Value
+                }).ToList() ?? new List<TranslationTranslation>()
+            }).OrderBy(t => t.Code).ToList();
         }
     }
 }

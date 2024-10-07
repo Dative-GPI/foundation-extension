@@ -31,7 +31,7 @@ namespace Foundation.Extension.Context.DI
 
             services.AddScoped<IColumnRepository, ColumnRepository>();
             services.AddScoped<IEntityPropertyRepository, EntityPropertyRepository>();
-            services.AddScoped<IEntityPropertyTranslationRepository, EntityPropertyTranslationRepository>();
+            services.AddScoped<IEntityPropertyApplicationTranslationRepository, EntityPropertyApplicationTranslationRepository>();
             services.AddScoped<IOrganisationTypeDispositionRepository, OrganisationTypeDispositionRepository>();
             services.AddScoped<ITableRepository, TableRepository>();
             services.AddScoped<IUserOrganisationTableRepository, UserOrganisationTableRepository>();

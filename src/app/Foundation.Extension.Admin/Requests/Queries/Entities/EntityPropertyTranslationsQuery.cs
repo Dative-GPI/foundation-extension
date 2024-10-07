@@ -9,7 +9,7 @@ using static Foundation.Clients.AdminAuthorizations;
 
 namespace Foundation.Extension.Admin
 {
-    public class EntityPropertyTranslationsQuery : ICoreRequest, IRequest<IEnumerable<EntityPropertyTranslation>>
+    public class EntityPropertyTranslationsQuery : ICoreRequest, IRequest<IEnumerable<EntityPropertyApplicationTranslation>>
     {
         public IEnumerable<string> Authorizations => new[] { ADMIN_ENTITYPROPERTYAPPLICATIONTRANSLATIONS_INFOS };
         public Guid ApplicationId { get; set; }

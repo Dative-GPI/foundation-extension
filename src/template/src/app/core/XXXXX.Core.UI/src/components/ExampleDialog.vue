@@ -3,7 +3,6 @@
     title="Example Dialog"
     subtitle="Example Dialog Subtitle"
     :width="600"
-    :height="400"
     v-model="dialog"
   >
     <template
@@ -82,5 +81,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped></style>

@@ -91,7 +91,7 @@ export default defineComponent({
       if (props.width) {
         setWidth();
       }
-    });
+    }, { immediate: true });
 
     watch(() => props.modelValue, (): void => {
       if (!props.modelValue) {

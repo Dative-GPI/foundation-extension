@@ -56,12 +56,12 @@ export default defineComponent({
     width: {
       type: Number,
       required: false,
-      default: 800
+      default: 600
     }
   },
   emits: ["click", "update:modelValue"],
   setup(props) {
-    const { closeDialog, setDialogWidth } = useExtensionCommunicationBridge();
+    const { closeDialog, setDialogWidth, warnDialogMounted } = useExtensionCommunicationBridge();
     const { isExtraSmall } = useBreakpoints();
 
     const classes = computed((): string[] => {
@@ -84,6 +84,7 @@ export default defineComponent({
     };
 
     onMounted((): void => {
+      warnDialogMounted(location.pathname);
       setWidth();
     });
 

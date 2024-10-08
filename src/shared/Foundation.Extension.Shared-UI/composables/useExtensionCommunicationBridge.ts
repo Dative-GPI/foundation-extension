@@ -145,6 +145,13 @@ export function useExtensionCommunicationBridge() {
     });
   }
 
+  const warnDialogMounted = (path: string, dialogMounted: boolean = true) => {
+    notify({
+      path,
+      dialogMounted
+    });
+  }
+
   //Deprecated
   const openDrawer = (path: string) => {
     notify({
@@ -182,7 +189,8 @@ export function useExtensionCommunicationBridge() {
     unsubscribe,
     setDialogWidth,
     setDialogHeight,
-    subscribeUnsafe
+    subscribeUnsafe,
+    warnDialogMounted
   }
 }
 

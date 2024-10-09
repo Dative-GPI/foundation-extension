@@ -13,7 +13,7 @@ using Foundation.Extension.Proxy.Tools;
 
 namespace Foundation.Extension.Proxy.Controllers
 {
-    [Route("api/v1")]
+    [Route("api/foundation/core/v1/organisations/{organisationId}")]
     public class CoreActionsController : ControllerBase
     {
         private IHttpClientFactory _httpClientFactory;
@@ -36,14 +36,9 @@ namespace Foundation.Extension.Proxy.Controllers
 
 
         [HttpGet("actions")]
-        public async Task<IActionResult> GetMany()
+        public async Task<IActionResult> GetMany([FromRoute] Guid organisationId)
         {
             var result = new List<JsonElement>();
-            // TODO : récupérer dans l'url quand on fera la mise à jour
-            Guid organisationId = HttpContext.Request.Headers.TryGetValue("X-Organisation-Id", out var organisationIdHeader)
-                ? Guid.Parse(organisationIdHeader)
-                : Guid.Empty;
-
             if (_enableInstalledExtensions)
             {
                 var foundationClient = _httpClientFactory.CreateClient();

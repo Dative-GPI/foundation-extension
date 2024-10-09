@@ -29,7 +29,17 @@ namespace XXXXX.Context.Migrations.Shared
 				},
 				(fixture, dto) =>
 				{
-					dto.ValueDefault = fixture.Value;
+                    dto.ValueDefault = fixture.Value;
+                    dto.Translations = dto.Translations
+                        .Concat(DEFAULT_LANGUAGES
+                            .Select(l => new TranslationTranslationDTO()
+                            {
+                                LanguageCode = l,
+                                Value = null
+                            })
+                        )
+                        .DistinctBy(t => t.LanguageCode)
+                        .ToList();
 					return dto;
 				});
 

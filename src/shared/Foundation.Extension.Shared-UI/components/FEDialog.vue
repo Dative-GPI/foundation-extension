@@ -53,15 +53,20 @@ export default defineComponent({
       required: false,
       default: null
     },
-    width: {
-      type: Number,
+    height: {
+      type: [Array, String, Number] as PropType<string[] | number[] | string | number | null>,
       required: false,
-      default: 600
+      default: null
+    },
+    width: {
+      type: [Array, String, Number] as PropType<string[] | number[] | string | number>,
+      required: false,
+      default: "600px"
     }
   },
   emits: ["click", "update:modelValue"],
   setup(props) {
-    const { closeDialog, setDialogWidth, warnDialogMounted } = useExtensionCommunicationBridge();
+    const { closeDialog, setDialogHeight, setDialogMounted, setDialogWidth,  } = useExtensionCommunicationBridge();
     const { isExtraSmall } = useBreakpoints();
 
     const classes = computed((): string[] => {
@@ -75,22 +80,29 @@ export default defineComponent({
       return innerClasses;
     });
 
-    const setWidth = (): void => {
-      setDialogWidth(props.width, location.pathname);
-    };
-
     const close = (success: boolean): void => {
       closeDialog(location.pathname, success);
     };
 
     onMounted((): void => {
-      warnDialogMounted(location.pathname);
-      setWidth();
+      setDialogMounted(location.pathname);
+      if (props.height) {
+        setDialogHeight(props.height, location.pathname);
+      }
+      if (props.width) {
+        setDialogWidth(props.width, location.pathname);
+      }
     });
+
+    watch(() => props.height, (): void => {
+      if (props.height) {
+        setDialogHeight(props.height, location.pathname);
+      }
+    }, { immediate: true });
 
     watch(() => props.width, (): void => {
       if (props.width) {
-        setWidth();
+        setDialogWidth(props.width, location.pathname);
       }
     }, { immediate: true });
 

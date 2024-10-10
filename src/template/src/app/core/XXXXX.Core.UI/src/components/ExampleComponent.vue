@@ -4,7 +4,7 @@
   >
     <FSButton
       label="open a dialog"
-      @click="openDialog('organisations/41ea29a1-bbfe-4f4a-86b3-425963471053/XXXXX/examples/drawer')"
+      @click="openDialog('organisations/41ea29a1-bbfe-4f4a-86b3-425963471053/XXXXX/examples/drawer?width=600&height=[282, 258]')"
     />
     <FSSpan
       font="text-h1"

@@ -117,23 +117,23 @@ export function useExtensionCommunicationBridge() {
     });
   }
 
-  const setDialogWidth = (dialogWidth: number, path: string) => {
+  const setDialogWidth = (dialogWidth: string[] | number[] | string | number, path: string) => {
     notify({
-      dialogWidth,
-      path,
+      dialogWidth: JSON.stringify(dialogWidth),
+      path
     });
   }
-  const setDialogHeight = (dialogHeight: number, path: string) => {
+  const setDialogHeight = (dialogHeight: string[] | number[] | string | number, path: string) => {
     notify({
-      dialogHeight,
-      path,
+      dialogHeight: JSON.stringify(dialogHeight),
+      path
     });
   }
 
   const openDialog = (path: string) => {
     notify({
       path,
-      dialog: true,
+      dialog: true
     });
   }
 
@@ -141,7 +141,14 @@ export function useExtensionCommunicationBridge() {
     notify({
       path,
       success,
-      dialog: false,
+      dialog: false
+    });
+  }
+
+  const setDialogMounted = (path: string, dialogMounted: boolean = true) => {
+    notify({
+      path,
+      dialogMounted
     });
   }
 
@@ -182,7 +189,8 @@ export function useExtensionCommunicationBridge() {
     unsubscribe,
     setDialogWidth,
     setDialogHeight,
-    subscribeUnsafe
+    subscribeUnsafe,
+    setDialogMounted
   }
 }
 

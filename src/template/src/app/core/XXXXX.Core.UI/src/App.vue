@@ -2,9 +2,7 @@
   <v-app
     style="background-color: transparent"
   >
-    <v-main
-      style="height: 100vh;"
-    >
+    <v-main>
       <router-view
         v-if="done"
       />
@@ -18,13 +16,13 @@ import { defineComponent } from "vue";
 import { useCoreExtension } from "@dative-gpi/foundation-extension-core-ui";
 
 export default defineComponent({
+  name: "App",
   setup() {
     const { done } = useCoreExtension();
 
     return {
       done
-    }
+    };
   }
 });
-
 </script>

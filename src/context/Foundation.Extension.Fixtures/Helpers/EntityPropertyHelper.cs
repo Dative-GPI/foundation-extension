@@ -32,6 +32,7 @@ namespace Foundation.Extension.Fixtures
                             })
                     )
                 )
+				.Where(e => !e.Code.EndsWith("id") || e.Code.EndsWith("image-id"))
                 .DistinctBy(e => e.Code)
                 .ToList();
 

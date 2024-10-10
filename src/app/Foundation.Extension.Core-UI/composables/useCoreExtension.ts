@@ -4,7 +4,6 @@ import { useRouter } from "vue-router";
 import { usePermissions as useAppPermissions, useTranslations as useAppTranslations } from "@dative-gpi/bones-ui";
 import { useExtensionHost, useTranslations } from "@dative-gpi/foundation-extension-shared-ui";
 import { useAppOrganisationId } from "@dative-gpi/foundation-core-services/composables";
-import { useAppTimeZone } from "@dative-gpi/foundation-shared-services/composables";
 import { Single } from "@dative-gpi/foundation-shared-domain/tools";
 
 import { useCurrentPermissions } from "./useCurrentPermissions";
@@ -17,8 +16,6 @@ export const useCoreExtension = () => {
   return single.call(() => {
     const { setAppOrganisationId, ready: organisationIdInitialized } = useAppOrganisationId();
     const { done: hostReady } = useExtensionHost();
-
-    const { setAppTimeZone } = useAppTimeZone();
     
     const { getMany: getCurrentPermission, entities: permissions } = useCurrentPermissions();
     const { set: setAppPermissions } = useAppPermissions();
@@ -30,16 +27,14 @@ export const useCoreExtension = () => {
 
     const ready = computed((): boolean => {
       return (hostReady.value && organisationIdInitialized.value);
-    })
+    });
 
     const done = ref(false);
 
     watch(ready, async () => {
-      if(!ready.value) {
+      if (!ready.value) {
         return;
       }
-
-      setAppTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
 
       await getCurrentPermission();
       setAppPermissions(permissions.value.map(p => p.toString()));

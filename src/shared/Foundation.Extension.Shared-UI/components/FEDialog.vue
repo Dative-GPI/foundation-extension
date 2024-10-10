@@ -4,10 +4,13 @@
     @click="$emit('update:modelValue', false)"
   >
     <FSDialogContent
+      class="fe-dialog-content"
       height="fit-content"
+      ref="dialogContent"
       :title="$props.title"
       :subtitle="$props.subtitle"
       :width="$props.width"
+      :style="style"
       :modelValue="true"
       @update:modelValue="$emit('update:modelValue', $event)"
       @click.stop="$emit('click', $event)"
@@ -26,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, type PropType, watch } from "vue";
+import { computed, defineComponent, onMounted, type PropType, ref, type StyleValue, watch } from "vue";
 
 import { useExtensionCommunicationBridge } from "@dative-gpi/foundation-extension-shared-ui";
 import { useBreakpoints } from "@dative-gpi/foundation-shared-components/composables";
@@ -53,11 +56,6 @@ export default defineComponent({
       required: false,
       default: null
     },
-    height: {
-      type: [Array, String, Number] as PropType<string[] | number[] | string | number | null>,
-      required: false,
-      default: null
-    },
     width: {
       type: [Array, String, Number] as PropType<string[] | number[] | string | number>,
       required: false,
@@ -68,6 +66,13 @@ export default defineComponent({
   setup(props) {
     const { closeDialog, setDialogHeight, setDialogMounted, setDialogWidth,  } = useExtensionCommunicationBridge();
     const { isExtraSmall } = useBreakpoints();
+
+    const dialogContent = ref<HTMLElement | null>(null);
+    const mounted = ref(false);
+
+    const style = computed((): StyleValue => ({
+      "--fe-dialog-opacity": mounted.value ? 1 : 0
+    }));
 
     const classes = computed((): string[] => {
       const innerClasses: string[] = [];
@@ -85,20 +90,17 @@ export default defineComponent({
     };
 
     onMounted((): void => {
-      setDialogMounted(location.pathname);
-      if (props.height) {
-        setDialogHeight(props.height, location.pathname);
+      if (dialogContent.value) {
+        setDialogHeight((dialogContent.value as any).$el.clientHeight, location.pathname);
       }
       if (props.width) {
         setDialogWidth(props.width, location.pathname);
       }
+      setDialogMounted(location.pathname);
+      setTimeout(() => {
+        mounted.value = true;
+      }, 280);
     });
-
-    watch(() => props.height, (): void => {
-      if (props.height) {
-        setDialogHeight(props.height, location.pathname);
-      }
-    }, { immediate: true });
 
     watch(() => props.width, (): void => {
       if (props.width) {
@@ -113,7 +115,9 @@ export default defineComponent({
     });
 
     return {
+      dialogContent,
       classes,
+      style,
       close
     };
   }

@@ -28,6 +28,7 @@
 import { computed, defineComponent, onUnmounted, type PropType, watch } from "vue";
 
 import { useDebounce, useTables } from "@dative-gpi/foundation-shared-components/composables";
+import type { FSDataTableColumn } from "@dative-gpi/foundation-shared-components/models";
 import { useDataTables } from "@dative-gpi/foundation-core-services/composables";
 
 import { useUpdateUserOrganisationTable, useUserOrganisationTable } from "../composables";
@@ -42,22 +43,23 @@ export default defineComponent({
     FSDataTableUI
   },
   props: {
+    defaultMode: {
+      type: String as PropType<"table" | "iterator">,
+      required: false,
+      default: "table"
+    },
     tableCode: {
-      type: String,
-      required: true
+      type: String as PropType<string | null>,
+      required: false,
+      default: null
     },
     debounceTime: {
       type: Number,
       required: false,
       default: 1000
     },
-    customSorts: {
-      type: Object as PropType<{ [key: string]: any }>,
-      required: false,
-      default: () => ({})
-    },
-    customSortRaws: {
-      type: Object as PropType<{ [key: string]: any }>,
+    headersOptions: {
+      type: Object as PropType<{ [key: string]: Partial<FSDataTableColumn> }>,
       required: false,
       default: () => ({})
     }
@@ -69,7 +71,7 @@ export default defineComponent({
     const { getTable, setTable } = useTables();
     const { debounce, cancel } = useDebounce();
 
-    const computedTable = computed(() => computeTable(props.customSorts, props.customSortRaws));
+    const computedTable = computed(() => computeTable(props.headersOptions, props.defaultMode));
 
     onUnmounted(() => {
       cancel();
@@ -77,23 +79,17 @@ export default defineComponent({
     });
 
     const update = () => {
-      updateTable(
-        updateUserOrganisationTable,
-        setTable,
-        props.tableCode
-      );
+      if (props.tableCode) {
+        updateTable(updateUserOrganisationTable, setTable, props.tableCode, props.defaultMode);
+      }
     }
 
     watch(() => props.tableCode, async (): Promise<void> => {
-      onTableCodeChange(
-        getUserOrganisationTable,
-        getTable,
-        props.tableCode
-      );
+      onTableCodeChange(getUserOrganisationTable, getTable, props.tableCode, props.defaultMode);
     }, { immediate: true });
 
-    watch(() => table.value, () => {
-      if (table.value && initialized.value) {
+    watch(() => (table.value ? { ...table.value } : null), (_, former) => {
+      if (table.value && former && initialized.value) {
         debounce(update, props.debounceTime);
       }
     }, { deep: true });

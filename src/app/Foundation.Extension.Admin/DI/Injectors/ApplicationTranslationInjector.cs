@@ -39,12 +39,12 @@ namespace Foundation.Extension.Admin.DI
                 return pipeline;
             });
 
-            services.AddScoped<DownloadApplicationTranslationsCommandHandler>();
-            services.AddScoped<ICommandHandler<DownloadApplicationTranslationsCommand>>(sp =>
+            services.AddScoped<ApplicationTranslationsSpreadSheetQueryHandler>();
+            services.AddScoped<IQueryHandler<ApplicationTranslationsSpreadsheetQuery, byte[]>>(sp =>
             {
-                var pipeline = sp.GetPipelineFactory<DownloadApplicationTranslationsCommand>()
-                    .Add<PermissionApplicationsMiddleware>()
-                    .Add<DownloadApplicationTranslationsCommandHandler>()
+                var pipeline = sp.GetPipelineFactory<ApplicationTranslationsSpreadsheetQuery, byte[]>()
+                    .With<PermissionApplicationsMiddleware>()
+                    .Add<ApplicationTranslationsSpreadSheetQueryHandler>()
                     .Build();
 
                 return pipeline;

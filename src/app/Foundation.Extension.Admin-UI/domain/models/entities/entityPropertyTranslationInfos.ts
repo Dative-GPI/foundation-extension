@@ -1,3 +1,5 @@
+import { SpreadsheetColumnDefinition } from "../applications/spreadsheetColumn";
+
 export class EntityPropertyTranslationInfos {
     get id(): string {
         return this.entityPropertyId + this.languageCode
@@ -6,14 +8,12 @@ export class EntityPropertyTranslationInfos {
     entityPropertyId: string;
 
     label: string;
-    categoryLabel: string;
 
     languageCode: string;
 
     constructor(params: EntityPropertyTranslationDTO) {
         this.entityPropertyId = params.entityPropertyId;
         this.label = params.label;
-        this.categoryLabel = params.categoryLabel;
         this.languageCode = params.languageCode;
     }
 }
@@ -24,7 +24,6 @@ export interface EntityPropertyTranslationDTO {
     entityPropertyId: string;
 
     label: string;
-    categoryLabel: string;
 
     languageCode: string;
 }
@@ -32,7 +31,6 @@ export interface EntityPropertyTranslationDTO {
 export interface UpdateEntityPropertyTranslation {
     languageCode: string;
     label: string;
-    categoryLabel: string;
 }
 
 export interface DownloadEntityPropertyTranslations {
@@ -41,13 +39,7 @@ export interface DownloadEntityPropertyTranslations {
 
 export interface UploadEntityPropertyTranslations {
     file: File;
-    labels: SpreadsheetColumnDefinition[];
-    categories: SpreadsheetColumnDefinition[];
-}
-
-export interface SpreadsheetColumnDefinition {
-    index: number;
-    languageCode: string;
+    languages: SpreadsheetColumnDefinition[];
 }
 
 export interface EntityPropertyTranslationsFilter {

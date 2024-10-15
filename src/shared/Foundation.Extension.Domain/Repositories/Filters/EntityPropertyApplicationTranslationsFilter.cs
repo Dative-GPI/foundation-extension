@@ -7,7 +7,7 @@ namespace Foundation.Extension.Domain.Repositories.Filters
     {
         public Guid? ApplicationId { get; set; }
         public Guid? EntityPropertyId { get; set; }
-        public List<Guid> EntityPropertyIds { get; set; }
+        public List<Guid> EntityPropertiesIds { get; set; }
         public string EntityType { get; set; }
         public string LanguageCode { get; set; }
     }

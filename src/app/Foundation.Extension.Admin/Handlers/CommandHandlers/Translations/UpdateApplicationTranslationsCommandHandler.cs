@@ -1,10 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 using Bones.Flow;
+
 using Foundation.Extension.Admin.Abstractions;
 using Foundation.Extension.Admin.Requests;
 using Foundation.Extension.Domain.Models;
@@ -16,11 +16,12 @@ namespace Foundation.Extension.Admin.Handlers
 {
     public class UpdateApplicationTranslationsCommandHandler : IMiddleware<UpdateApplicationTranslationCommand>
     {
-        private IRequestContextProvider _requestContextProvider;
-        private ITranslationRepository _translationRepository;
-        private IApplicationTranslationRepository _applicationTranslationRepository;
+        private readonly IRequestContextProvider _requestContextProvider;
+        private readonly ITranslationRepository _translationRepository;
+        private readonly IApplicationTranslationRepository _applicationTranslationRepository;
 
-        public UpdateApplicationTranslationsCommandHandler(
+        public UpdateApplicationTranslationsCommandHandler
+        (
             IRequestContextProvider requestContextProvider,
             ITranslationRepository translationRepository,
             IApplicationTranslationRepository applicationTranslationRepository)
@@ -32,8 +33,8 @@ namespace Foundation.Extension.Admin.Handlers
 
         public async Task HandleAsync(UpdateApplicationTranslationCommand command, Func<Task> next, CancellationToken cancellationToken)
         {
-
             var context = _requestContextProvider.Context;
+            
             var defaultTranslation = (await _translationRepository.GetMany())
                  .FirstOrDefault(t => t.Code == command.Code);
 

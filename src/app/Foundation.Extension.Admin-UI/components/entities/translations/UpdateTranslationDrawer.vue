@@ -11,7 +11,6 @@
           <FSCol :items="items"
             class="mt-5">
             <FSSpan font="text-button"> Default label: {{ entityProperty.labelDefault }} </FSSpan><br />
-            <FSSpan font="text-button"> Default category : {{ entityProperty.categoryLabelDefault }} </FSSpan>
           </FSCol>
         </FSRow>
 
@@ -30,13 +29,6 @@
                 :key="l.code + '-' + l.code"
                 :label="l.label"
                 style="width: 97%" />
-              <FSTextArea :rows="2"
-                color="primary"
-                :modelValue="getCategory(l.code)"
-                @update:modelValue="setCategory(l.code, $event)"
-                :key="l.code"
-                :label="l.label"
-                style="width: 97%" />
             </FSCol>
           </FSCol>
         </FSRow>
@@ -45,16 +37,20 @@
 
     <template #actions>
       <v-spacer />
-      <FSButton @click="close(true)"
+      <FSButton
+        @click="close(true)"
         prepend-icon="mdi-cancel"
         :loading="updating"
-        label="Cancel"> </FSButton>
-      <FSButton class="ml-3 justify-content-end"
+        label="Cancel"
+      />
+      <FSButton
+        class="ml-3 justify-content-end"
         @click="updateTranslations"
         :loading="updating"
         color="primary"
         prepend-icon="mdi-content-save-outline"
-        label="Save"></FSButton>
+        label="Save"
+      />
     </template>
   </Drawer>
 </template>
@@ -74,10 +70,7 @@ import {
   useEntityProtertyTranslations,
 } from "../../../composables";
 
-import {
-  EntityPropertyTranslationInfos,
-  UpdateEntityPropertyTranslation,
-} from "../../../domain";
+import { UpdateEntityPropertyTranslation } from "../../../domain";
 
 import Drawer from "../../shared/Drawer.vue";
 
@@ -86,26 +79,24 @@ export default defineComponent({
   components: {
     Drawer,
   },
-  setup(props, { emit }) {
+  setup() {
     const route = useRoute();
     const extension = useExtensionCommunicationBridge();
 
     const {
       getMany: getEntityProperties,
       entities: entityProperties,
-      fetching: fetchingEntityProperties,
     } = useEntityProterties();
 
     const drawer = ref<boolean>(true);
 
     const newTranslations = ref<UpdateEntityPropertyTranslation[]>([]);
 
-    const { updated, update, updating } = useUpdateEntityPropertyTranslation();
+    const { update, updating } = useUpdateEntityPropertyTranslation();
 
     const {
       getMany: getEntityProtertyTranslations,
       entities: entityProtertyTranslations,
-      fetching: fetchingEntityProtertyTranslations,
     } = useEntityProtertyTranslations();
 
     const { getMany: getManyLanguages, entities: languages, fetching: fetchingLanguages } = useApplicationLanguages();
@@ -139,28 +130,13 @@ export default defineComponent({
         newTranslations.value.push({
           languageCode: languageCode,
           label: lab,
-          categoryLabel: ""
         } as UpdateEntityPropertyTranslation)
       }
     };
-
-    const setCategory = (languageCode: string, categoryLab: string) => {
-      const entityPropertyTranslation = newTranslations.value.find((x) => x.languageCode === languageCode);
-
-      if (entityPropertyTranslation) { entityPropertyTranslation.categoryLabel = categoryLab; }
-      else {
-        newTranslations.value.push({
-          languageCode: languageCode,
-          label: "",
-          categoryLabel: categoryLab,
-        } as UpdateEntityPropertyTranslation)
-      }
-    };
-
 
     const updateTranslations = () => {
 
-      newTranslations.value = newTranslations.value.filter((x) => x.label || x.categoryLabel);
+      newTranslations.value = newTranslations.value.filter((x) => x.label);
 
       update(entityPropId, newTranslations.value).then(() => {
         close(true);
@@ -171,10 +147,6 @@ export default defineComponent({
       return newTranslations.value.find((x) => x.languageCode === languageCode)?.label;
     };
 
-    const getCategory = (languageCode: string): string | undefined => {
-      return newTranslations.value.find((x) => x.languageCode === languageCode)?.categoryLabel;
-    };
-
     const fetch = async () => {
       getManyLanguages();
       getEntityProperties();
@@ -183,7 +155,6 @@ export default defineComponent({
         return {
           languageCode: x.languageCode,
           label: x.label,
-          categoryLabel: x.categoryLabel
         } as UpdateEntityPropertyTranslation;
       });
     };
@@ -201,12 +172,8 @@ export default defineComponent({
       updateTranslations,
       close,
       getLabel,
-      getCategory,
-      setLabel,
-      setCategory
+      setLabel
     };
   },
 });
 </script>
-
-<style scoped></style>

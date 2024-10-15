@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 using Bones.Flow;
@@ -15,8 +14,6 @@ namespace Foundation.Extension.Admin.Requests
         public IEnumerable<string> Authorizations => new string[] { ADMIN_TRANSLATION_INFOS };
 
         public string LanguageCode { get; set; }
-
         public string TranslationCode { get; set; }
-
     }
 }

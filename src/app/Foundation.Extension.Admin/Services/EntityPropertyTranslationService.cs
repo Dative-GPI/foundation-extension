@@ -1,18 +1,18 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 using AutoMapper;
-using Bones.Flow;
 
-using Foundation.Extension.Domain.Models;
-using Foundation.Extension.Domain.Repositories.Interfaces;
+using Bones.Flow;
 
 using Foundation.Extension.Admin.Abstractions;
 using Foundation.Extension.Admin.ViewModels;
+using Foundation.Extension.Domain.Models;
 using Foundation.Extension.Domain.Repositories.Filters;
+using Foundation.Extension.Domain.Repositories.Interfaces;
 
 namespace Foundation.Extension.Admin.Services
 {
@@ -23,11 +23,11 @@ namespace Foundation.Extension.Admin.Services
         private readonly ICommandHandler<ReplaceEntityPropertyTranslationsCommand> _replaceEntityPropertyTranslationCommandHandler;
         private readonly ICommandHandler<UploadEntityPropertyTranslationsCommand> _uploadEntityPropertyTranslationsCommandHandler;
         private readonly IEntityPropertyApplicationTranslationRepository _entityPropertyTranslationRepository;
-
         private readonly IRequestContextProvider _requestContextProvider;
         private readonly IMapper _mapper;
 
-        public EntityPropertyTranslationService(
+        public EntityPropertyTranslationService
+        (
             IQueryHandler<EntityPropertyTranslationsQuery, IEnumerable<EntityPropertyApplicationTranslation>> entityPropertyTranslationsQueryHandler,
             IQueryHandler<EntityPropertyTranslationsSpreadsheetQuery, byte[]> entityPropertyTranslationsSpreadsheetQueryHandler,
             ICommandHandler<ReplaceEntityPropertyTranslationsCommand> replaceEntityPropertyTranslationCommandHandler,
@@ -39,7 +39,6 @@ namespace Foundation.Extension.Admin.Services
         {
             _entityPropertyTranslationsQueryHandler = entityPropertyTranslationsQueryHandler;
             _entityPropertyTranslationsSpreadsheetQueryHandler = entityPropertyTranslationsSpreadsheetQueryHandler;
-
             _replaceEntityPropertyTranslationCommandHandler = replaceEntityPropertyTranslationCommandHandler;
             _uploadEntityPropertyTranslationsCommandHandler = uploadEntityPropertyTranslationsCommandHandler;
             _entityPropertyTranslationRepository = entityPropertyTranslationRepository;
@@ -52,7 +51,7 @@ namespace Foundation.Extension.Admin.Services
             var query = new EntityPropertyTranslationsQuery()
             {
                 EntityPropertyId = filter.EntityPropertyId,
-                EntityPropertyIds = filter.EntityPropertyIds,
+                EntityPropertiesIds = filter.EntityPropertiesIds,
             };
 
             var result = await _entityPropertyTranslationsQueryHandler.HandleAsync(query);
@@ -65,15 +64,13 @@ namespace Foundation.Extension.Admin.Services
             var context = _requestContextProvider.Context;
             var command = new ReplaceEntityPropertyTranslationsCommand()
             {
-                ActorId = context.ActorId,
                 ApplicationId = context.ApplicationId,
 
                 EntityPropertyId = entityPropertyId,
                 Translations = payload.Select(t => new ReplaceEntityPropertyTranslation()
                 {
                     LanguageCode = t.LanguageCode,
-                    Label = t.Label,
-                    CategoryLabel = t.CategoryLabel
+                    Label = t.Label
                 }).ToList()
             };
 
@@ -91,29 +88,22 @@ namespace Foundation.Extension.Admin.Services
         {
             var query = new EntityPropertyTranslationsSpreadsheetQuery()
             {
-                ActorId = _requestContextProvider.Context.ActorId,
                 ApplicationId = _requestContextProvider.Context.ApplicationId
             };
 
             return await _entityPropertyTranslationsSpreadsheetQueryHandler.HandleAsync(query);
         }
 
-        public async Task<IEnumerable<EntityPropertyTranslationViewModel>> Upload(List<SpreadsheetColumnDefinitionViewModel> labels, List<SpreadsheetColumnDefinitionViewModel> categories, Stream file)
+        public async Task<IEnumerable<EntityPropertyTranslationViewModel>> Upload(List<SpreadsheetColumnDefinitionViewModel> languages, Stream file)
         {
             var command = new UploadEntityPropertyTranslationsCommand()
             {
-                ActorId = _requestContextProvider.Context.ActorId,
                 ApplicationId = _requestContextProvider.Context.ApplicationId,
 
-                Labels = labels.Select(lc => new SpreadsheetColumnDefinition()
+                Languages = languages.Select(lc => new SpreadsheetColumnDefinition()
                 {
                     Index = lc.Index,
                     LanguageCode = lc.LanguageCode
-                }).ToList(),
-                Categories = categories.Select(cc => new SpreadsheetColumnDefinition()
-                {
-                    Index = cc.Index,
-                    LanguageCode = cc.LanguageCode
                 }).ToList(),
 
                 File = file

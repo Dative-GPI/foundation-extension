@@ -14,14 +14,9 @@ const EntityPropertyTranslationServiceFactory = new ServiceFactory<EntityPropert
                 const data = new FormData();
                 data.append('file', payload.file);
 
-                for (let i = 0; i < payload.labels.length; i++) {
-                    data.append(`labels[${i}].index`, payload.labels[i].index.toString());
-                    data.append(`labels[${i}].languageCode`, payload.labels[i].languageCode);
-                }
-
-                for (let i = 0; i < payload.categories.length; i++) {
-                    data.append(`categories[${i}].index`, payload.categories[i].index.toString());
-                    data.append(`categories[${i}].languageCode`, payload.categories[i].languageCode);
+                for (let i = 0; i < payload.languages.length; i++) {
+                    data.append(`languages[${i}].index`, payload.languages[i].index.toString());
+                    data.append(`languages[${i}].languageCode`, payload.languages[i].languageCode);
                 }
 
                 const response = await ServiceFactory.http.put(ENTITYPROPERTY_TRANSLATIONS_WORKBOOK_URL, data, { headers: { 'Content-Type': 'multipart/form-data' } });

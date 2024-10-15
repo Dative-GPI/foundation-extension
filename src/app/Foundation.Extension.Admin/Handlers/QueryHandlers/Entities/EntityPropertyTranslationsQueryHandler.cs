@@ -1,41 +1,43 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 using Bones.Flow;
 
+using Foundation.Clients.Admin.FoundationModels;
+using Foundation.Extension.Admin.Abstractions;
+using Foundation.Extension.Domain.Abstractions;
 using Foundation.Extension.Domain.Models;
 using Foundation.Extension.Domain.Repositories.Filters;
 using Foundation.Extension.Domain.Repositories.Interfaces;
-using Foundation.Extension.Domain.Abstractions;
-using Foundation.Extension.Admin.Abstractions;
-using Foundation.Clients.Admin.FoundationModels;
-using System.Linq;
 
 namespace Foundation.Extension.Admin.Handlers
 {
     public class EntityPropertyTranslationsQueryHandler : IMiddleware<EntityPropertyTranslationsQuery, IEnumerable<EntityPropertyApplicationTranslation>>
     {
-        private IEntityPropertyApplicationTranslationRepository _entityPropertyTranslationRepository;
-
+        private readonly IEntityPropertyApplicationTranslationRepository _entityPropertyTranslationRepository;
         private readonly IFoundationClientFactory _foundationClientFactory;
         private readonly IRequestContextProvider _requestContextProvider;
 
-
-        public EntityPropertyTranslationsQueryHandler(
-            IEntityPropertyApplicationTranslationRepository entityPropertyTranslationRepository,
+        public EntityPropertyTranslationsQueryHandler
+        (
+            IRequestContextProvider requestContextProvider,
             IFoundationClientFactory foundationClientFactory,
-            IRequestContextProvider requestContextProvider)
+            IEntityPropertyApplicationTranslationRepository entityPropertyTranslationRepository
+        )
         {
-            _entityPropertyTranslationRepository = entityPropertyTranslationRepository;
-            _foundationClientFactory = foundationClientFactory;
             _requestContextProvider = requestContextProvider;
+            _foundationClientFactory = foundationClientFactory;
+            _entityPropertyTranslationRepository = entityPropertyTranslationRepository;
         }
 
         public async Task<IEnumerable<EntityPropertyApplicationTranslation>> HandleAsync(EntityPropertyTranslationsQuery request, Func<Task<IEnumerable<EntityPropertyApplicationTranslation>>> next, CancellationToken cancellationToken)
         {
             var context = _requestContextProvider.Context;
+
+            var adminFoundationClient = await _foundationClientFactory.CreateAdmin(context.ApplicationId, context.LanguageCode);
 
             var entityPropertyTranslations = await _entityPropertyTranslationRepository.GetMany(new EntityPropertyApplicationTranslationsFilter()
             {
@@ -43,13 +45,10 @@ namespace Foundation.Extension.Admin.Handlers
                 EntityPropertyId = request.EntityPropertyId,
             });
 
-            var adminFoundationClient = await _foundationClientFactory.CreateAdmin(context.ApplicationId, context.LanguageCode);
-
             var entityPropertyTranslationsFoundation = await adminFoundationClient.Admin.EntityPropertyApplicationTranslations.GetMany(new EntityPropertyApplicationTranslationsFilterFoundationModel()
             {
-                EntityPropertyIds = request.EntityPropertyIds,
+                EntityPropertyIds = request.EntityPropertiesIds,
             });
-
 
             return entityPropertyTranslations.Concat(entityPropertyTranslationsFoundation.Select(x => new EntityPropertyApplicationTranslation()
             {
@@ -57,8 +56,7 @@ namespace Foundation.Extension.Admin.Handlers
                 ApplicationId = context.ApplicationId,
                 EntityPropertyId = x.EntityPropertyId,
                 LanguageCode = x.LanguageCode,
-                Label = x.Label,
-                CategoryLabel = x.CategoryLabel,
+                Label = x.Label
             }));
         }
     }

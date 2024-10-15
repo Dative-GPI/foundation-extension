@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+
 using Bones.Flow;
 
 using static Foundation.Clients.AdminAuthorizations;
@@ -11,6 +11,5 @@ namespace Foundation.Extension.Admin
     {
         public IEnumerable<string> Authorizations => new[] { ADMIN_ENTITYPROPERTY_INFOS, ADMIN_ENTITYPROPERTYAPPLICATIONTRANSLATIONS_INFOS };
         public Guid ApplicationId { get; set; }
-        public Guid ActorId { get; set; }
     }
 }

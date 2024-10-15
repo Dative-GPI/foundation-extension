@@ -43,14 +43,11 @@ namespace Foundation.Extension.Admin.Controllers
         }
 
         [HttpPut("entity-property-translations/workbook")]
-        public async Task<ActionResult<IEnumerable<EntityPropertyTranslationViewModel>>> Upload(
-            [FromForm] List<SpreadsheetColumnDefinitionViewModel> labels,
-            [FromForm] List<SpreadsheetColumnDefinitionViewModel> categories,
-            [FromForm] IFormFile file)
+        public async Task<ActionResult<IEnumerable<EntityPropertyTranslationViewModel>>> Upload([FromForm] List<SpreadsheetColumnDefinitionViewModel> languages, [FromForm] IFormFile file)
         {
             using (var stream = file.OpenReadStream())
             {
-                var result = await _entityPropertyTranslationService.Upload(labels, categories, stream);
+                var result = await _entityPropertyTranslationService.Upload(languages, stream);
                 return Ok(result);
             }
         }

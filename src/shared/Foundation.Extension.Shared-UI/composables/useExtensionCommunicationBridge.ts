@@ -152,7 +152,7 @@ export function useExtensionCommunicationBridge() {
     });
   }
 
-  //Deprecated
+  //Deprecated but used for foundation admin 
   const openDrawer = (path: string) => {
     notify({
       path,
@@ -160,12 +160,20 @@ export function useExtensionCommunicationBridge() {
     });
   }
   
-  //Deprecated
+  //Deprecated but used for foundation admin
   const closeDrawer = (path: string, success: boolean = false) => {
     notify({
       path,
       success,
       drawer: false,
+    });
+  }
+
+  //Deprecated but used for foundation admin
+  const setDrawerWidth = (drawerWidth: number, path: string) => {
+    notify({
+      width: drawerWidth,
+      path
     });
   }
 
@@ -187,6 +195,7 @@ export function useExtensionCommunicationBridge() {
     closeDrawer,
     closeDialog,
     unsubscribe,
+    setDrawerWidth,
     setDialogWidth,
     setDialogHeight,
     subscribeUnsafe,

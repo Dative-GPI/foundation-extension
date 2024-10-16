@@ -81,7 +81,7 @@ export default defineComponent({
     const extension = useExtensionCommunicationBridge();
 
     const setWidth = () => {
-      extension.setDialogWidth(props.width, location.pathname);
+      extension.setDrawerWidth(props.width, location.pathname);
     };
 
     const close = (success: boolean) => {

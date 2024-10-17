@@ -4,7 +4,6 @@ export class EntityPropertyInfos {
     entityType: string;
 
     labelDefault: string;
-    categoryLabelDefault: string;
 
     parentId: string;
 
@@ -15,7 +14,6 @@ export class EntityPropertyInfos {
         this.code = params.code;
         this.entityType = params.entityType;
         this.labelDefault = params.labelDefault;
-        this.categoryLabelDefault = params.categoryLabelDefault;
         this.value = params.value;
         this.parentId = params.parentId;
     }
@@ -28,7 +26,6 @@ export interface EntityPropertyDTO {
 
     parentId: string;
     labelDefault: string;
-    categoryLabelDefault: string;
 
     value: string;
 }

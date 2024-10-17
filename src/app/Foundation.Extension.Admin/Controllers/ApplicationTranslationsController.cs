@@ -1,20 +1,19 @@
-using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Foundation.Extension.Admin.Abstractions;
 using Foundation.Extension.Admin.ViewModels;
-using System.IO;
-using Microsoft.AspNetCore.Http;
 
 namespace Foundation.Extension.Admin.Controllers
 {
     [Route("api/admin/v1")]
     public class ApplicationTranslationsController : ControllerBase
     {
-        private IApplicationTranslationService _applicationTranslationService;
+        private readonly IApplicationTranslationService _applicationTranslationService;
 
         public ApplicationTranslationsController(IApplicationTranslationService applicationTranslationService)
         {
@@ -38,22 +37,16 @@ namespace Foundation.Extension.Admin.Controllers
         [HttpGet("application-translations/workbook")]
         public async Task<FileContentResult> Download([FromQuery] string fileName)
         {
-            using (var stream = new MemoryStream())
-            {
-                await _applicationTranslationService.Download(stream);
-                stream.Position = 0;
-
-                return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-            }
+            var data = await _applicationTranslationService.Download();
+            return File(data, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
 
         [HttpPut("application-translations/workbook")]
-        public async Task<ActionResult<IEnumerable<ApplicationTranslationViewModel>>> Upload([FromForm] IEnumerable<ApplicationTranslationsColumnViewModel> languagesCodes, [FromForm] IFormFile file)
+        public async Task<ActionResult<IEnumerable<ApplicationTranslationViewModel>>> Upload([FromForm] IEnumerable<SpreadsheetColumnDefinitionViewModel> languages, [FromForm] IFormFile file)
         {
             using (var stream = file.OpenReadStream())
             {
-
-                var result = await _applicationTranslationService.Upload(languagesCodes, stream);
+                var result = await _applicationTranslationService.Upload(languages, stream);
                 return Ok(result);
             }
         }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -11,7 +10,7 @@ namespace Foundation.Extension.Admin.Abstractions
     {
         Task<IEnumerable<ApplicationTranslationViewModel>> GetMany(ApplicationTranslationViewModel filter);
         Task<IEnumerable<ApplicationTranslationViewModel>> Update(string code, UpdateApplicationTranslationViewModel payload);
-        Task Download(Stream file);
-        Task<IEnumerable<ApplicationTranslationViewModel>> Upload(IEnumerable<ApplicationTranslationsColumnViewModel> languagesCodes, Stream file);
+        Task<byte[]> Download();
+        Task<IEnumerable<ApplicationTranslationViewModel>> Upload(IEnumerable<SpreadsheetColumnDefinitionViewModel> languages, Stream file);
     }
 }

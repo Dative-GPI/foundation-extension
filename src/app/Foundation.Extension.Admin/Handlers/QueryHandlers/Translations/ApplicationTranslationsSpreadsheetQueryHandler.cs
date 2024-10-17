@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,56 +10,57 @@ using DocumentFormat.OpenXml.Spreadsheet;
 
 using Bones.Flow;
 
-using Foundation.Extension.Domain.Repositories.Filters;
-using Foundation.Extension.Domain.Repositories.Interfaces;
+using Foundation.Extension.Admin.Abstractions;
 using Foundation.Extension.Admin.Requests;
 using Foundation.Extension.Domain.Abstractions;
-using Foundation.Extension.Admin.Abstractions;
+using Foundation.Extension.Domain.Repositories.Filters;
+using Foundation.Extension.Domain.Repositories.Interfaces;
 
 namespace Foundation.Extension.Admin.Handlers
 {
-    public class DownloadApplicationTranslationsCommandHandler : IMiddleware<DownloadApplicationTranslationsCommand>
+    public class ApplicationTranslationsSpreadSheetQueryHandler : IMiddleware<ApplicationTranslationsSpreadsheetQuery, byte[]>
     {
-        private readonly ITranslationRepository _translationRepository;
-        private readonly IFoundationClientFactory _foundationClientFactory;
         private readonly IRequestContextProvider _requestContextProvider;
+        private readonly IFoundationClientFactory _foundationClientFactory;
+        private readonly ITranslationRepository _translationRepository;
         private readonly IApplicationTranslationRepository _applicationTranslationRepository;
 
-        public DownloadApplicationTranslationsCommandHandler
+        public ApplicationTranslationsSpreadSheetQueryHandler
         (
-            ITranslationRepository translationRepository,
-            IFoundationClientFactory foundationClientFactory,
             IRequestContextProvider requestContextProvider,
+            IFoundationClientFactory foundationClientFactory,
+            ITranslationRepository translationRepository,
             IApplicationTranslationRepository applicationTranslationRepository
         )
         {
-            _translationRepository = translationRepository;
-            _foundationClientFactory = foundationClientFactory;
             _requestContextProvider = requestContextProvider;
+            _foundationClientFactory = foundationClientFactory;
+            _translationRepository = translationRepository;
             _applicationTranslationRepository = applicationTranslationRepository;
         }
 
-        public async Task HandleAsync(DownloadApplicationTranslationsCommand command, Func<Task> next, CancellationToken cancellationToken)
+        public async Task<byte[]> HandleAsync(ApplicationTranslationsSpreadsheetQuery request, Func<Task<byte[]>> next, CancellationToken cancellationToken)
         {
-            // Get all existing translations
-            var translations = await _translationRepository.GetMany();
-
             var context = _requestContextProvider.Context;
 
             var adminFoundationClient = await _foundationClientFactory.CreateAdmin(context.ApplicationId, context.LanguageCode);
 
-
+            // Get all existing translations
+            var translations = await _translationRepository.GetMany();
 
             // Get all languages for this application
             var applicationLanguages = await adminFoundationClient.Admin.ApplicationLanguages.GetMany();
+
             // Get all translations for this application
             var applicationTranslations = await _applicationTranslationRepository.GetMany(new ApplicationTranslationsFilter()
             {
-                ApplicationId = command.ApplicationId
+                ApplicationId = request.ApplicationId
             });
 
+            using var tmp = new MemoryStream();
+
             // Create all required parts
-            using (var xlsx = SpreadsheetDocument.Create(command.File, SpreadsheetDocumentType.Workbook))
+            using (var xlsx = SpreadsheetDocument.Create(tmp, SpreadsheetDocumentType.Workbook))
             {
                 var workbookPart = xlsx.AddWorkbookPart();
                 workbookPart.Workbook = new Workbook();
@@ -98,9 +100,15 @@ namespace Foundation.Extension.Admin.Handlers
                     {
                         CellReference = $"{ColumnIndexToCellReference(index)}1",
                         DataType = CellValues.String,
-                        CellValue = new CellValue(language.Code)
+                        CellValue = new CellValue($"Default {language.Code}")
                     });
-                    index++;
+                    headers.AppendChild(new Cell()
+                    {
+                        CellReference = $"{ColumnIndexToCellReference(index + 1)}1",
+                        DataType = CellValues.String,
+                        CellValue = new CellValue($"Application {language.Code}")
+                    });
+                    index += 2;
                 }
 
                 // Add translations in other rows
@@ -123,9 +131,23 @@ namespace Foundation.Extension.Admin.Handlers
 
                     foreach (var language in applicationLanguages)
                     {
+                        var translationTranslation = translation.Translations
+                            .FirstOrDefault(tt => tt.LanguageCode == language.Code);
+
+                        if (translationTranslation != null)
+                        {
+                            row.AppendChild(new Cell()
+                            {
+                                CellReference = $"{ColumnIndexToCellReference(index)}{sheetData.ChildElements.Count}",
+                                DataType = CellValues.String,
+                                CellValue = new CellValue(translationTranslation.Value)
+                            });
+                        }
+                        index++;
+
                         var applicationTranslation = applicationTranslations
                             .FirstOrDefault(at => at.TranslationCode == translation.Code && at.LanguageCode == language.Code);
-
+                        
                         if (applicationTranslation != null)
                         {
                             row.AppendChild(new Cell()
@@ -139,6 +161,8 @@ namespace Foundation.Extension.Admin.Handlers
                     }
                 }
             }
+
+            return tmp.ToArray();
         }
 
         private static string ColumnIndexToCellReference(int index)

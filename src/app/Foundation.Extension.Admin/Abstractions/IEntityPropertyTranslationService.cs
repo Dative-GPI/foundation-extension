@@ -12,6 +12,6 @@ namespace Foundation.Extension.Admin.Abstractions
         Task<IEnumerable<EntityPropertyTranslationViewModel>> GetMany(EntityPropertyTranslationsFilterViewModel filter);
         Task<IEnumerable<EntityPropertyTranslationViewModel>> Replace(Guid entityPropertyId, List<UpdateEntityPropertyTranslationViewModel> payload);
         Task<byte[]> Download();
-        Task<IEnumerable<EntityPropertyTranslationViewModel>> Upload(List<SpreadsheetColumnDefinitionViewModel> labels, List<SpreadsheetColumnDefinitionViewModel> categories, Stream file);
+        Task<IEnumerable<EntityPropertyTranslationViewModel>> Upload(List<SpreadsheetColumnDefinitionViewModel> languages, Stream file);
     }
 }

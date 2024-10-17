@@ -23,9 +23,9 @@ const ApplicationTranslationServiceFactory = new ServiceFactory<ApplicationTrans
             upload: async (payload: UploadApplicationTranslations) => {
                 const data = new FormData();
                 data.append('file', payload.file);
-                for (let i = 0; i < payload.languagesCodes.length; i++) {
-                    data.append(`languagesCodes[${i}].index`, payload.languagesCodes[i].index.toString());
-                    data.append(`languagesCodes[${i}].languageCode`, payload.languagesCodes[i].languageCode);
+                for (let i = 0; i < payload.languages.length; i++) {
+                    data.append(`languages[${i}].index`, payload.languages[i].index.toString());
+                    data.append(`languages[${i}].languageCode`, payload.languages[i].languageCode);
                 }
 
                 const response = await ServiceFactory.http.put(APPLICATION_TRANSLATIONS_WORKBOOK_URL, data, { headers: { 'Content-Type': 'multipart/form-data' } });

@@ -18,37 +18,32 @@ namespace Foundation.Extension.Admin.Handlers
     public class UploadEntityPropertyTranslationsCommandHandler : IMiddleware<UploadEntityPropertyTranslationsCommand>
     {
         private readonly IEntityPropertyRepository _entityPropertyRepository;
-        private readonly IEntityPropertyApplicationTranslationRepository _entityPropertyTranslationRepository;
+        private readonly IEntityPropertyApplicationTranslationRepository _entityPropertyApplicationTranslationRepository;
 
         public UploadEntityPropertyTranslationsCommandHandler
         (
             IEntityPropertyRepository entityPropertyRepository,
-            IEntityPropertyApplicationTranslationRepository entityPropertyTranslationRepository
+            IEntityPropertyApplicationTranslationRepository entityPropertyApplicationTranslationRepository
         )
         {
             _entityPropertyRepository = entityPropertyRepository;
-            _entityPropertyTranslationRepository = entityPropertyTranslationRepository;
+            _entityPropertyApplicationTranslationRepository = entityPropertyApplicationTranslationRepository;
         }
 
         public async Task HandleAsync(UploadEntityPropertyTranslationsCommand command, Func<Task> next, CancellationToken cancellationToken)
         {
-            // Get all existing entityPropertys
-            var entityPropertys = await _entityPropertyRepository.GetMany(new EntityPropertiesFilter());
+            // Get all existing entityProperties
+            var entityProperties = await _entityPropertyRepository.GetMany(new EntityPropertiesFilter());
 
-            // Remove all existing entityPropertys for each uploaded language for this application
-            var updatedLanguages = command.Labels.Select(l => l.LanguageCode).Concat(command.Categories.Select(l => l.LanguageCode).Distinct()).ToHashSet();
-            var languageConfiguration = command.Labels.Join(command.Categories, l => l.LanguageCode, c => c.LanguageCode,
-                (l, c) => new { l.LanguageCode, LabelIndex = l.Index, CategoryIndex = c.Index })
-                .ToDictionary(l => l.LanguageCode);
-
-            var entityPropertyTranslations = await _entityPropertyTranslationRepository.GetMany(new EntityPropertyApplicationTranslationsFilter()
+            // Remove all existing entityPropertyTranslation for each uploaded language for this application
+            var entityPropertyApplicationTranslations = await _entityPropertyApplicationTranslationRepository.GetMany(new EntityPropertyApplicationTranslationsFilter()
             {
                 ApplicationId = command.ApplicationId
             });
 
-            await _entityPropertyTranslationRepository.RemoveRange(entityPropertyTranslations
-                .Where(et => updatedLanguages.Contains(et.LanguageCode))
-                .Select(at => at.Id)
+            await _entityPropertyApplicationTranslationRepository.RemoveRange(entityPropertyApplicationTranslations
+                .Where(epat => command.Languages.Any(l => l.LanguageCode == epat.LanguageCode))
+                .Select(epat => epat.Id)
             );
 
             // Handle the xlsx file
@@ -90,23 +85,20 @@ namespace Foundation.Extension.Admin.Handlers
                     var code = (((codeCell.DataType ?? CellValues.String) == CellValues.SharedString) && strings != null) ?
                         strings.ElementAt(Convert.ToInt32(codeCell.InnerText)).InnerText : codeCell.InnerText;
 
-                    var entityProperty = entityPropertys.FirstOrDefault(t => t.Code == code);
+                    var entityProperty = entityProperties.FirstOrDefault(t => t.Code == code);
 
                     if (entityProperty == default)
                     {
                         continue;
                     }
 
-                    foreach (var language in languageConfiguration)
+                    foreach (var language in command.Languages)
                     {
                         // This cell is supposed to contain the entityProperty for this language
-                        var labelCellReference = $"{ColumnIndexToCellReference(language.Value.LabelIndex)}{CellReferenceToRowIndex(codeCell.CellReference)}";
+                        var labelCellReference = $"{ColumnIndexToCellReference(language.Index)}{CellReferenceToRowIndex(codeCell.CellReference)}";
                         var labelCell = row.Descendants<Cell>().FirstOrDefault(c => c.CellReference == labelCellReference);
 
-                        var categoryCellReference = $"{ColumnIndexToCellReference(language.Value.CategoryIndex)}{CellReferenceToRowIndex(codeCell.CellReference)}";
-                        var categoryCell = row.Descendants<Cell>().FirstOrDefault(c => c.CellReference == categoryCellReference);
-
-                        if (labelCell == default && categoryCell == default)
+                        if (labelCell == default)
                         {
                             continue;
                         }
@@ -114,21 +106,17 @@ namespace Foundation.Extension.Admin.Handlers
                         var label = (labelCell != null && ((labelCell.DataType ?? CellValues.String) == CellValues.SharedString) && strings != null) ?
                             strings.ElementAt(Convert.ToInt32(labelCell.InnerText)).InnerText : labelCell?.InnerText;
 
-                        var category = (categoryCell != null && ((categoryCell.DataType ?? CellValues.String) == CellValues.SharedString) && strings != null) ?
-                            strings.ElementAt(Convert.ToInt32(categoryCell.InnerText)).InnerText : categoryCell?.InnerText;
-
                         commands.Add(new CreateEntityPropertyApplicationTranslation()
                         {
                             ApplicationId = command.ApplicationId,
-                            LanguageCode = language.Value.LanguageCode,
+                            LanguageCode = language.LanguageCode,
                             EntityPropertyId = entityProperty.Id,
-                            Label = label,
-                            CategoryLabel = category
+                            Label = label
                         });
                     }
                 }
 
-                await _entityPropertyTranslationRepository.CreateRange(commands);
+                await _entityPropertyApplicationTranslationRepository.CreateRange(commands);
             }
         }
 

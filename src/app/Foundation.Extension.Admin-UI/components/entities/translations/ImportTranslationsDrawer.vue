@@ -9,115 +9,130 @@
     <FSCol
       :gap="12"
       class="pa-2"
-      width="fill"
+      align="center-center"
     >
-      <FSCol
-        :gap="12"
+      <FSDivider
+        :label="$tr('ui.admin.translations.workbook', 'Workbook')"
+      />
+
+      <v-form
+        v-model="valid"
+        ref="form"
+        lazy-validation
       >
-        <FSDivider
-          :label="$tr('ui.admin.translations.workbook', 'Workbook')"
-        />
-        <FSSpan
-          font="text-body text-wrap"
-        >
-          {{
-            $tr(
-              "ui.admin.entity-property.workbook-description",
-              "Please select a workbook from your device. The first column must include the entity properties codes"
-            )
-          }}
-        </FSSpan>
-        <FSRow
-          class="align-center"
-        >
-          <FSButtonFile
-            class="mr-2"
-            prepend-icon="mdi-upload"
-            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-            :readFile="false"
-            color="primary"
-            @update:modelValue="onUpload"
-            :label="$tr('ui.admin.translations.workbook', 'Upload workbook')"
-          />
-          <FSRow
-            v-if="workbook != null"
-          >
-            <FSSpan
-              font="text-h3 mr-2"
-            >
-              {{ workbook.name }}
-            </FSSpan>
-            <FSButton
-              class="mr-2"
-              variant="icon"
-              color="error"
-              icon="mdi-minus-circle-outline"
-              @click="workbook = null"
-            />
-          </FSRow>
-        </FSRow>
-        <FSDivider
-          :label="$tr('ui.admin.translations.languages', 'Languages')"
-        />
-        <FSRow
-          class="align-center mb-5"
+        <FSCol
+          :gap="12"
         >
           <FSSpan
             font="text-body text-wrap"
           >
             {{
-              $tr("ui.admin.translations.add-a-column", "Click the plus button for each column containing a language")
+              $tr(
+                "ui.admin.entity-property.workbook-description",
+                "Please select a workbook from your device. The first column must include the entity properties codes"
+              )
             }}
           </FSSpan>
-          <v-spacer />
-          <FSButton
-            variant="icon"
-            icon="mdi-plus-circle-outline"
-            @click="() => columns.push({ index: nextIndex(), languageCode: '' })"
-          />
-        </FSRow>
-        <FSCol
-          v-if="columns.length > 0"
-        >
           <FSRow
-            v-for="(column, i) in columns"
-            :key="i"
-            align="bottom-right"
+            class="align-center"
           >
+            <FSButtonFile
+              class="mr-2"
+              prepend-icon="mdi-upload"
+              accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+              color="primary"
+              @update:metadata="onUpload"
+              :label="$tr('ui.admin.translations.workbook', 'Upload workbook')"
+            />
+            <FSRow
+              v-if="workbook != null"
+            >
+              <FSSpan
+                font="text-h3 mr-2"
+              >
+                {{ workbook.name }}
+              </FSSpan>
+              <FSButton
+                class="mr-2"
+                variant="icon"
+                color="error"
+                icon="mdi-minus-circle-outline"
+                @click="workbook = null"
+              />
+            </FSRow>
+          </FSRow>
+          <FSRow
+            align="center-center"
+          >
+            <FSDivider
+              :label="$tr('ui.admin.translations.languages', 'Languages')"
+            />
+          </FSRow>
+          <FSRow
+            class="align-center mb-5"
+          >
+            <FSSpan
+              font="text-body text-wrap"
+            >
+              {{
+                $tr("ui.admin.translations.add-a-column", "Click the plus button for each column containing a language")
+              }}
+            </FSSpan>
             <v-spacer />
             <FSButton
               variant="icon"
-              color="error"
-              icon="mdi-minus-circle-outline"
-              @click="() => columns.splice(i, 1)"
-            />
-            <FSText
-              font="text-h3"
-            >
-              {{ $tr("ui.admin.entity-property.label-column", "Label column") }}
-              {{ indexToColumn(column.index) }} /
-              {{ $tr("ui.admin.entity-property.category-column", "Category column") }}
-              {{ indexToColumn(column.index + 1) }}
-            </FSText>
-            <FSButton
-              variant="icon"
-              icon="mdi-menu-left-outline"
-              :disabled="column.index < 2"
-              @click="() => column.index--"
-            />
-            <FSButton
-              variant="icon"
-              icon="mdi-menu-right-outline"
-              @click="() => column.index++"
-            />
-            <LanguageSelector
-              :rules="[(v: string) => !!v || $tr('ui.common.required', 'Required')]"
-              style="width: 330px"
-              @update:model-value="setLanguageCode(i, $event)"
+              icon="mdi-plus-circle-outline"
+              @click="() => columns.push({ index: nextIndex(), languageCode: '' })"
             />
           </FSRow>
+          <FSCol
+            v-if="columns.length > 0"
+          >
+            <FSRow
+              v-for="(column, i) in columns"
+              :key="i"
+              align="bottom-center"
+            >
+              <FSRow
+                align="center-center"
+              >
+                <FSButton
+                  class="mr-2"
+                  variant="icon"
+                  color="error"
+                  icon="mdi-minus-circle-outline"
+                  @click="() => columns.splice(i, 1)"
+                />
+                <FSText
+                  font="text-h2"
+                >
+                  {{ $tr("ui.admin.translations.column", "Column") }}
+                  {{ indexToColumn(column.index) }}
+                </FSText>
+                <v-spacer />
+                <FSButton
+                  class="mr-2"
+                  variant="icon"
+                  icon="mdi-menu-left-outline"
+                  :disabled="column.index < 2"
+                  @click="() => column.index--"
+                />
+                <FSButton
+                  class="mr-2"
+                  variant="icon"
+                  icon="mdi-menu-right-outline"
+                  @click="() => column.index++"
+                />
+              </FSRow>
+              <LanguageSelector
+                :rules="[(v: string) => !!v || $tr('ui.common.required', 'Required')]"
+                style="width: 280px"
+                @update:model-value="setLanguageCode(i, $event)"
+              />
+            </FSRow>
+          </FSCol>
         </FSCol>
-      </FSCol>
+      </v-form>
     </FSCol>
 
     <template
@@ -134,8 +149,8 @@
         prepend-icon="mdi-upload"
         :loading="uploading"
         variant="standard"
-        color="primary"
         @click="upload"
+        color="primary"
         :label="$tr('ui.common.import', 'Import')"
       />
     </template>
@@ -209,14 +224,7 @@ export default defineComponent({
 
       await uploadEntityPropertyTranslations({
         file: workbook.value,
-        labels: columns.value.map((c) => ({
-          languageCode: c.languageCode,
-          index: c.index,
-        })),
-        categories: columns.value.map((c) => ({
-          languageCode: c.languageCode,
-          index: c.index + 1,
-        })),
+        languages: columns.value
       }).then(() => {
         extension.notify(entityPropertyTranslations.value);
         extension.closeDrawer(location.pathname, true);
@@ -244,5 +252,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped></style>

@@ -5,21 +5,17 @@ using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
-using Bones.Repository.Interfaces;
-
 using Foundation.Extension.Context.DTOs;
 using Foundation.Extension.Domain.Repositories.Interfaces;
 using Foundation.Extension.Domain.Models;
 using Foundation.Extension.Domain.Repositories.Filters;
 using Foundation.Extension.Domain.Repositories.Commands;
-using Foundation.Extension.Domain.Abstractions;
 
 namespace Foundation.Extension.Context.Repositories
 {
     public class EntityPropertyApplicationTranslationRepository : IEntityPropertyApplicationTranslationRepository
     {
         private readonly DbSet<EntityPropertyApplicationTranslationDTO> _dbSet;
-        private readonly IFoundationClientFactory _foundationClientFactory;
 
         public EntityPropertyApplicationTranslationRepository(BaseApplicationContext context)
         {
@@ -42,6 +38,11 @@ namespace Foundation.Extension.Context.Repositories
                 query = query.Where(dto => dto.EntityPropertyId == filter.EntityPropertyId);
             }
 
+            if (filter.EntityPropertiesIds != null)
+            {
+                query = query.Where(dto => filter.EntityPropertiesIds.Contains(dto.EntityPropertyId));
+            }
+
             if (!string.IsNullOrEmpty(filter.EntityType))
             {
                 query = query.Where(dto => dto.EntityProperty.EntityType == filter.EntityType);
@@ -56,21 +57,18 @@ namespace Foundation.Extension.Context.Repositories
                 ApplicationId = dto.ApplicationId,
                 EntityPropertyId = dto.EntityPropertyId,
 				EntityPropertyCode = dto.EntityProperty.Code,
-                CategoryLabel = dto.CategoryLabel,
-                LanguageCode = dto.LanguageCode,
+                LanguageCode = dto.LanguageCode
             });
         }
 
         public Task CreateRange(IEnumerable<CreateEntityPropertyApplicationTranslation> payload)
         {
-
             var dtos = payload.Select(e => new EntityPropertyApplicationTranslationDTO()
             {
                 Id = Guid.NewGuid(),
                 Label = e.Label,
                 ApplicationId = e.ApplicationId,
                 EntityPropertyId = e.EntityPropertyId,
-                CategoryLabel = e.CategoryLabel,
                 LanguageCode = e.LanguageCode,
                 Disabled = false
             }).ToList();

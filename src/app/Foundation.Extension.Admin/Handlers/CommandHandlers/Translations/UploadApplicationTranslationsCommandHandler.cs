@@ -9,10 +9,10 @@ using DocumentFormat.OpenXml.Spreadsheet;
 
 using Bones.Flow;
 
+using Foundation.Extension.Admin.Requests;
 using Foundation.Extension.Domain.Repositories.Commands;
 using Foundation.Extension.Domain.Repositories.Filters;
 using Foundation.Extension.Domain.Repositories.Interfaces;
-using Foundation.Extension.Admin.Requests;
 
 
 namespace Foundation.Extension.Admin.Handlers
@@ -38,15 +38,15 @@ namespace Foundation.Extension.Admin.Handlers
             var translations = await _translationRepository.GetMany();
 
             // Remove all existing translations for each uploaded language for this application
-            foreach (var language in command.LanguagesCodes)
+            var applicationTranslations = await _applicationTranslationRepository.GetMany(new ApplicationTranslationsFilter()
             {
-                var applicationTranslations = await _applicationTranslationRepository.GetMany(new ApplicationTranslationsFilter()
-                {
-                    ApplicationId = command.ApplicationId,
-                    LanguageCode = language.LanguageCode
-                });
-                await _applicationTranslationRepository.RemoveRange(applicationTranslations.Select(at => at.Id));
-            }
+                ApplicationId = command.ApplicationId
+            });
+
+            await _applicationTranslationRepository.RemoveRange(applicationTranslations
+                .Where(at => command.Languages.Any(l => l.LanguageCode == at.LanguageCode))
+                .Select(at => at.Id)
+            );
 
             // Handle the xlsx file
             using (var xlsx = SpreadsheetDocument.Open(command.File, false))
@@ -94,7 +94,7 @@ namespace Foundation.Extension.Admin.Handlers
                         continue;
                     }
 
-                    foreach (var language in command.LanguagesCodes)
+                    foreach (var language in command.Languages)
                     {
                         // This cell is supposed to contain the translation for this language
                         var cellReference = $"{ColumnIndexToCellReference(language.Index)}{CellReferenceToRowIndex(codeCell.CellReference)}";

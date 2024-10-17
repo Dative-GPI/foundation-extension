@@ -1,17 +1,16 @@
-using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 using AutoMapper;
 
 using Bones.Flow;
 
-using Foundation.Extension.Domain.Models;
 using Foundation.Extension.Admin.Abstractions;
-using Foundation.Extension.Admin.ViewModels;
 using Foundation.Extension.Admin.Requests;
-using System.Linq;
-using System.IO;
+using Foundation.Extension.Admin.ViewModels;
+using Foundation.Extension.Domain.Models;
 using Foundation.Extension.Domain.Repositories.Interfaces;
 using Foundation.Extension.Domain.Repositories.Filters;
 
@@ -19,20 +18,19 @@ namespace Foundation.Extension.Admin.Services
 {
     public class ApplicationTranslationService : IApplicationTranslationService
     {
-        private IQueryHandler<ApplicationTranslationsQuery, IEnumerable<ApplicationTranslation>> _applicationTranslationsQueryHandler;
-        private ICommandHandler<UpdateApplicationTranslationCommand> _updateApplicationTranslationsCommandHandler;
-        private readonly ICommandHandler<DownloadApplicationTranslationsCommand> _downloadApplicationTranslationsCommandHandler;
+        private readonly IQueryHandler<ApplicationTranslationsQuery, IEnumerable<ApplicationTranslation>> _applicationTranslationsQueryHandler;
+        private readonly IQueryHandler<ApplicationTranslationsSpreadsheetQuery, byte[]> _applicationTranslationsSpreadsheetQueryHandler;
+        private readonly ICommandHandler<UpdateApplicationTranslationCommand> _updateApplicationTranslationsCommandHandler;
         private readonly ICommandHandler<UploadApplicationTranslationsCommand> _uploadApplicationTranslationsCommandHandler;
         private readonly IApplicationTranslationRepository _applicationTranslationRepository;
-
         private readonly IRequestContextProvider _requestContextProvider;
+        private readonly IMapper _mapper;
 
-        private IMapper _mapper;
-
-        public ApplicationTranslationService(
+        public ApplicationTranslationService
+        (
             IQueryHandler<ApplicationTranslationsQuery, IEnumerable<ApplicationTranslation>> applicationTranslationsQueryHandler,
+            IQueryHandler<ApplicationTranslationsSpreadsheetQuery, byte[]> applicationTranslationsSpreadsheetQueryHandler,
             ICommandHandler<UpdateApplicationTranslationCommand> updateApplicationTranslationsCommandHandler,
-            ICommandHandler<DownloadApplicationTranslationsCommand> downloadApplicationTranslationsCommandHandler,
             ICommandHandler<UploadApplicationTranslationsCommand> uploadApplicationTranslationsCommandHandler,
             IApplicationTranslationRepository applicationTranslationRepository,
             IRequestContextProvider requestContextProvider,
@@ -40,27 +38,38 @@ namespace Foundation.Extension.Admin.Services
         )
         {
             _applicationTranslationsQueryHandler = applicationTranslationsQueryHandler;
+            _applicationTranslationsSpreadsheetQueryHandler = applicationTranslationsSpreadsheetQueryHandler;
             _updateApplicationTranslationsCommandHandler = updateApplicationTranslationsCommandHandler;
-            _downloadApplicationTranslationsCommandHandler = downloadApplicationTranslationsCommandHandler;
             _uploadApplicationTranslationsCommandHandler = uploadApplicationTranslationsCommandHandler;
             _applicationTranslationRepository = applicationTranslationRepository;
             _requestContextProvider = requestContextProvider;
             _mapper = mapper;
         }
 
+        public async Task<IEnumerable<ApplicationTranslationViewModel>> GetMany(ApplicationTranslationViewModel filter)
+        {
+            var query = new ApplicationTranslationsQuery()
+            {
+                LanguageCode = filter.LanguageCode,
+                TranslationCode = filter.TranslationCode
+            };
+
+            var result = await _applicationTranslationsQueryHandler.HandleAsync(query);
+
+            return _mapper.Map<IEnumerable<ApplicationTranslation>, IEnumerable<ApplicationTranslationViewModel>>(result);
+        }
+
         public async Task<IEnumerable<ApplicationTranslationViewModel>> Update(string code, UpdateApplicationTranslationViewModel payload)
         {
-
             var context = _requestContextProvider.Context;
             var command = new UpdateApplicationTranslationCommand()
             {
-
                 Code = code,
                 Translations = payload.Translations.Select(t => new UpdateApplicationTranslationLanguageCommand()
                 {
                     LanguageCode = t.LanguageCode,
                     Value = t.Value
-                })
+                }).ToList()
             };
 
             await _updateApplicationTranslationsCommandHandler.HandleAsync(command);
@@ -73,51 +82,36 @@ namespace Foundation.Extension.Admin.Services
             return _mapper.Map<IEnumerable<ApplicationTranslation>, IEnumerable<ApplicationTranslationViewModel>>(result);
         }
 
-        public async Task<IEnumerable<ApplicationTranslationViewModel>> GetMany(ApplicationTranslationViewModel filter)
-        {
-            var query = new ApplicationTranslationsQuery()
-            {
-                LanguageCode = filter.LanguageCode,
-                TranslationCode = filter.TranslationCode
-            };
-
-            var results = await _applicationTranslationsQueryHandler.HandleAsync(query);
-
-            return _mapper.Map<IEnumerable<ApplicationTranslation>, IEnumerable<ApplicationTranslationViewModel>>(results);
-        }
-
-        public async Task Download(Stream file)
+        public async Task<byte[]> Download()
         {
             var context = _requestContextProvider.Context;
-            var command = new DownloadApplicationTranslationsCommand()
+            var query = new ApplicationTranslationsSpreadsheetQuery()
             {
-                ApplicationId = context.ApplicationId,
-                File = file
+                ApplicationId = context.ApplicationId
             };
 
-            await _downloadApplicationTranslationsCommandHandler.HandleAsync(command);
+            return await _applicationTranslationsSpreadsheetQueryHandler.HandleAsync(query);
         }
 
-        public async Task<IEnumerable<ApplicationTranslationViewModel>> Upload(IEnumerable<ApplicationTranslationsColumnViewModel> languagesCodes, Stream file)
+        public async Task<IEnumerable<ApplicationTranslationViewModel>> Upload(IEnumerable<SpreadsheetColumnDefinitionViewModel> languages, Stream file)
         {
-
-            var context = _requestContextProvider.Context;
-
             var command = new UploadApplicationTranslationsCommand()
             {
-                LanguagesCodes = languagesCodes.Select(lc => new ApplicationTranslationColumnIndex()
+                ApplicationId = _requestContextProvider.Context.ApplicationId,
+
+                Languages = languages.Select(lc => new SpreadsheetColumnDefinition()
                 {
                     Index = lc.Index,
                     LanguageCode = lc.LanguageCode
                 }),
-                ApplicationId = context.ApplicationId,
                 File = file
             };
 
             await _uploadApplicationTranslationsCommandHandler.HandleAsync(command);
+            
             var result = await _applicationTranslationRepository.GetMany(new ApplicationTranslationsFilter()
             {
-                ApplicationId = context.ApplicationId
+                ApplicationId = _requestContextProvider.Context.ApplicationId
             });
 
             return _mapper.Map<IEnumerable<ApplicationTranslation>, IEnumerable<ApplicationTranslationViewModel>>(result);

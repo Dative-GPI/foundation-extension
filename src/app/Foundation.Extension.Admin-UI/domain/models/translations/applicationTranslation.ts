@@ -1,3 +1,5 @@
+import { SpreadsheetColumnDefinition } from "../applications/spreadsheetColumn";
+
 export class ApplicationTranslation {
     id: string;
     translationCode: string;
@@ -36,12 +38,7 @@ export interface DownloadApplicationTranslations {
 
 export interface UploadApplicationTranslations {
     file: File;
-    languagesCodes: ApplicationTranslationsColumn[];
-}
-
-export interface ApplicationTranslationsColumn {
-    index: number;
-    languageCode: string;
+    languages: SpreadsheetColumnDefinition[];
 }
 
 export interface ApplicationTranslationsFilter {

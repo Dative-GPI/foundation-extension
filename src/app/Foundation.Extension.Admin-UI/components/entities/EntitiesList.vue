@@ -137,10 +137,6 @@ export default defineComponent({
           value: "labelDefault",
         },
         {
-          title: $tr("ui.admin.entity-properties.category-default", "Default category"),
-          value: "categoryLabelDefault",
-        },
-        {
           title: $tr("ui.admin.entity-properties.entity", "Entity"),
           value: "entityType",
           sortable: true,

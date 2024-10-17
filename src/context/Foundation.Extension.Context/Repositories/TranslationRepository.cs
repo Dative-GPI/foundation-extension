@@ -5,21 +5,17 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 using Foundation.Extension.Context.DTOs;
-
 using Foundation.Extension.Domain.Models;
-using Foundation.Extension.Domain.Repositories.Filters;
 using Foundation.Extension.Domain.Repositories.Interfaces;
 
 namespace Foundation.Extension.Context.Repositories
 {
     public class TranslationRepository : ITranslationRepository
     {
-        private BaseApplicationContext _context;
-        private DbSet<TranslationDTO> _dbSet;
+        private readonly DbSet<TranslationDTO> _dbSet;
 
         public TranslationRepository(BaseApplicationContext context)
         {
-            _context = context;
             _dbSet = context.Translations;
         }
 

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Bones.Flow;
+
 using Foundation.Extension.Domain.Models;
 using Foundation.Extension.Domain.Repositories.Commands;
 using Foundation.Extension.Domain.Repositories.Filters;
@@ -35,25 +36,23 @@ namespace Foundation.Extension.Admin.Handlers
                 throw new Exception(ErrorCode.EntityNotFound);
             }
 
-            var formerEntityPropertys = await _entityPropertyTranslationRepository.GetMany(new EntityPropertyApplicationTranslationsFilter()
+            var formerEntityProperties = await _entityPropertyTranslationRepository.GetMany(new EntityPropertyApplicationTranslationsFilter()
             {
                 ApplicationId = command.ApplicationId,
                 EntityPropertyId = command.EntityPropertyId
             });
 
-            await _entityPropertyTranslationRepository.RemoveRange(formerEntityPropertys.Select(t => t.Id));
+            await _entityPropertyTranslationRepository.RemoveRange(formerEntityProperties.Select(t => t.Id));
 
-            var newEntityPropertys = command.Translations.Select(t => new CreateEntityPropertyApplicationTranslation()
+            var newEntityProperties = command.Translations.Select(t => new CreateEntityPropertyApplicationTranslation()
             {
                 ApplicationId = command.ApplicationId,
                 LanguageCode = t.LanguageCode,
                 EntityPropertyId = property.Id,
-
-                Label = t.Label,
-                CategoryLabel = t.CategoryLabel
+                Label = t.Label
             }).ToList();
 
-            await _entityPropertyTranslationRepository.CreateRange(newEntityPropertys);
+            await _entityPropertyTranslationRepository.CreateRange(newEntityProperties);
         }
     }
 }

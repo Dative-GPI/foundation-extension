@@ -65,23 +65,23 @@ export default defineComponent({
   props: {
     title: {
       type: String,
-      required: true,
+      required: true
     },
     value: {
       type: Boolean,
-      required: true,
+      required: true
     },
     width: {
       type: Number,
       required: false,
-      default: 256,
-    },
+      default: 600
+    }
   },
   setup(props) {
     const extension = useExtensionCommunicationBridge();
 
     const setWidth = () => {
-      extension.setWidth(props.width, location.pathname);
+      extension.setDrawerWidth(props.width, location.pathname);
     };
 
     const close = (success: boolean) => {
@@ -111,8 +111,6 @@ export default defineComponent({
     return {
       close,
     };
-  },
+  }
 });
 </script>
-
-<style scoped></style>

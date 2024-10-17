@@ -1,7 +1,7 @@
 <template>
   <Drawer
     class="pa-1"
-    :width="601"
+    :width="800"
     v-bind="$attrs"
     :title="$tr('ui.admin.translations.import-drawer', 'Import translations')"
     v-model:value="drawer"
@@ -40,12 +40,10 @@
               class="mr-2"
               prepend-icon="mdi-upload"
               accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-              :readFile="false"
               color="primary"
-              @update:modelValue="onUpload"
+              @update:metadata="onUpload"
               :label="$tr('ui.admin.translations.workbook', 'Workbook')"
             />
-
             <FSRow
               v-if="workbook != null"
             >
@@ -160,7 +158,7 @@
 </template>
 
 <script lang="ts">
-import type { ApplicationTranslationsColumn } from "../domain";
+import type { SpreadsheetColumnDefinition } from "../domain";
 import { defineComponent, ref } from "vue";
 
 import Drawer from "./shared/Drawer.vue";
@@ -176,7 +174,6 @@ export default defineComponent({
     LanguageSelector,
     Drawer,
   },
-
   setup() {
     const drawer = ref<boolean>(true);
     const valid = ref<boolean>(false);
@@ -192,7 +189,7 @@ export default defineComponent({
     const form = ref<any>();
 
     const workbook = ref<File | null>(null);
-    const columns = ref<ApplicationTranslationsColumn[]>([]);
+    const columns = ref<SpreadsheetColumnDefinition[]>([]);
 
     const onUpload = (payload: File) => {
       workbook.value = payload;
@@ -227,7 +224,7 @@ export default defineComponent({
 
       await uploadApplicationTranslations({
         file: workbook.value,
-        languagesCodes: columns.value,
+        languages: columns.value,
       }).then(() => {
         extension.notify(applicationTranslations.value);
         extension.closeDrawer(location.pathname, true);
@@ -255,5 +252,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped></style>

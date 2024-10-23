@@ -9,28 +9,28 @@ using Foundation.Clients.Fixtures.Services;
 
 namespace XXXXX.Context.Migrations.Shared
 {
-  public static class TranslationProvider
-  {
-    static readonly List<string> PROJECTS = new List<string>()
-        {
-            "../../../src/app/admin/XXXXX.Admin.UI",
-            "../../../src/app/core/XXXXX.Core.UI",
-        };
+	public static class TranslationProvider
+	{
+		static readonly List<string> PROJECTS = new List<string>()
+		{
+			"../../../src/app/admin/XXXXX.Admin.UI",
+			"../../../src/app/core/XXXXX.Core.UI",
+		};
 
-    public static async Task<List<Fixture>> GetAllTranslations()
-    {
-      var translations = new List<Fixture>();
-      var fixtureService = new FixtureService();
+		public static async Task<List<Fixture>> GetAllTranslations()
+		{
+			var translations = new List<Fixture>();
+			var fixtureService = new FixtureService();
 
-      foreach (var project in PROJECTS)
-      {
-        var translation = await TranslationHelper.GetTranslations(project);
-        translations.AddRange(translation);
-      }
+			foreach (var project in PROJECTS)
+			{
+				var translation = await TranslationHelper.GetTranslations(project);
+				translations.AddRange(translation);
+			}
 
-      var translationsCode = fixtureService.GetTranslations().Select(t => t.Code).ToList();
+			var translationsCode = fixtureService.GetTranslations().Select(t => t.Code).ToList();
 
-      return translations.DistinctBy(t => t.Code).Where(t => !translationsCode.Contains(t.Code)).ToList();
-    }
-  }
+			return translations.DistinctBy(t => t.Code).Where(t => !translationsCode.Contains(t.Code)).ToList();
+		}
+	}
 }

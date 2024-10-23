@@ -6,8 +6,8 @@ using Foundation.Extension.Admin.ViewModels;
 
 namespace Foundation.Extension.Admin.Abstractions
 {
-  public interface IPageService
-  {
-    Task<IEnumerable<PageViewModel>> GetMany(PageFiltersViewModel payload);
-  }
+	public interface IPageService
+	{
+		Task<IEnumerable<PageViewModel>> GetMany(PageFiltersViewModel payload);
+	}
 }

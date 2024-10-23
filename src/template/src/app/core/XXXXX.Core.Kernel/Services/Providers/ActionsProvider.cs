@@ -5,11 +5,11 @@ using Foundation.Extension.Core.Abstractions;
 
 namespace XXXXX.Core.Kernel.Services
 {
-  public class ActionsProvider : IActionsProvider
-  {
-    public Task<IEnumerable<ActionInfos>> GetActions(string path)
-    {
-      throw new System.NotImplementedException();
-    }
-  }
+	public class ActionsProvider : IActionsProvider
+	{
+		public Task<IEnumerable<ActionInfos>> GetActions(string path)
+		{
+			throw new System.NotImplementedException();
+		}
+	}
 }

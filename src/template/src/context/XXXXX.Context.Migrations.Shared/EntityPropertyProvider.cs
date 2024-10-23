@@ -10,25 +10,25 @@ using Foundation.Clients.Fixtures.Services;
 
 namespace XXXXX.Context.Migrations.Shared
 {
-  public static class EntityPropertyProvider
-  {
-    static List<Assembly> Assemblies = new List<Assembly>() {
-            XXXXX.Core.Kernel.KernelAssembly.Get(),
-            XXXXX.Admin.Kernel.KernelAssembly.Get()
-        };
+	public static class EntityPropertyProvider
+	{
+		static List<Assembly> Assemblies = new List<Assembly>() {
+			XXXXX.Core.Kernel.KernelAssembly.Get(),
+			XXXXX.Admin.Kernel.KernelAssembly.Get()
+		};
 
-    static List<string> Namespaces = new List<string>() {
-            "XXXXX.Core.Kernel.ViewModels",
-            "XXXXX.Admin.Kernel.ViewModels"
-        };
+		static List<string> Namespaces = new List<string>() {
+			"XXXXX.Core.Kernel.ViewModels",
+			"XXXXX.Admin.Kernel.ViewModels"
+		};
 
-    public static Task<List<EntityProperty>> GetAllEntityProperties()
-    {
-      var entityProperties = EntityPropertyHelper.GetAll(Assemblies, Namespaces);
+		public static Task<List<EntityProperty>> GetAllEntityProperties()
+		{
+			var entityProperties = EntityPropertyHelper.GetAll(Assemblies, Namespaces);
 
-      var result = entityProperties.DistinctBy(t => t.Code).ToList();
+			var result = entityProperties.DistinctBy(t => t.Code).ToList();
 
-      return Task.FromResult(result);
-    }
-  }
+			return Task.FromResult(result);
+		}
+	}
 }

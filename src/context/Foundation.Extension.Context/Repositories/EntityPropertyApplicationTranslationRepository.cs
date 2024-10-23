@@ -19,7 +19,7 @@ namespace Foundation.Extension.Context.Repositories
 
         public EntityPropertyApplicationTranslationRepository(BaseApplicationContext context)
         {
-            _dbSet = context.EntityPropertyTranslations;
+            _dbSet = context.EntityPropertyApplicationTranslations;
         }
 
         public async Task<IEnumerable<EntityPropertyApplicationTranslation>> GetMany(EntityPropertyApplicationTranslationsFilter filter)

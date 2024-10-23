@@ -9,6 +9,7 @@ using Foundation.Extension.Domain.Models;
 using Foundation.Extension.Domain.Abstractions;
 using Foundation.Extension.Domain.Repositories.Filters;
 using Foundation.Extension.Domain.Repositories.Interfaces;
+using Foundation.Extension.CrossCutting.Helpers;
 
 namespace Foundation.Extension.CrossCutting.Services
 {
@@ -69,7 +70,7 @@ namespace Foundation.Extension.CrossCutting.Services
 					{
 						Id = @default.Id,
 						TranslationCode = @default.Code,
-						Value = GetTranslationValue(languageCode, @default, translations),
+						Value = TranslationsHelper.GetTranslationValue(languageCode, @default, translations),
 						LanguageCode = languageCode
 					};
 				}
@@ -85,7 +86,7 @@ namespace Foundation.Extension.CrossCutting.Services
 					{
 						Id = @default.Id,
 						TranslationCode = @default.Code,
-						Value = GetTranslationValue(languageCode, @default, appTranslations),
+						Value = TranslationsHelper.GetTranslationValue(languageCode, @default, appTranslations),
 						LanguageCode = languageCode
 					};
 				}
@@ -117,40 +118,6 @@ namespace Foundation.Extension.CrossCutting.Services
 			{
 				return Enumerable.Empty<ApplicationTranslation>();
 			}
-		}
-
-		public string GetTranslationValue(string languageCode, Translation defaultTranslation, IEnumerable<ApplicationTranslation> appTranslations)
-		{
-			var result = appTranslations.FirstOrDefault(t => t.LanguageCode == languageCode)?.Value;
-
-			if (result == null)
-			{
-				result = defaultTranslation.Translations.FirstOrDefault(t => t.LanguageCode == languageCode)?.Value;
-			}
-
-			if (result == null)
-			{
-				result = defaultTranslation.Value;
-			}
-
-			return result;
-		}
-
-		public string GetTranslationValue(string languageCode, EntityProperty entityProperty, IEnumerable<EntityPropertyApplicationTranslation> appTranslations)
-		{
-			var result = appTranslations.FirstOrDefault(t => t.LanguageCode == languageCode)?.Label;
-
-			if (result == null)
-			{
-				result = entityProperty.Translations.FirstOrDefault(t => t.LanguageCode == languageCode)?.Label;
-			}
-
-			if (result == null)
-			{
-				result = entityProperty.LabelDefault;
-			}
-
-			return result;
 		}
 	}
 }

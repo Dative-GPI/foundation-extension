@@ -94,13 +94,10 @@ namespace Foundation.Extension.Core.Handlers
 				entityPropertiesTranslations,
 				c => c.EntityPropertyId,
 				ept => ept.EntityPropertyId,
-				(c, ept) =>
+				(c, ept) => new
 				{
-					return new
-					{
-						Column = c,
-						Label = ept.FirstOrDefault()?.Label ?? c.Label
-					};
+					Column = c,
+					Label = ept.FirstOrDefault()?.Label ?? c.Label
 				}
 			).ToList();
 

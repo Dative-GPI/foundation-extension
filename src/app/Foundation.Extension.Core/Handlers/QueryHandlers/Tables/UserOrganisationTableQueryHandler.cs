@@ -77,13 +77,10 @@ namespace Foundation.Extension.Core.Handlers
 				entityPropertyApplicationTranslations,
 				@default => @default.Id,
 				tr => tr.EntityPropertyId,
-				(@default, translations) =>
+				(@default, translations) => new
 				{
-					return new
-					{
-						EntityPropertyId = @default.Id,
-						Label = TranslationsHelper.GetTranslationValue(_context.LanguageCode, @default, translations)
-					};
+					EntityPropertyId = @default.Id,
+					Label = TranslationsHelper.GetTranslationValue(_context.LanguageCode, @default, translations)
 				}
 			).ToList();
 
@@ -112,8 +109,6 @@ namespace Foundation.Extension.Core.Handlers
 				OrganisationTypeId = _context.OrganisationTypeId,
 				TableId = table.Id
 			});
-
-			Console.WriteLine("AOIID " + _context.ActorOrganisationId);
 
 			var userOrganisationColumns = await _userOrganisationColumnRepository.GetMany(new UserOrganisationColumnsFilter()
 			{

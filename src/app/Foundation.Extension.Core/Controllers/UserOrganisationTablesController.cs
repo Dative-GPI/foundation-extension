@@ -19,9 +19,9 @@ namespace Foundation.Extension.Core.API.Controllers
     }
 
     [HttpGet("user-organisation-tables/{tableCode}")]
-    public async Task<ActionResult<UserOrganisationTableDetailsViewModel>> GetMany([FromRoute] string tableCode)
+    public async Task<ActionResult<UserOrganisationTableDetailsViewModel>> Get([FromRoute] string tableCode)
     {
-      var result = await _tableService.GetMany(tableCode);
+      var result = await _tableService.Get(tableCode);
       return Ok(result);
     }
 

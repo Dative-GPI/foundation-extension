@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Foundation.Extension.Domain.Models
 {
-  public class CompleteUserOrganisationColumnInfos : ITranslatable<TranslationItemProperty>
+  public class CompleteUserOrganisationColumnInfos
   {
     public Guid ColumnId { get; set; }
     public int Index { get; set; }
@@ -16,6 +16,5 @@ namespace Foundation.Extension.Domain.Models
     public string Label { get; set; }
     #endregion
 
-    public List<TranslationItemProperty> Translations { get; set; }
   }
 }

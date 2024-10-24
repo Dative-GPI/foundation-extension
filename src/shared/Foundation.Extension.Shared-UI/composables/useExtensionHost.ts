@@ -1,7 +1,7 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { useAppAuthToken, useAppLanguageCode, useAppTimeZone } from "@dative-gpi/foundation-shared-services/composables";
+import { useAppAuthToken, useAppLanguageCode, useAppTimeZone, useAppLanguages, useLanguages } from "@dative-gpi/foundation-shared-services/composables";
 
 import { useExtensionCommunicationBridge } from './useExtensionCommunicationBridge';
 
@@ -12,7 +12,7 @@ const timeZone = ref<string | null>(null);
 const token = ref<string | null>(null);
 
 export const useExtensionHost = () => {
-  onMounted(() => {
+  onMounted(async () => {
     if (done.value) {
       return;
     }
@@ -23,7 +23,9 @@ export const useExtensionHost = () => {
 
     const { goTo, setHeight } = useExtensionCommunicationBridge();
     const { setAppLanguageCode } = useAppLanguageCode();
+    const { getMany: getLanguages } = useLanguages();
     const { setAppAuthToken } = useAppAuthToken();
+    const { setAppLanguages } = useAppLanguages();
     const { setAppTimeZone } = useAppTimeZone();
     const router = useRouter();
     const route = useRoute();
@@ -54,6 +56,11 @@ export const useExtensionHost = () => {
     }
     if (token.value) {
       setAppAuthToken(token.value);
+    }
+
+    const languages = await getLanguages();
+    if (languages.value) {
+      setAppLanguages(languages.value);
     }
 
     onUnmounted(() => {

@@ -26,6 +26,13 @@
             :rules="[TextRules.required()]"
             v-model="fieldValue"
           />
+          <FSTranslateField
+            :label="$tr('entity.example.label','Label')"
+            :required="true"
+            :rules="[TextRules.required()]"
+            :modelValue="labelDefault"
+            :translations="translations"
+          />
         </template>
       </FSDialogFormBody>
     </template>
@@ -51,6 +58,9 @@ export default defineComponent({
     const fieldValue = ref("");
     const dialog = ref(true);
 
+    const labelDefault = ref("");
+    const translations = ref([]); 
+
     const onSubmit = () => {
       let program = {
         messageType: "stepProgram",
@@ -73,6 +83,8 @@ export default defineComponent({
     };
     
     return {
+      labelDefault,
+      translations,
       fieldValue,
       TextRules,
       dialog,

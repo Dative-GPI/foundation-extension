@@ -14,13 +14,13 @@
         @click:cancelButton="dialog = false"
         v-bind="$attrs"
       >
-        <template 
+        <template
           #body
         >
           <FSText>
             {{ $tr('ui.common.information','Information') }}
           </FSText>
-          <FSTextField
+          <FSTranslateField
             :label="$tr('entity.chart-organisation.label-default','Name')"
             :required="true"
             :rules="[TextRules.required()]"

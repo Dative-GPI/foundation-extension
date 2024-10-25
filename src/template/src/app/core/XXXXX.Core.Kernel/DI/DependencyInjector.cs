@@ -6,21 +6,29 @@ using Bones.Flow;
 using Foundation.Extension.Core.Abstractions;
 
 using XXXXX.Core.Kernel.Services;
+using XXXXX.Core.Kernel.Services.Providers;
 
 namespace XXXXX.Core.Kernel.DI
 {
-	public static class DependencyInjector
-	{
-		public static IServiceCollection AddKernel(this IServiceCollection services, IConfiguration configuration)
-		{
-			services.AddFlow();
+    public static class DependencyInjector
+    {
+        public static IServiceCollection AddKernel(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddFlow();
 
-			services.AddScoped<IRoutesProvider, RoutesProvider>();
-			services.AddScoped<IActionsProvider, ActionsProvider>();
+            services.AddProviders();
 
-			services.AddAutoMapper(typeof(DependencyInjector).Assembly);
+            services.AddAutoMapper(typeof(DependencyInjector).Assembly);
 
-			return services;
-		}
-	}
+            return services;
+        }
+
+        public static IServiceCollection AddProviders(this IServiceCollection services)
+        {
+            services.AddScoped<IRoutesProvider, RoutesProvider>();
+            services.AddScoped<IActionsProvider, ActionsProvider>();
+
+            return services;
+        }
+    }
 }

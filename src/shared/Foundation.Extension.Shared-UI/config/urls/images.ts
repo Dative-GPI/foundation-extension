@@ -7,3 +7,4 @@ export const IMAGE_RAW_URL = (imageId: string) => `${IMAGE_URL(imageId)}/raw`;
 export const IMAGE_RAW_SOURCE_URL = (imageId: string, jwt: string) => `${IMAGE_RAW_URL(imageId)}?access_token=${jwt}`;
 
 export const IMAGE_THUMBNAIL_URL = (imageId: string) => `${IMAGE_URL(imageId)}/thumbnail`;
+export const IMAGE_THUMBNAIL_SOURCE_URL = (imageId: string, jwt: string) => `${IMAGE_THUMBNAIL_URL(imageId)}?access_token=${jwt}`;

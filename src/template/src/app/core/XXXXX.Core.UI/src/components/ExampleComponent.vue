@@ -20,13 +20,16 @@
       :removeCurrent="fakeRemove"
       @remove="fakeRemove = 8"
     />
+    <FEDateRangeField
+      :title="$tr('ui.code','select a date range')"
+      :color="ColorEnum.Success"
+      v-model="dateRange"
+    />
     <FSRow
       height="1000px"
     >
       1000px row for scroll
     </FSRow>
-
-
   </FSCol>
 </template>
 
@@ -35,13 +38,16 @@ import { defineComponent, onMounted, ref } from "vue";
 import Ajv from "ajv";
 
 import { useExtensionCommunicationBridge } from "@dative-gpi/foundation-extension-shared-ui/composables";
+import { ColorEnum } from "@dative-gpi/foundation-shared-components/models";
 
+import FEDateRangeField from "@dative-gpi/foundation-extension-core-ui/components/FEDateRangeField.vue";
 import FEButtonRemove from "@dative-gpi/foundation-extension-core-ui/components/FEButtonRemove.vue";
 import FEDataTable from "@dative-gpi/foundation-extension-core-ui/components/FEDataTable.vue";
 
 export default defineComponent({
   name: "ExampleComponent",
   components: {
+    FEDateRangeField,
     FEButtonRemove,
     FEDataTable
   },
@@ -49,6 +55,7 @@ export default defineComponent({
     const { openDialog, subscribeUnsafe } = useExtensionCommunicationBridge();
 
     const fakeRemove = ref(0);
+    const dateRange = ref<number[] | null>([ 1729029600000, 1729288800000 ]);
 
     const tableCode = "ui.tables.test";
 
@@ -93,6 +100,8 @@ export default defineComponent({
     return {
       fakeRemove,
       tableCode,
+      dateRange,
+      ColorEnum,
       items,
       openDialog
     };

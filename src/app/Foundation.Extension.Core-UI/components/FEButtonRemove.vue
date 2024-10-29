@@ -1,7 +1,7 @@
 <template>
   <FEButtonRemoveUI
     v-if="dialogId"
-    :dialogPath="DIALOG_REMOVE(dialogId)"
+    :dialogPath="REMOVE_ENTITIES_DIALOG_PATH(dialogId)"
     :removeTotal="$props.removeTotal"
     :removeCurrent="$props.removeCurrent"
     :dialogId="dialogId"
@@ -14,7 +14,7 @@ import { defineComponent, onMounted, ref } from "vue";
 
 import { uuidv4 } from "@dative-gpi/bones-ui";
 
-import { DIALOG_REMOVE } from "../config";
+import { REMOVE_ENTITIES_DIALOG_PATH } from "../config";
 import FEButtonRemoveUI from "@dative-gpi/foundation-extension-shared-ui/components/FEButtonRemoveUI.vue";
 
 export default defineComponent({
@@ -41,7 +41,7 @@ export default defineComponent({
     });
 
     return {
-      DIALOG_REMOVE,
+      REMOVE_ENTITIES_DIALOG_PATH,
       dialogId
     };
   }

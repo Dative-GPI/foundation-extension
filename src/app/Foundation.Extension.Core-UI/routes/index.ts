@@ -14,5 +14,12 @@ export const routes: RouteRecordRaw[] = [
       components: {
           default: () => import("../views/dialogs/Remove.vue")
       }
+    },
+    {
+      path: "/organisations/:organisationId/dialogs/calendar-twin",
+      name: "dialog-calendar-twin",
+      components: {
+          default: () => import("../views/dialogs/CalendarTwin.vue")
+      }
     }
 ]

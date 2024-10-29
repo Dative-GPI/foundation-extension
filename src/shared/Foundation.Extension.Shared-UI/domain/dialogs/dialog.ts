@@ -40,6 +40,41 @@ export const removePayloadSchema: JTDSchemaType<RemovePayload> = {
   }
 };
 
+export interface DateRangePayload {
+  messageType: "dialog-date-range";
+  dialogId: string;
+  dateRange: number[] | null;
+  title: string | null;
+  color: string | null;
+}
+
+export const dateRangePayloadSchema = {
+  type: "object",
+  properties: {
+    messageType:  { enum: ["dialog-date-range"]},
+    dialogId: { type: "string" },
+    dateRange: { type: "array", nullable: true  },
+    title: { type: "string", nullable: true },
+    color: { type: "string", nullable: true }
+  },
+  required: ["messageType", "dialogId", "dateRange"]
+};
+
+export interface SubmitDateRange {
+  messageType: "dialog-submit-date-range";
+  dialogId: string;
+  dateRange: number[] | null;
+}
+
+export const submitDateRangeSchema = {
+  type: "object",
+  properties: {
+    messageType: { enum: ["dialog-submit-date-range"] },
+    dialogId: { type: "string" },
+    dateRange: { type: "array", nullable: true }
+  },
+  required: ["messageType", "dialogId", "dateRange"]
+};
 
 
 

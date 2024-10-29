@@ -1,7 +1,7 @@
 // Composables
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
 
-import { routes as extensionRoutes } from "@dative-gpi/foundation-extension-core-ui"
+import { routes as extensionRoutes } from "@dative-gpi/foundation-extension-core-ui";
 
 const routes = [
   {
@@ -9,23 +9,28 @@ const routes = [
     name: 'example',
     component: () => import('@/views/Home.vue'),
   },
-]
+];
 
-const drawers = [
+const dialogs = [
   {
-    path: '/organisations/:organisationId/XXXXX/examples/drawer',
-    name: 'drawer',
-    component: () => import('@/views/DialogView.vue'),
+    path: '/organisations/:organisationId/XXXXX/examples/dialog',
+    name: 'dialog',
+    component: () => import('../views/DialogView.vue'),
+  },
+  {
+    path: "/organisations/:organisationId/XXXXX/examples/action-dialog",
+    name: "action-dialog",
+    component: () => import('../views/dialogs/ActionDialog.vue'),
   }
-]
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes: [
     ...extensionRoutes,
     ...routes,
-    ...drawers
+    ...dialogs
   ]
-})
+});
 
-export default router
+export default router;

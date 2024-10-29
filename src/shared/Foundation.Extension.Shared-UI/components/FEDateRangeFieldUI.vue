@@ -45,8 +45,9 @@
 <script lang="ts">
 import { computed, defineComponent, type PropType, watch, onMounted } from "vue";
 import _ from "lodash";
+import Ajv from "ajv";
 
-import { type ColorBase, ColorEnum } from "@dative-gpi/foundation-shared-components/models";
+import { ColorEnum } from "@dative-gpi/foundation-shared-components/models";
 import { useDateFormat } from "@dative-gpi/foundation-shared-services/composables";
 import { useRules } from "@dative-gpi/foundation-shared-components/composables";
 import { useExtensionCommunicationBridge } from "../composables";
@@ -71,6 +72,11 @@ export default defineComponent({
       required: false,
       default: null
     },
+    color: {
+      type: String as PropType<string | null>,
+      required: false,
+      default: null
+    },
     label: {
       type: String as PropType<string | null>,
       required: false,
@@ -85,11 +91,6 @@ export default defineComponent({
       type: Array as PropType<number[] | null>,
       required: false,
       default: null
-    },
-    color: {
-      type: String as PropType<ColorBase>,
-      required: false,
-      default: ColorEnum.Primary
     },
     hideHeader: {
       type: Boolean,
@@ -116,7 +117,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const { validateOn, getMessages } = useRules();
     const { epochToShortDateFormat } = useDateFormat();
-    const { openDialog, subscribe, notify } = useExtensionCommunicationBridge();
+    const { openDialog, subscribe, subscribeUnsafe, notify } = useExtensionCommunicationBridge();
 
     const toShortDateFormat = computed((): string => {
       if (!props.modelValue || !Array.isArray(props.modelValue) || !props.modelValue.length) {
@@ -141,7 +142,8 @@ export default defineComponent({
         messageType: "dialog-date-range",
         dialogId: props.dialogId,
         dateRange: props.modelValue,
-        title: props.title
+        title: props.title,
+        color: props.color
       }
       notify(dateRangeInfosMessage);
     };
@@ -165,10 +167,10 @@ export default defineComponent({
         onReceiveDialogReady
       );
 
-      subscribe(
-        submitDateRangeSchema, 
+      subscribeUnsafe(
         location.href,
-        onReceiveDialogSubmit
+        onReceiveDialogSubmit,
+        new Ajv().compile(submitDateRangeSchema)
       )
     });
 

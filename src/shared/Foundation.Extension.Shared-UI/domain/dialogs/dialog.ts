@@ -45,17 +45,19 @@ export interface DateRangePayload {
   dialogId: string;
   dateRange: number[] | null;
   title: string | null;
+  color: string | null;
 }
 
-export const dateRangePayloadSchema: JTDSchemaType<DateRangePayload> = {
+export const dateRangePayloadSchema = {
+  type: "object",
   properties: {
-    messageType: { enum: ["dialog-date-range"] },
+    messageType:  { enum: ["dialog-date-range"]},
     dialogId: { type: "string" },
-    dateRange: { elements: {
-      type: "int32"
-    }, nullable: true },
-    title: { type: "string", nullable: true }
-  }
+    dateRange: { type: "array", nullable: true  },
+    title: { type: "string", nullable: true },
+    color: { type: "string", nullable: true }
+  },
+  required: ["messageType", "dialogId", "dateRange"]
 };
 
 export interface SubmitDateRange {
@@ -64,16 +66,15 @@ export interface SubmitDateRange {
   dateRange: number[] | null;
 }
 
-export const submitDateRangeSchema: JTDSchemaType<SubmitDateRange> = {
+export const submitDateRangeSchema = {
+  type: "object",
   properties: {
     messageType: { enum: ["dialog-submit-date-range"] },
     dialogId: { type: "string" },
-    dateRange: { elements: {
-      type: "int32"
-    }, nullable: true }
-  }
+    dateRange: { type: "array", nullable: true }
+  },
+  required: ["messageType", "dialogId", "dateRange"]
 };
-
 
 
 

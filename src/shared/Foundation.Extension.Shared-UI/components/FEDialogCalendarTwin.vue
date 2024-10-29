@@ -1,6 +1,7 @@
 <template>
   <FEDialogSubmit
     v-if="dialogId"
+    width="hug"
     :title="title"
     v-model="dialog"
     v-bind="$attrs"
@@ -10,7 +11,7 @@
       #body
     >
       <FSCalendarTwin
-        :color="$props.color"
+        :color="color"
         v-model="dateRange"
       />
     </template>
@@ -19,6 +20,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref, onMounted, watch } from "vue";
+import Ajv from "ajv";
 
 import { ColorEnum } from "@dative-gpi/foundation-shared-components/models";
 
@@ -34,9 +36,10 @@ export default defineComponent({
     FEDialogSubmit
   },
   setup() {
-    const { notify, subscribe } = useExtensionCommunicationBridge();
+    const { notify, subscribeUnsafe } = useExtensionCommunicationBridge();
 
     const title = ref<string | null>(null);
+    const color = ref<string | ColorEnum>(ColorEnum.Primary);
     const dateRange = ref<number[] | null>(null);
     const dialog = ref(true);
 
@@ -52,16 +55,23 @@ export default defineComponent({
         dateRange: dateRange.value
       }
       notify(message);
+      dialog.value = false;
     };
 
     onMounted(() => {
-      subscribe(
-        dateRangePayloadSchema,
+      subscribeUnsafe(
         location.href,
         (payload: DateRangePayload) => {
           if(payload.dialogId !== dialogId.value) {return;}
-          dateRange.value = payload.dateRange; 
-        }
+          dateRange.value = payload.dateRange;
+          if(payload.title) {
+            title.value = payload.title;
+          }
+          if(payload.color) {
+            color.value = payload.color;
+          }
+        },
+        new Ajv().compile(dateRangePayloadSchema)
       );
     })
 
@@ -80,6 +90,7 @@ export default defineComponent({
       onSubmit,
       dialogId,
       dialog,
+      color,
       title
     };
   }

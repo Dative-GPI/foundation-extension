@@ -20,6 +20,10 @@
       :removeCurrent="fakeRemove"
       @remove="fakeRemove = 8"
     />
+    <FEDateRangeField
+      v-model="dateRange"
+    />
+    {{ dateRange }}
     <FSRow
       height="1000px"
     >
@@ -36,12 +40,14 @@ import Ajv from "ajv";
 
 import { useExtensionCommunicationBridge } from "@dative-gpi/foundation-extension-shared-ui/composables";
 
+import FEDateRangeField from "@dative-gpi/foundation-extension-core-ui/components/FEDateRangeField.vue";
 import FEButtonRemove from "@dative-gpi/foundation-extension-core-ui/components/FEButtonRemove.vue";
 import FEDataTable from "@dative-gpi/foundation-extension-core-ui/components/FEDataTable.vue";
 
 export default defineComponent({
   name: "ExampleComponent",
   components: {
+    FEDateRangeField,
     FEButtonRemove,
     FEDataTable
   },
@@ -49,6 +55,7 @@ export default defineComponent({
     const { openDialog, subscribeUnsafe } = useExtensionCommunicationBridge();
 
     const fakeRemove = ref(0);
+    const dateRange = ref<number[] | null>(null);
 
     const tableCode = "ui.tables.test";
 
@@ -93,6 +100,7 @@ export default defineComponent({
     return {
       fakeRemove,
       tableCode,
+      dateRange,
       items,
       openDialog
     };

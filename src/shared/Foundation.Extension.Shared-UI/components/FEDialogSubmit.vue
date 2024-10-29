@@ -164,7 +164,6 @@ export default defineComponent({
       return new URL(window.location.toString()).searchParams.get("dialogId");
     });
 
-
     const maxHeight = computed(() => {
       const other = 24 + 24                                          // Paddings
         + (isMobileSized.value ? 24 : 32) + 24                       // Title

@@ -10,42 +10,42 @@ using Foundation.Extension.Admin.Abstractions;
 
 namespace Foundation.Extension.Admin.DI
 {
-    public static class DependencyInjector
-    {
-        public static IServiceCollection AddAdminExtension(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddAutoMapper(typeof(DependencyInjector).Assembly);
+	public static class DependencyInjector
+	{
+		public static IServiceCollection AddAdminExtension(this IServiceCollection services, IConfiguration configuration)
+		{
+			services.AddAutoMapper(typeof(DependencyInjector).Assembly);
 
-            services.AddCrossCutting(configuration);
+			services.AddCrossCutting(configuration);
 
-            services.AddScoped<RequestContextProvider>();
-            services.AddScoped<IRequestContextProvider>(sp
-                => sp.GetRequiredService<RequestContextProvider>());
+			services.AddScoped<RequestContextProvider>();
+			services.AddScoped<IRequestContextProvider>(sp
+				=> sp.GetRequiredService<RequestContextProvider>());
 
-            services.AddFlow();
-            services.AddServices();
-            services.AddMiddlewares();
+			services.AddFlow();
+			services.AddServices();
+			services.AddMiddlewares();
 
-            services.AddPermissions();
-            services.AddPermissionOrganisationCategories();
-            services.AddPermissionOrganisationTypes();
-            services.AddRolePermissionOrganisation();
+			services.AddPermissions();
+			services.AddPermissionOrganisationCategories();
+			services.AddPermissionOrganisationTypes();
+			services.AddRolePermissionOrganisation();
 
-            services.AddPermissionApplications();
-            services.AddPermissionApplicationCategories();
-            services.AddRoleApplication();
+			services.AddPermissionApplications();
+			services.AddPermissionApplicationCategories();
+			services.AddRoleApplication();
 
-            services.AddTranslations();
-            services.AddApplicationTranslations();
-            services.AddDispositions();
+			services.AddTranslations();
+			services.AddApplicationTranslations();
+			services.AddDispositions();
 			services.AddEntities();
-            services.AddPages();
+			services.AddPages();
 
-            services.AddScoped<IPermissionProvider, PermissionProvider>();
-            services.AddScoped<IApplicationTableProvider, ApplicationTableProvider>();
-            services.AddScoped<IOrganisationTypeTableProvider, OrganisationTypeTableProvider>();
+			services.AddScoped<IPermissionProvider, PermissionProvider>();
+			services.AddScoped<IApplicationTableProvider, ApplicationTableProvider>();
+			services.AddScoped<IOrganisationTypeTableProvider, OrganisationTypeTableProvider>();
 
-            return services;
-        }
-    }
+			return services;
+		}
+	}
 }

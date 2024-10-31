@@ -23,22 +23,5 @@ namespace Foundation.Extension.CrossCutting.Helpers
 
 			return result;
 		}
-
-		public static string GetTranslationValue(string languageCode, EntityProperty entityProperty, IEnumerable<EntityPropertyApplicationTranslation> appTranslations)
-		{
-			var result = appTranslations.FirstOrDefault(t => t.LanguageCode == languageCode)?.Label;
-
-			if (result == null)
-			{
-				result = entityProperty.Translations.FirstOrDefault(t => t.LanguageCode == languageCode)?.Label;
-			}
-
-			if (result == null)
-			{
-				result = entityProperty.LabelDefault;
-			}
-
-			return result;
-		}
 	}
 }

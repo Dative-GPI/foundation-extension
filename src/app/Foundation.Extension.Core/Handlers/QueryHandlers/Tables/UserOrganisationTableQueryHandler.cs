@@ -13,6 +13,7 @@ using Foundation.Extension.Core.Abstractions;
 using Foundation.Extension.Core.Models;
 using Foundation.Extension.Domain.Enums;
 using Foundation.Extension.CrossCutting.Helpers;
+using Foundation.Extension.Domain.Abstractions;
 
 namespace Foundation.Extension.Core.Handlers
 {
@@ -22,10 +23,10 @@ namespace Foundation.Extension.Core.Handlers
 		private ITableRepository _tableRepository;
 		private IColumnRepository _columnRepository;
 		private IEntityPropertyRepository _entityPropertiesRepository;
-		private IEntityPropertyApplicationTranslationRepository _entityPropertyApplicationTranslationRepository;
 		private IOrganisationTypeDispositionRepository _organisationTypeDispositionRepository;
 		private IUserOrganisationTableRepository _userOrganisationTableRepository;
 		private IUserOrganisationColumnRepository _userOrganisationColumnRepository;
+		private ITranslationsProvider _translationsProvider;
 
 		public UserOrganisationTableQueryHandler
 		(
@@ -33,10 +34,10 @@ namespace Foundation.Extension.Core.Handlers
 			ITableRepository tableRepository,
 			IColumnRepository columnRepository,
 			IEntityPropertyRepository entityPropertiesRepository,
-			IEntityPropertyApplicationTranslationRepository entityPropertyApplicationTranslationRepository,
 			IOrganisationTypeDispositionRepository organisationTypeDispositionRepository,
 			IUserOrganisationTableRepository userOrganisationTableRepository,
-			IUserOrganisationColumnRepository userOrganisationColumnRepository)
+			IUserOrganisationColumnRepository userOrganisationColumnRepository,
+			ITranslationsProvider translationsProvider)
 		{
 			_context = requestContextProvider.Context;
 
@@ -44,11 +45,12 @@ namespace Foundation.Extension.Core.Handlers
 			_columnRepository = columnRepository;
 
 			_entityPropertiesRepository = entityPropertiesRepository;
-			_entityPropertyApplicationTranslationRepository = entityPropertyApplicationTranslationRepository;
 
 			_organisationTypeDispositionRepository = organisationTypeDispositionRepository;
 			_userOrganisationTableRepository = userOrganisationTableRepository;
 			_userOrganisationColumnRepository = userOrganisationColumnRepository;
+
+			_translationsProvider = translationsProvider;
 		}
 
 		public async Task<UserOrganisationTableDetails> HandleAsync(UserOrganisationTableQuery request, Func<Task<UserOrganisationTableDetails>> next, CancellationToken cancellationToken)
@@ -66,21 +68,20 @@ namespace Foundation.Extension.Core.Handlers
 				EntityType = table.EntityType
 			});
 
-			var entityPropertyApplicationTranslations = await _entityPropertyApplicationTranslationRepository.GetMany(new EntityPropertyApplicationTranslationsFilter()
-			{
-				ApplicationId = _context.ApplicationId,
-				LanguageCode = _context.LanguageCode,
-				EntityType = table.EntityType
-			});
+			var translations = await _translationsProvider.GetMany(
+				_context.ApplicationId, 
+				_context.LanguageCode, 
+				entitiesProperties.Select(ep => ep.TranslationCode).Distinct().ToList()
+			);
 
-			var entityPropertiesTranslations = entitiesProperties.GroupJoin(
-				entityPropertyApplicationTranslations,
-				@default => @default.Id,
-				tr => tr.EntityPropertyId,
-				(@default, translations) => new
+			var entityPropertiesTranslations = translations.GroupJoin(
+				entitiesProperties,
+				t => t.TranslationCode,
+				ep => ep.TranslationCode,
+				(t, ep) => new
 				{
-					EntityPropertyId = @default.Id,
-					Label = TranslationsHelper.GetTranslationValue(_context.LanguageCode, @default, translations)
+					EntityPropertyId = ep.FirstOrDefault()?.Id,
+					Label = t.Value
 				}
 			).ToList();
 
@@ -89,6 +90,7 @@ namespace Foundation.Extension.Core.Handlers
 				ApplicationId = _context.ApplicationId,
 				TableId = table.Id
 			});
+
 
 			var translatedColumns = columns.GroupJoin(
 				entityPropertiesTranslations,

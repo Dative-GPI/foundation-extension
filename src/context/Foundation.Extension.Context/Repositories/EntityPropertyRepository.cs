@@ -11,6 +11,7 @@ using Foundation.Extension.Context.DTOs;
 using Foundation.Extension.Domain.Models;
 using Foundation.Extension.Domain.Repositories.Filters;
 using Foundation.Extension.Context;
+using Foundation.Extension.Domain.Enums;
 
 namespace Foundation.Extension.Context.Repositories
 {
@@ -35,16 +36,12 @@ namespace Foundation.Extension.Context.Repositories
             {
                 Id = dto.Id,
                 Code = dto.Code,
-                LabelDefault = dto.LabelDefault,
                 EntityType = dto.EntityType,
                 ParentId = dto.ParentId,
                 Value = dto.Value,
-                Disabled = dto.Disabled,
-                Translations = dto.Translations?.Select(t => new TranslationEntityProperty()
-                {
-                    LanguageCode = t.LanguageCode,
-                    Label = t.Label
-                }).ToList() ?? new List<TranslationEntityProperty>()
+				EntityKind = Enum.Parse<EntityKind>(dto.EntityKind),
+				TranslationCode = dto.TranslationCode,
+                Disabled = dto.Disabled
             };
         }
 
@@ -64,16 +61,12 @@ namespace Foundation.Extension.Context.Repositories
             {
                 Id = dto.Id,
                 Code = dto.Code,
-                LabelDefault = dto.LabelDefault,
                 EntityType = dto.EntityType,
-                Value = dto.Value,
                 ParentId = dto.ParentId,
-                Disabled = dto.Disabled,
-                Translations = dto.Translations?.Select(t => new TranslationEntityProperty()
-                {
-                    LanguageCode = t.LanguageCode,
-                    Label = t.Label
-                }).ToList() ?? new List<TranslationEntityProperty>()
+                Value = dto.Value,
+				EntityKind = Enum.Parse<EntityKind>(dto.EntityKind),
+				TranslationCode = dto.TranslationCode,
+                Disabled = dto.Disabled
             }).OrderBy(e => e.Code).ToList();
         }
     }

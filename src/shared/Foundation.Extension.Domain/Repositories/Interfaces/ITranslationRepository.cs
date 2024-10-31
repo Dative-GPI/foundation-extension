@@ -8,6 +8,6 @@ namespace Foundation.Extension.Domain.Repositories.Interfaces
 {
     public interface ITranslationRepository
     {
-        Task<IEnumerable<Translation>> GetMany();
+        Task<IEnumerable<Translation>> GetMany(TranslationsFilter filter = null);
     }
 }

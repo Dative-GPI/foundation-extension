@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Foundation.Extension.Context.DTOs;
 using Foundation.Extension.Domain.Models;
 using Foundation.Extension.Domain.Repositories.Interfaces;
+using Foundation.Extension.Domain.Repositories.Filters;
 
 namespace Foundation.Extension.Context.Repositories
 {
@@ -19,12 +20,17 @@ namespace Foundation.Extension.Context.Repositories
             _dbSet = context.Translations;
         }
 
-        public async Task<IEnumerable<Translation>> GetMany()
+        public async Task<IEnumerable<Translation>> GetMany(TranslationsFilter filter = null)
         {
             var query = _dbSet
                 .AsQueryable();
 
             var dtos = await query.AsNoTracking().ToListAsync();
+			
+            if (filter?.Codes != null)
+            {
+                query = query.Where(t => filter.Codes.Contains(t.Code));
+            }
 
             return dtos.Select(t => new Translation()
             {

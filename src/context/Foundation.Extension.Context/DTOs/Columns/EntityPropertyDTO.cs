@@ -16,20 +16,13 @@ namespace Foundation.Extension.Context.DTOs
 
         public string LabelDefault { get; set; }
 
-        // PropertyName
         public string Code { get; set; }
         public string Value { get; set; }
 
-
-        // Class FullName
         public string EntityType { get; set; }
+		public string TranslationCode { get; set; }
+		public string Description { get; set; }
+		public string EntityKind { get; set; }
         public bool Disabled { get; set; }
-        public List<TranslationEntityPropertyDTO> Translations { get; set; }
-    }
-
-    public class TranslationEntityPropertyDTO
-    {
-        public string LanguageCode { get; set; }
-        public string Label { get; set; }
     }
 }

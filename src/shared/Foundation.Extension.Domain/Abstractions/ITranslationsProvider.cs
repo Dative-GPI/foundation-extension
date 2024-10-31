@@ -8,6 +8,6 @@ namespace Foundation.Extension.Domain.Abstractions
 {
     public interface ITranslationsProvider
     {
-        Task<IEnumerable<ApplicationTranslation>> GetMany(Guid applicationId, string languageCode);
+        Task<IEnumerable<ApplicationTranslation>> GetMany(Guid applicationId, string languageCode, IEnumerable<string> translationCodes = null);
     }
 }

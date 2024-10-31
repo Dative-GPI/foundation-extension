@@ -46,7 +46,6 @@ namespace XXXXX.Context.Migrations.Shared
 			ConfigureJsonColumn<PermissionOrganisationCategoryDTO, TranslationPermissionOrganisationCategoryDTO>(modelBuilder, p => p.Translations);
 			ConfigureJsonColumn<PermissionApplicationDTO, TranslationPermissionApplicationDTO>(modelBuilder, p => p.Translations);
 			ConfigureJsonColumn<PermissionApplicationCategoryDTO, TranslationPermissionApplicationCategoryDTO>(modelBuilder, p => p.Translations);
-			ConfigureJsonColumn<EntityPropertyDTO, TranslationEntityPropertyDTO>(modelBuilder, e => e.Translations);
 			ConfigureJsonColumn<TranslationDTO, TranslationTranslationDTO>(modelBuilder, t => t.Translations);
 		}
 

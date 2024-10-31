@@ -10,6 +10,7 @@ namespace Foundation.Extension.Context.DTOs
         public Guid Id { get; set; }
         public string Code { get; set; }
         public string ValueDefault { get; set; }
+		public string Context { get; set; }
         public bool Disabled { get; set; }
         public List<TranslationTranslationDTO> Translations { get; set; }
     }

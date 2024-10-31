@@ -21,7 +21,6 @@ namespace Foundation.Extension.Context.DTOs
 
         public string EntityType { get; set; }
 		public string TranslationCode { get; set; }
-		public string Description { get; set; }
 		public string EntityKind { get; set; }
         public bool Disabled { get; set; }
     }

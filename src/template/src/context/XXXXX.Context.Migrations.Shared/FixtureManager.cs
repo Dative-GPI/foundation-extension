@@ -14,13 +14,14 @@ namespace XXXXX.Context.Migrations.Shared
 		static string[] DEFAULT_LANGUAGES = new string[] { "en-GB", "fr-FR", "es-ES", "it-IT", "de-DE" };
 		public FixtureManager(ILogger<FixtureManager> logger, IFixtureHelper helper) : base(logger, helper)
 		{
-			Add<TranslationDTO, Fixture>(
+			Add<TranslationDTO, Translation>(
 				TranslationProvider.GetAllTranslations,
 				fixture => new TranslationDTO()
 				{
 					Id = Guid.NewGuid(),
 					Code = fixture.Code,
 					ValueDefault = fixture.Value,
+					Context = fixture.Context,
 					Translations = DEFAULT_LANGUAGES.Select(l => new TranslationTranslationDTO()
 					{
 						LanguageCode = l,
@@ -30,6 +31,7 @@ namespace XXXXX.Context.Migrations.Shared
 				(fixture, dto) =>
 				{
                     dto.ValueDefault = fixture.Value;
+					dto.Context = fixture.Context;
                     dto.Translations = dto.Translations
                         .Concat(DEFAULT_LANGUAGES
                             .Select(l => new TranslationTranslationDTO()
@@ -176,32 +178,22 @@ namespace XXXXX.Context.Migrations.Shared
 				EntityPropertyProvider.GetAllEntityProperties,
 				fixture => new EntityPropertyDTO()
 				{
-					Id = Guid.NewGuid(),
-					Code = fixture.Code,
-					EntityType = fixture.EntityType,
-					LabelDefault = fixture.LabelDefault,
-					Value = fixture.Value,
+                    Id = Guid.NewGuid(),
+                    Code = fixture.Code,
+                    EntityType = fixture.EntityType,
+                    LabelDefault = fixture.LabelDefault,
+                    Value = fixture.Value,
+					EntityKind = fixture.EntityKind.ToString(),
+					TranslationCode = fixture.TranslationCode,
 					ParentId = fixture.ParentId,
-                    Translations = DEFAULT_LANGUAGES.Select(l => new TranslationEntityPropertyDTO()
-                    {
-                        LanguageCode = l,
-                        Label = null
-                    }).ToList()
 				},
 				(prop, dto) =>
 				{
-					dto.EntityType = prop.EntityType;
-					dto.Value = prop.Value;
-                    dto.Translations = dto.Translations
-                        .Concat(DEFAULT_LANGUAGES
-                            .Select(l => new TranslationEntityPropertyDTO()
-                            {
-                                LanguageCode = l,
-                                Label = null
-                            })
-                        )
-                        .DistinctBy(t => t.LanguageCode)
-                        .ToList();
+                    dto.EntityType = prop.EntityType;
+                    dto.LabelDefault = prop.LabelDefault;
+                    dto.Value = prop.Value;
+					dto.EntityKind = prop.EntityKind.ToString();
+					dto.TranslationCode = prop.TranslationCode;
 					return dto;
 				});
 

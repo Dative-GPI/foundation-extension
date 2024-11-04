@@ -13,7 +13,7 @@ namespace Foundation.Extension.Fixtures
         const string REGEX_PATTERN = @"\$tr\(\s*['""]([\w\.-]*)['""],\s*(?:[']([^']*)[']|[""]([^""]*)[""])\s*(?:,\s*[^)]+)?\s*\)";
         static Regex Regex = new Regex(REGEX_PATTERN);
 
-        public static async Task<List<Fixture>> GetTranslations(params string[] projects)
+        public static async Task<List<Translation>> GetTranslations(params string[] projects)
         {
             Dictionary<string, string> result = new Dictionary<string, string>();
 
@@ -45,7 +45,7 @@ namespace Foundation.Extension.Fixtures
             }
 
             return result
-                .Select(kv => new Fixture()
+                .Select(kv => new Translation()
                 {
                     Code = kv.Key,
                     Value = kv.Value

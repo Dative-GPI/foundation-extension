@@ -19,14 +19,12 @@ namespace Foundation.Extension.CrossCutting.Services
 		private readonly IApplicationTranslationRepository _applicationTranslationRepository;
 		private readonly IFoundationClientFactory _foundationClientFactory;
 		private readonly IEntityPropertyRepository _entityPropertyRepository;
-		private readonly IEntityPropertyApplicationTranslationRepository _entityPropertyApplicationTranslationRepository;
 
 		public TranslationsProvider(
 			ITranslationRepository translationRepository,
 			IApplicationTranslationRepository applicationTranslationRepository,
 			IFoundationClientFactory foundationClientFactory,
-			IEntityPropertyRepository entityPropertyRepository,
-			IEntityPropertyApplicationTranslationRepository entityPropertyApplicationTranslationRepository
+			IEntityPropertyRepository entityPropertyRepository
 
 		)
 		{
@@ -35,30 +33,30 @@ namespace Foundation.Extension.CrossCutting.Services
 			_foundationClientFactory = foundationClientFactory;
 
 			_entityPropertyRepository = entityPropertyRepository;
-			_entityPropertyApplicationTranslationRepository = entityPropertyApplicationTranslationRepository;
 		}
 
 
-		public async Task<IEnumerable<ApplicationTranslation>> GetMany(Guid applicationId, string languageCode)
+		public async Task<IEnumerable<ApplicationTranslation>> GetMany(Guid applicationId, string languageCode, IEnumerable<string> codes = null)
 		{
-			var defaultTranslations = await _translationRepository.GetMany();
+			var defaultTranslations = await _translationRepository.GetMany(
+				new TranslationsFilter()
+				{
+					Codes = codes
+				}
+			);
 
 			var filter = new ApplicationTranslationsFilter()
 			{
 				ApplicationId = applicationId,
-				LanguageCode = languageCode
+				LanguageCode = languageCode,
+				Codes = codes
 			};
+
 			var applicationTranslations = await _applicationTranslationRepository.GetMany(filter);
 
 			var foundationTranslations = await FetchFoundationTranslations(applicationId, languageCode);
 
 			var defaultEntities = await _entityPropertyRepository.GetMany(new EntityPropertiesFilter());
-
-			var entityApplicationTranslations = await _entityPropertyApplicationTranslationRepository.GetMany(new EntityPropertyApplicationTranslationsFilter()
-			{
-				ApplicationId = applicationId,
-				LanguageCode = languageCode
-			});
 
 			var translations = defaultTranslations.GroupJoin(
 				applicationTranslations,
@@ -76,24 +74,7 @@ namespace Foundation.Extension.CrossCutting.Services
 				}
 			).ToList();
 
-			var entityTranslations = defaultEntities.GroupJoin(
-				entityApplicationTranslations,
-				@default => @default.Code,
-				appTranslation => appTranslation.EntityPropertyCode,
-				(@default, appTranslations) =>
-				{
-					return new ApplicationTranslation()
-					{
-						Id = @default.Id,
-						TranslationCode = @default.Code,
-						Value = TranslationsHelper.GetTranslationValue(languageCode, @default, appTranslations),
-						LanguageCode = languageCode
-					};
-				}
-			).ToList();
-
 			return translations
-				.Concat(entityTranslations)
 				.Concat(foundationTranslations)
 				.DistinctBy(t => new {t.TranslationCode, t.LanguageCode})
 				.ToList();

@@ -24,7 +24,7 @@ namespace XXXXX.Context.Migrations.Shared
 
 		public static Task<List<EntityProperty>> GetAllEntityProperties()
 		{
-			var entityProperties = EntityPropertyHelper.GetAll(Assemblies, Namespaces);
+			var entityProperties = EntityPropertyHelper.GetAllEntities(Assemblies, Namespaces);
 
 			var result = entityProperties.DistinctBy(t => t.Code).ToList();
 

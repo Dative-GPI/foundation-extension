@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-using Foundation.Extension.Context.Abstractions;
 using Foundation.Extension.Fixtures;
 using System.Linq;
 
@@ -17,9 +16,9 @@ namespace XXXXX.Context.Migrations.Shared
 			"../../../src/app/core/XXXXX.Core.UI",
 		};
 
-		public static async Task<List<Fixture>> GetAllTranslations()
+		public static async Task<List<Translation>> GetAllTranslations()
 		{
-			var translations = new List<Fixture>();
+			var translations = new List<Translation>();
 			var fixtureService = new FixtureService();
 
 			foreach (var project in PROJECTS)
@@ -28,9 +27,20 @@ namespace XXXXX.Context.Migrations.Shared
 				translations.AddRange(translation);
 			}
 
+			var properties = await EntityPropertyProvider.GetAllEntityProperties();
+			var propertyTranslations = properties.Select(p => new Translation
+			{
+				Code = p.TranslationCode,
+				Value = p.LabelDefault,
+				Context = p.Context
+			});
+
 			var translationsCode = fixtureService.GetTranslations().Select(t => t.Code).ToList();
 
-			return translations.DistinctBy(t => t.Code).Where(t => !translationsCode.Contains(t.Code)).ToList();
+            return translations.Concat(propertyTranslations)
+                .DistinctBy(t => t.Code)
+				.Where(t => !translationsCode.Contains(t.Code))
+                .ToList();
 		}
 	}
 }

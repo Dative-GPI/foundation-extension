@@ -1,46 +1,43 @@
 <template>
-  <div
-    :class="classes"
-    @click="$emit('update:modelValue', false)"
+  <FSDialog
+    :modelValue="$props.modelValue"
+    @update:modelValue="$emit('update:modelValue', false)"
+    :width="$props.width"
   >
-    <FSDialogContent
-      class="fe-dialog-content"
-      height="fit-content"
-      ref="dialogContent"
-      :title="$props.title"
-      :subtitle="$props.subtitle"
-      :width="$props.width"
-      :style="style"
-      :modelValue="true"
-      @update:modelValue="$emit('update:modelValue', $event)"
-      @click.stop="$emit('click', $event)"
+    <div
+      ref="element"
     >
-      <template
-        v-for="(_, name) in $slots"
-        v-slot:[name]="slotData"
+      <FSDialogContent
+        class="fe-dialog-content"
+        height="fit-content"
+        :title="$props.title"
+        :subtitle="$props.subtitle"
+        :width="$props.width"
+        :modelValue="true"
+        @update:modelValue="$emit('update:modelValue', $event)"
       >
-        <slot
-          :name="name"
-          v-bind="slotData"
-        />
-      </template>
-    </FSDialogContent>
-  </div>
+        <template
+          v-for="(_, name) in $slots"
+          v-slot:[name]="slotData"
+        >
+          <slot
+            :name="name"
+            v-bind="slotData"
+          />
+        </template>
+      </FSDialogContent>
+    </div>
+  </FSDialog>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, type PropType, ref, type StyleValue, watch } from "vue";
+import { defineComponent, type PropType, ref, watch } from "vue";
 
 import { useExtensionCommunicationBridge } from "@dative-gpi/foundation-extension-shared-ui";
 import { useBreakpoints } from "@dative-gpi/foundation-shared-components/composables";
 
-import FSDialogContent from "@dative-gpi/foundation-shared-components/components/FSDialogContent.vue";
-
 export default defineComponent({
   name: "FEDialog",
-  components: {
-    FSDialogContent
-  },
   props: {
     modelValue: {
       type: Boolean,
@@ -67,46 +64,17 @@ export default defineComponent({
     const { closeDialog, setDialogHeight, setDialogMounted, setDialogWidth,  } = useExtensionCommunicationBridge();
     const { isExtraSmall } = useBreakpoints();
 
-    const dialogContent = ref<HTMLElement | null>(null);
-    const mounted = ref(false);
-
-    const style = computed((): StyleValue => ({
-      "--fe-dialog-opacity": mounted.value ? 1 : 0
-    }));
-
-    const classes = computed((): string[] => {
-      const innerClasses: string[] = [];
-      if (isExtraSmall.value) {
-        innerClasses.push("fe-dialog-wrapper-mobile");
-      }
-      else {
-        innerClasses.push("fe-dialog-wrapper");
-      }
-      return innerClasses;
-    });
+    const element = ref<HTMLElement | null>(null);
 
     const close = (success: boolean): void => {
       closeDialog(location.pathname, success);
     };
 
-    onMounted((): void => {
-      if (dialogContent.value) {
-        setDialogHeight((dialogContent.value as any).$el.clientHeight, location.pathname);
-      }
-      if (props.width) {
-        setDialogWidth(props.width, location.pathname);
-      }
-      setDialogMounted(location.pathname);
-      setTimeout(() => {
-        mounted.value = true;
-      }, 280);
-    });
-
     watch(() => props.width, (): void => {
       if (props.width) {
         setDialogWidth(props.width, location.pathname);
       }
-    }, { immediate: true });
+    });
 
     watch(() => props.modelValue, (): void => {
       if (!props.modelValue) {
@@ -114,10 +82,17 @@ export default defineComponent({
       }
     });
 
+    watch(element, (): void => {
+      if (element.value) {
+        setDialogHeight(element.value.clientHeight, location.pathname);
+        setDialogWidth(element.value.clientWidth, location.pathname);
+        setDialogMounted(location.pathname);
+      }
+    });
+
     return {
-      dialogContent,
-      classes,
-      style,
+      isExtraSmall,
+      element,
       close
     };
   }

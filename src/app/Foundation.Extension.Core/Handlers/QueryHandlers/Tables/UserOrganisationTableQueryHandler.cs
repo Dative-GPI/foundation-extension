@@ -69,18 +69,18 @@ namespace Foundation.Extension.Core.Handlers
 			});
 
 			var translations = await _translationsProvider.GetMany(
-				_context.ApplicationId, 
-				_context.LanguageCode, 
+				_context.ApplicationId,
+				_context.LanguageCode,
 				entitiesProperties.Select(ep => ep.TranslationCode).Distinct().ToList()
 			);
 
-			var entityPropertiesTranslations = translations.GroupJoin(
-				entitiesProperties,
-				t => t.TranslationCode,
+			var entityPropertiesTranslations = entitiesProperties.Join(
+				translations,
 				ep => ep.TranslationCode,
-				(t, ep) => new
+				t => t.TranslationCode,
+				(ep, t) => new
 				{
-					EntityPropertyId = ep.FirstOrDefault()?.Id,
+					EntityPropertyId = ep.Id,
 					Label = t.Value
 				}
 			).ToList();

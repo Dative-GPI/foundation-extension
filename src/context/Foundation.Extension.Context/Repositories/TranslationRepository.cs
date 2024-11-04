@@ -22,11 +22,13 @@ namespace Foundation.Extension.Context.Repositories
 
         public async Task<IEnumerable<Translation>> GetMany(TranslationsFilter filter = null)
         {
+            filter ??= new TranslationsFilter();
+
             var query = _dbSet
                 .AsQueryable();
 
             var dtos = await query.AsNoTracking().ToListAsync();
-			
+            
             if (filter?.Codes != null)
             {
                 query = query.Where(t => filter.Codes.Contains(t.Code));

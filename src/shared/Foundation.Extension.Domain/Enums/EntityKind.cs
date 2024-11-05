@@ -2,7 +2,6 @@ using System;
 
 namespace Foundation.Extension.Domain.Enums
 {
-
     public enum EntityKind
     {
         None = 0,

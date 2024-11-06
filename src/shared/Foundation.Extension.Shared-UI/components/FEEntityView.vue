@@ -48,7 +48,7 @@ export default defineComponent({
     imageCover: {
       type: Boolean,
       required: false,
-      default: false
+      default: true
     },
     imageB64: {
       type: String as PropType<string | null>,

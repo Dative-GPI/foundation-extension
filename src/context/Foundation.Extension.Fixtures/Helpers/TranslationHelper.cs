@@ -13,7 +13,7 @@ namespace Foundation.Extension.Fixtures
         const string REGEX_PATTERN = @"\$tr\(\s*['""]([\w\.-]*)['""],\s*(?:[']([^']*)[']|[""]([^""]*)[""])\s*(?:,\s*[^)]+)?\s*\)";
         static Regex Regex = new Regex(REGEX_PATTERN);
 
-        public static async Task<List<Translation>> GetTranslations(params string[] projects)
+        public static async Task<List<Translation>> GetDistinctTranslations(params string[] projects)
         {
             Dictionary<string, string> result = new Dictionary<string, string>();
 
@@ -51,6 +51,34 @@ namespace Foundation.Extension.Fixtures
                     Value = kv.Value
                 })
                 .ToList();
+        }
+
+        public static async Task<List<Translation>> GetTranslations(params string[] projects)
+        {
+            List<Translation> result = new();
+
+            foreach (var project in projects)
+            {
+                var files = Directory.GetFiles(project, "*", SearchOption.AllDirectories)
+                    .Where(filepath => FILES_PATTERN.Any(pattern => filepath.EndsWith(pattern)));
+
+                foreach (var filepath in files)
+                {
+                    var content = await File.ReadAllTextAsync(filepath);
+                    var matches = Regex.Matches(content);
+
+                    foreach (Match match in matches)
+                    {
+                        result.Add(new Translation()
+                        {
+                            Code = match.Groups[1].Value,
+                            Value = match.Groups[2].Value + match.Groups[3].Value
+                        });
+                    }
+                }
+            }
+            
+            return result;
         }
     }
 }

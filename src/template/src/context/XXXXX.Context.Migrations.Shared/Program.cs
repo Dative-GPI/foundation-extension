@@ -43,6 +43,11 @@ namespace XXXXX.Context.Migrations.Shared
                     await fixtureManager.List();
                     return;
                 }
+                if (args.Contains("verify"))
+                {
+                    await fixtureManager.Verify();
+                    return;
+                }
                 logger.LogError("Command unknown {command}", args);
                 return;
             }

@@ -21,25 +21,43 @@ namespace XXXXX.Context.Migrations.Shared
 			var translations = new List<Translation>();
 			var fixtureService = new FixtureService();
 
-			foreach (var project in PROJECTS)
-			{
-				var translation = await TranslationHelper.GetTranslations(project);
-				translations.AddRange(translation);
-			}
+            foreach (var project in PROJECTS)
+            {
+                var translation = await TranslationHelper.GetTranslations(project);
+                translations.AddRange(translation);
+            }
 
-			var properties = await EntityPropertyProvider.GetAllEntityProperties();
-			var propertyTranslations = properties.Select(p => new Translation
-			{
-				Code = p.TranslationCode,
-				Value = p.LabelDefault,
-				Context = p.Context
-			});
+			translations.AddRange(
+                XXXXX.Core.Kernel.Actions.GetActions()
+                .SelectMany(a => new List<Translation>()
+                {
+                    new Translation()
+                    {
+                        Code = a.LabelCode,
+                        Value = a.LabelDefault,
+                        Context = a.LabelDefault
+                    }
+                })
+            );
 
-			var translationsCode = fixtureService.GetTranslations().Select(t => t.Code).ToList();
+			translations.AddRange(
+                XXXXX.Admin.Kernel.Actions.GetActions()
+                .SelectMany(a => new List<Translation>()
+                {
+                    new Translation()
+                    {
+                        Code = a.LabelCode,
+                        Value = a.LabelDefault,
+                        Context = a.LabelDefault
+                    }
+                })
+            );
 
-            return translations.Concat(propertyTranslations)
+			var foundationTranslationCodes = fixtureService.GetTranslations().Select(t => t.Code).ToList();
+
+            return translations
                 .DistinctBy(t => t.Code)
-				.Where(t => !translationsCode.Contains(t.Code))
+				.Where(t => !foundationTranslationCodes.Contains(t.Code))
                 .ToList();
 		}
 	}

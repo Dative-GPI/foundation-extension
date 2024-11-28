@@ -1,7 +1,7 @@
 <template>
   <FEDialogSubmit
     v-if="dialogId"
-    width="hug"
+    :width="700"
     :title="title"
     v-model="dialog"
     v-bind="$attrs"

@@ -218,5 +218,5 @@ namespace XXXXX.Context.Migrations.Shared
             AddVerifier<TranslationDTO, TranslationDTO>(VerificationHelper.CheckDuplicatedTranslations);
             AddVerifier<TranslationDTO, Translation>(VerificationHelper.CheckDuplicatedCodes, TranslationProvider.GetAllTranslations);
 		}
-	}z
+	}
 }

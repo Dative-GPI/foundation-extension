@@ -5,6 +5,7 @@ using Foundation.Extension.Context.DTOs;
 using Foundation.Extension.Domain.Enums;
 using Foundation.Extension.Fixtures;
 using Microsoft.Extensions.Logging;
+using Foundation.Clients.Fixtures.Services;
 
 namespace Foundation.Context.Migrations.Shared
 {
@@ -12,12 +13,16 @@ namespace Foundation.Context.Migrations.Shared
     {
         public static bool CheckMissingProperties(IEnumerable<EntityProperty> properties, IEnumerable<TranslationDTO> translations, ILogger logger)
         {
-
             logger.LogInformation("Start looking for missing properties...");
 
+			var fixtureService = new FixtureService();
+
+			var foundationTranslationCodes = fixtureService.GetTranslations().Select(t => t.Code).ToList();
+            
             var propertyTranslations = translations.Where(t =>
                 t.Code.StartsWith(EntityPropertyHelper.ENTITY_PROPERTY_PREFIX)
                 && !Enum.TryParse(t.Code.Split(".")[2], true, out PropertyKind _)
+                && !foundationTranslationCodes.Contains(t.Code)
             ).ToList();
 
             //Récupère les translations qui n'ont aucune propriété associée ou hérité

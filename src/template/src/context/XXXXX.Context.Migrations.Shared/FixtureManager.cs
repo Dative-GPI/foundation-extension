@@ -4,6 +4,7 @@ using System.Runtime.Intrinsics.Arm;
 using Foundation.Extension.Context.DTOs;
 using Foundation.Extension.Fixtures;
 using Foundation.Extension.Fixtures.Abstractions;
+using Foundation.Context.Migrations.Shared;
 
 using Microsoft.Extensions.Logging;
 

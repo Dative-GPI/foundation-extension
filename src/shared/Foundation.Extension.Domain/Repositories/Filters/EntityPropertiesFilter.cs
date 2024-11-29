@@ -7,6 +7,6 @@ namespace Foundation.Extension.Domain.Repositories.Filters
     {
         public Guid ApplicationId { get; set; }
         public string EntityType { get; set; }
-        public IEnumerable<Guid> EntityPropertyIds { get; set; }
+        public IEnumerable<Guid> EntityPropertiesIds { get; set; }
     }
 }

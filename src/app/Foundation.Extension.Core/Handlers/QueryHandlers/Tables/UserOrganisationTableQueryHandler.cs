@@ -129,7 +129,7 @@ namespace Foundation.Extension.Core.Handlers
 
             var entityProperties = await _entityPropertyRepository.GetMany(new EntityPropertiesFilter()
             {
-                EntityPropertyIds = allowedColumns
+                EntityPropertiesIds = allowedColumns
                     .Where(c => c.PropertyType == PropertyType.EntityProperty)
                     .Select(c => c.EntityPropertyId.Value)
                     .Distinct()

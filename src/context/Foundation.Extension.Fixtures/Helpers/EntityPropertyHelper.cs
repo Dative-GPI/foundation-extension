@@ -77,21 +77,21 @@ namespace Foundation.Extension.Fixtures
             if (property.IsDefined(typeof(StandardPropertyAttribute), false))
             {
                 var attribute = property.GetCustomAttribute<StandardPropertyAttribute>();
-                return $"entity.common.{attribute.PropertyKind.ToString().Kebaberize()}";
+                return $"{ENTITY_PROPERTY_PREFIX}common.{attribute.PropertyKind.ToString().Kebaberize()}";
             }
             else if (property.IsDefined(typeof(CustomPropertyAttribute), false))
             {
-                return $"entity.{type.ToString().Kebaberize()}.{property.Name.Kebaberize()}";
+                return $"{ENTITY_PROPERTY_PREFIX}{type.ToString().Kebaberize()}.{property.Name.Kebaberize()}";
             }
             else if (property.IsDefined(typeof(StandardForeignPropertyAttribute), false))
             {
                 var attribute = property.GetCustomAttribute<StandardForeignPropertyAttribute>();
-                return $"entity.{attribute.Owner.ToString().Kebaberize()}.{attribute.PropertyKind.ToString().Kebaberize()}.foreign";
+                return $"{ENTITY_PROPERTY_PREFIX}{attribute.Owner.ToString().Kebaberize()}.{attribute.PropertyKind.ToString().Kebaberize()}{FOREIGN_SUFFIX}";
             }
             else if (property.IsDefined(typeof(CustomForeignPropertyAttribute), false))
             {
                 var attribute = property.GetCustomAttribute<CustomForeignPropertyAttribute>();
-                return $"entity.{attribute.Owner.ToString().Kebaberize()}.{attribute.PropertyName.Kebaberize()}.foreign";
+                return $"{ENTITY_PROPERTY_PREFIX}{attribute.Owner.ToString().Kebaberize()}.{attribute.PropertyName.Kebaberize()}{FOREIGN_SUFFIX}";
             }
             else
             {

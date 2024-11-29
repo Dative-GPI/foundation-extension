@@ -212,6 +212,11 @@ namespace XXXXX.Context.Migrations.Shared
 					dto.ShowOnDrawer = prop.ShowOnDrawer;
 					return dto;
 				});
+
+            AddVerifier<TranslationDTO, EntityProperty>(VerificationHelper.CheckMissingProperties, EntityPropertyProvider.GetAllEntityProperties);
+            AddVerifier<TranslationDTO, Translation>(VerificationHelper.CheckDuplicatedDefaultValue, TranslationProvider.GetAllTranslations);
+            AddVerifier<TranslationDTO, TranslationDTO>(VerificationHelper.CheckDuplicatedTranslations);
+            AddVerifier<TranslationDTO, Translation>(VerificationHelper.CheckDuplicatedCodes, TranslationProvider.GetAllTranslations);
 		}
 	}
 }

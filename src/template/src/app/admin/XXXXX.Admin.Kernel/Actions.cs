@@ -8,7 +8,7 @@ namespace XXXXX.Admin.Kernel
     {
         private static readonly ActionDefinition[] ACTIONS = new ActionDefinition[]
         {
-            // TODO
+            // Exemple
             // new ActionDefinition()
             // {
             //     Authorizations = Enumerable.Empty<string>(),

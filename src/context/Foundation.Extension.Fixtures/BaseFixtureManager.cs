@@ -16,6 +16,7 @@ namespace Foundation.Extension.Fixtures
         public delegate Task<List<T>> FixtureGenerator<T>();
         private List<Func<bool, Task>> _generateActions = new List<Func<bool, Task>>();
         private List<Func<Task>> _listActions = new List<Func<Task>>();
+        private List<Func<Task>> _verifyActions = new List<Func<Task>>();
 
         protected ILogger<BaseFixtureManager> Logger { get; private set; }
         protected IFixtureHelper FixtureHelper { get; private set; }
@@ -49,6 +50,16 @@ namespace Foundation.Extension.Fixtures
             }
         }
 
+        public async Task Verify()
+        {
+            Logger.LogInformation("Verify fixtures");
+
+            foreach (var action in _verifyActions)
+            {
+                await action();
+            }
+        }
+
         public void Add<TDTO, TPartial>(
             FixtureGenerator<TPartial> provider,
             Func<TPartial, TDTO> create,
@@ -69,6 +80,15 @@ namespace Foundation.Extension.Fixtures
         {
             _generateActions.Add((_) => PrintInfos<TDTO>());
             _listActions.Add(() => PrintInfos<TDTO>());
+        }
+
+        public void AddVerifier<TDTO, TEntity>(
+            Func<IEnumerable<TEntity>, IEnumerable<TDTO>, ILogger, bool> check,
+            FixtureGenerator<TEntity> provider = default)
+            where TDTO : ICodeEntity
+            where TEntity : ICodeEntity
+        {
+            _verifyActions.Add(() => Verify(provider, check, Logger));
         }
 
         private async Task PrintInfos<TDTO>()
@@ -105,6 +125,27 @@ namespace Foundation.Extension.Fixtures
                 await FixtureHelper.Save<TDTO>(saved);
 
             Logger.LogInformation("{count} {type} saved", saved.Count(), typeof(TDTO).Name);
+        }
+
+        private async Task Verify<TDTO, TEntity>(
+            FixtureGenerator<TEntity> provider,
+            Func<IEnumerable<TEntity>, IEnumerable<TDTO>, ILogger, bool> check,
+            ILogger logger)
+            where TDTO : ICodeEntity
+            where TEntity : ICodeEntity
+        {
+            var dtos = await FixtureHelper.Get<TDTO>();
+            var entities = provider != null ? await provider() : null;
+
+            var result = check(entities, dtos, logger);
+
+            if(!result)
+            {
+                Logger.LogError("Verification failed for {type}", typeof(TDTO).Name);
+                throw new Exception("Fixtures verification failed");
+            }
+             
+            Logger.LogInformation("Verification passed for {type}", typeof(TDTO).Name);
         }
     }
 }

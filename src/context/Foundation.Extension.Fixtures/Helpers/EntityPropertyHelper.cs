@@ -14,6 +14,9 @@ namespace Foundation.Extension.Fixtures
 		public const string ENTITY_INFOS_PATTERN = "InfosViewModel";
 		public const string ENTITY_DETAILS_PATTERN = "DetailsViewModel";
 
+        public static readonly string FOREIGN_SUFFIX = ".foreign";
+        public static readonly string ENTITY_PROPERTY_PREFIX = "entity.";
+
 		public static List<EntityProperty> GetAllEntities(List<Assembly> assemblies, List<string> namespaces)
 		{
 			var result = assemblies.SelectMany(a => a.GetTypes())
@@ -32,8 +35,8 @@ namespace Foundation.Extension.Fixtures
 							{
 								Code = $"entity.{g.Key.ToString().Kebaberize()}.{p.Name.Kebaberize()}",
 								Value = p.Name.Camelize(),
-								EntityType = g.Key.ToString().Kebaberize().Pascalize(),
-								LabelDefault = p.Name.Humanize(),
+								EntityType = g.Key.ToString(),
+                                LabelDefault = p.GetCustomAttribute<DefaultTranslationAttribute>()?.DefaultTranslation,
 								Context = p.GetCustomAttribute<CustomPropertyAttribute>()?.Description,
 								TranslationCode = GetTranslationCode(g.Key, p),
 								EntityKind = t.GetCustomAttribute<EntityDescriptionAttribute>().EntityKind,
@@ -48,6 +51,18 @@ namespace Foundation.Extension.Fixtures
 			return result;
 		}
 
+        public static bool IsForeignProperty(this string translationCode)
+        {
+            return translationCode.EndsWith(FOREIGN_SUFFIX);
+        }
+
+        public static EntityProperty GetHeritedProperty(string translationCode, IEnumerable<EntityProperty> properties)
+        {
+            return properties.FirstOrDefault(p => p.TranslationCode == translationCode[..^FOREIGN_SUFFIX.Length].ToString());
+        }
+
+        public static EntityProperty GetHeritedProperty(this EntityProperty translationCode, List<EntityProperty> properties) => GetHeritedProperty(translationCode.TranslationCode, properties);
+
 		private static string GetEntityPropertyParentId(string entityPropertyCode)
 		{
 			var fixtureService = new FixtureService();
@@ -57,33 +72,32 @@ namespace Foundation.Extension.Fixtures
 			return result?.ToString();
 		}
 
-
 		private static string GetTranslationCode(string type, PropertyInfo property)
-		{
-			if(property.IsDefined(typeof(StandardPropertyAttribute), false))
-			{
-				var attribute = property.GetCustomAttribute<StandardPropertyAttribute>();
-				return $"entity.common.{attribute.PropertyKind.ToString().Kebaberize()}";
-			}
-			else if(property.IsDefined(typeof(CustomPropertyAttribute), false))
-			{
-				return $"entity.{type.ToString().Kebaberize()}.{property.Name.Kebaberize()}";
-			}
-			else if(property.IsDefined(typeof(StandardForeignPropertyAttribute), false))
-			{
-				var attribute = property.GetCustomAttribute<StandardForeignPropertyAttribute>();
-				return $"entity.{attribute.Owner.ToString().Kebaberize()}.{attribute.PropertyKind.ToString().Kebaberize()}.foreign";
-			}
-			else if(property.IsDefined(typeof(CustomForeignPropertyAttribute), false))
-			{
-				var attribute = property.GetCustomAttribute<CustomForeignPropertyAttribute>();
-				return $"entity.{attribute.Owner.ToString().Kebaberize()}.{attribute.PropertyName.Kebaberize()}.foreign";
-			}
-			else
-			{
-				return null;
-			}
-			
-		}
+        {
+            if (property.IsDefined(typeof(StandardPropertyAttribute), false))
+            {
+                var attribute = property.GetCustomAttribute<StandardPropertyAttribute>();
+                return $"{ENTITY_PROPERTY_PREFIX}common.{attribute.PropertyKind.ToString().Kebaberize()}";
+            }
+            else if (property.IsDefined(typeof(CustomPropertyAttribute), false))
+            {
+                return $"{ENTITY_PROPERTY_PREFIX}{type.ToString().Kebaberize()}.{property.Name.Kebaberize()}";
+            }
+            else if (property.IsDefined(typeof(StandardForeignPropertyAttribute), false))
+            {
+                var attribute = property.GetCustomAttribute<StandardForeignPropertyAttribute>();
+                return $"{ENTITY_PROPERTY_PREFIX}{attribute.Owner.ToString().Kebaberize()}.{attribute.PropertyKind.ToString().Kebaberize()}{FOREIGN_SUFFIX}";
+            }
+            else if (property.IsDefined(typeof(CustomForeignPropertyAttribute), false))
+            {
+                var attribute = property.GetCustomAttribute<CustomForeignPropertyAttribute>();
+                return $"{ENTITY_PROPERTY_PREFIX}{attribute.Owner.ToString().Kebaberize()}.{attribute.PropertyName.Kebaberize()}{FOREIGN_SUFFIX}";
+            }
+            else
+            {
+                return null;
+            }
+
+        }
 	}
 }

@@ -55,6 +55,11 @@ namespace Foundation.Extension.Context.Repositories
                 query = query.Where(ep => ep.EntityType == filter.EntityType);
             }
 
+            if(filter.EntityPropertiesIds != null)
+            {
+                query = query.Where(ep => filter.EntityPropertiesIds.Contains(ep.Id));
+            }
+
             var dtos = await query.AsNoTracking().ToListAsync();
 
             return dtos.Select(dto => new EntityProperty()

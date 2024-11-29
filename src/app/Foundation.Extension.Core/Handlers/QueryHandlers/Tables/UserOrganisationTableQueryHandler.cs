@@ -17,166 +17,192 @@ using Foundation.Extension.Domain.Abstractions;
 
 namespace Foundation.Extension.Core.Handlers
 {
-	public class UserOrganisationTableQueryHandler : IMiddleware<UserOrganisationTableQuery, UserOrganisationTableDetails>
-	{
-		private RequestContext _context;
-		private ITableRepository _tableRepository;
-		private IColumnRepository _columnRepository;
-		private IEntityPropertyRepository _entityPropertiesRepository;
-		private IOrganisationTypeDispositionRepository _organisationTypeDispositionRepository;
-		private IUserOrganisationTableRepository _userOrganisationTableRepository;
-		private IUserOrganisationColumnRepository _userOrganisationColumnRepository;
-		private ITranslationsProvider _translationsProvider;
+    public class UserOrganisationTableQueryHandler : IMiddleware<UserOrganisationTableQuery, UserOrganisationTableDetails>
+    {
+        private RequestContext _context;
+        private ITableRepository _tableRepository;
+        private IColumnRepository _columnRepository;
+        private IEntityPropertyRepository _entityPropertyRepository;
+        private IOrganisationTypeDispositionRepository _organisationTypeDispositionRepository;
+        private IUserOrganisationTableRepository _userOrganisationTableRepository;
+        private IUserOrganisationColumnRepository _userOrganisationColumnRepository;
+        private ITranslationsProvider _translationsProvider;
 
-		public UserOrganisationTableQueryHandler
-		(
-			IRequestContextProvider requestContextProvider,
-			ITableRepository tableRepository,
-			IColumnRepository columnRepository,
-			IEntityPropertyRepository entityPropertiesRepository,
-			IOrganisationTypeDispositionRepository organisationTypeDispositionRepository,
-			IUserOrganisationTableRepository userOrganisationTableRepository,
-			IUserOrganisationColumnRepository userOrganisationColumnRepository,
-			ITranslationsProvider translationsProvider)
-		{
-			_context = requestContextProvider.Context;
+        public UserOrganisationTableQueryHandler
+        (
+            IRequestContextProvider requestContextProvider,
+            ITableRepository tableRepository,
+            IColumnRepository columnRepository,
+            IEntityPropertyRepository entityPropertiesRepository,
+            IOrganisationTypeDispositionRepository organisationTypeDispositionRepository,
+            IUserOrganisationTableRepository userOrganisationTableRepository,
+            IUserOrganisationColumnRepository userOrganisationColumnRepository,
+            ITranslationsProvider translationsProvider)
+        {
+            _context = requestContextProvider.Context;
 
-			_tableRepository = tableRepository;
-			_columnRepository = columnRepository;
+            _tableRepository = tableRepository;
+            _columnRepository = columnRepository;
 
-			_entityPropertiesRepository = entityPropertiesRepository;
+            _entityPropertyRepository = entityPropertiesRepository;
 
-			_organisationTypeDispositionRepository = organisationTypeDispositionRepository;
-			_userOrganisationTableRepository = userOrganisationTableRepository;
-			_userOrganisationColumnRepository = userOrganisationColumnRepository;
+            _organisationTypeDispositionRepository = organisationTypeDispositionRepository;
+            _userOrganisationTableRepository = userOrganisationTableRepository;
+            _userOrganisationColumnRepository = userOrganisationColumnRepository;
 
-			_translationsProvider = translationsProvider;
-		}
+            _translationsProvider = translationsProvider;
+        }
 
-		public async Task<UserOrganisationTableDetails> HandleAsync(UserOrganisationTableQuery request, Func<Task<UserOrganisationTableDetails>> next, CancellationToken cancellationToken)
-		{
-			Table table = await _tableRepository.GetFromCode(request.TableCode);
+        public async Task<UserOrganisationTableDetails> HandleAsync(UserOrganisationTableQuery request, Func<Task<UserOrganisationTableDetails>> next, CancellationToken cancellationToken)
+        {
+            Table table = await _tableRepository.GetFromCode(request.TableCode);
 
-			if (table == null)
-			{
-				throw new Exception(ErrorCode.EntityNotFound);
-			}
+            if (table == null)
+            {
+                throw new Exception(ErrorCode.EntityNotFound);
+            }
 
-			var entitiesProperties = await _entityPropertiesRepository.GetMany(new EntityPropertiesFilter()
-			{
-				ApplicationId = _context.ApplicationId,
-				EntityType = table.EntityType
-			});
+            var columns = await _columnRepository.GetMany(new ColumnsFilter()
+            {
+                ApplicationId = _context.ApplicationId,
+                TableId = table.Id
+            });
 
-			var translations = await _translationsProvider.GetMany(
-				_context.ApplicationId,
-				_context.LanguageCode,
-				entitiesProperties.Select(ep => ep.TranslationCode).Distinct().ToList()
-			);
+            var organisationTypeColumns = await _organisationTypeDispositionRepository.GetMany(new ColumnOrganisationTypesFilter()
+            {
+                OrganisationTypeId = _context.OrganisationTypeId,
+                TableId = table.Id
+            });
 
-			var entityPropertiesTranslations = entitiesProperties.Join(
-				translations,
-				ep => ep.TranslationCode,
-				t => t.TranslationCode,
-				(ep, t) => new
-				{
-					EntityPropertyId = ep.Id,
-					Label = t.Value
-				}
-			).ToList();
+            var userOrganisationColumns = await _userOrganisationColumnRepository.GetMany(new UserOrganisationColumnsFilter()
+            {
+                UserOrganisationId = _context.ActorOrganisationId.Value,
+                TableId = table.Id
+            });
 
-			var columns = await _columnRepository.GetMany(new ColumnsFilter()
-			{
-				ApplicationId = _context.ApplicationId,
-				TableId = table.Id
-			});
+            // Merge columns with organisation type columns and user organisation columns
+            // Keeping index & hidden from most specific to least specific
+            var allowedColumns = columns
+                .GroupJoin(organisationTypeColumns, tc => tc.Id, otc => otc.ColumnId, (tc, otcs) =>
+                {
+                    var otc = otcs.FirstOrDefault();
+                    return new Column()
+                    {
+                        Id = tc.Id,
+                        Code = tc.Code,
+                        TableCode = tc.TableCode,
+                        TableId = tc.TableId,
+                        Value = tc.Value,
+                        Label = tc.Label,
+                        Sortable = tc.Sortable,
+                        Filterable = tc.Filterable,
+                        Index = otc?.Index ?? tc.Index,
+                        Hidden = otc?.Hidden ?? tc.Hidden,
+                        Disabled = tc.Disabled,
+                        PropertyType = tc.PropertyType,
+                        EntityPropertyId = tc.EntityPropertyId,
+                        CustomPropertyId = tc.CustomPropertyId
+                    };
+                })
+                .Where(c => !c.Disabled)
+                .GroupJoin(userOrganisationColumns, c => c.Id, c => c.ColumnId, (tc, uocs) =>
+                {
+                    var uoc = uocs.FirstOrDefault();
+                    return new Column()
+                    {
+                        Id = tc.Id,
+                        Code = tc.Code,
+                        TableCode = tc.TableCode,
+                        TableId = tc.TableId,
+                        Value = tc.Value,
+                        Label = tc.Label,
+                        Sortable = tc.Sortable,
+                        Filterable = tc.Filterable,
+                        Index = uoc?.Index ?? tc.Index,
+                        Hidden = uoc?.Hidden ?? tc.Hidden,
+                        Disabled = false, // User organisation cannot disable columns
+                        PropertyType = tc.PropertyType,
+                        EntityPropertyId = tc.EntityPropertyId,
+                        CustomPropertyId = tc.CustomPropertyId
+                    };
+                }).ToList();
 
+            var entityProperties = await _entityPropertyRepository.GetMany(new EntityPropertiesFilter()
+            {
+                EntityPropertiesIds = allowedColumns
+                    .Where(c => c.PropertyType == PropertyType.EntityProperty)
+                    .Select(c => c.EntityPropertyId.Value)
+                    .Distinct()
+                    .ToList()
+            });
 
-			var translatedColumns = columns.GroupJoin(
-				entityPropertiesTranslations,
-				c => c.EntityPropertyId,
-				ept => ept.EntityPropertyId,
-				(c, ept) => new
-				{
-					Column = c,
-					Label = ept.FirstOrDefault()?.Label ?? c.Label
-				}
-			).ToList();
+            var entityPropertyApplicationTranslations = await _translationsProvider.GetMany(
+                _context.ApplicationId,
+                _context.LanguageCode,
+                entityProperties.Select(ep => ep.TranslationCode).Distinct().ToList()
+            );
 
-			var organisationTypeColumns = await _organisationTypeDispositionRepository.GetMany(new ColumnOrganisationTypesFilter()
-			{
-				OrganisationTypeId = _context.OrganisationTypeId,
-				TableId = table.Id
-			});
+            var entityPropertyTranslations = entityProperties.GroupJoin(
+                entityPropertyApplicationTranslations,
+                ep => ep.TranslationCode,
+                t => t.TranslationCode,
+                (ep, ts) =>
+                {
+                    return new Tuple<PropertyType, Guid, List<TranslationItemProperty>>(
+                        PropertyType.EntityProperty,
+                        ep.Id,
+                        ts.Select(t => new TranslationItemProperty()
+                        {
+                            Label = t.Value,
+                            LanguageCode = t.LanguageCode
+                        }).ToList()
+                    );
+                }).ToList();
 
-			var userOrganisationColumns = await _userOrganisationColumnRepository.GetMany(new UserOrganisationColumnsFilter()
-			{
-				UserOrganisationId = _context.ActorOrganisationId.Value,
-				TableId = table.Id
-			});
+            var translatedColumns = allowedColumns
+                .Join(
+                    entityPropertyTranslations,
+                    ac => (ac.PropertyType, ac.CustomPropertyId ?? ac.EntityPropertyId),
+                    t => (t.Item1, t.Item2),
+                    (ac, t) => new CompleteUserOrganisationColumnInfos()
+                    {
+                        ColumnId = ac.Id,
+                        Filterable = ac.Filterable,
+                        Hidden = ac.Hidden,
+                        Index = ac.Index,
+                        Label = ac.Label,
+                        Sortable = ac.Sortable,
+                        Value = ac.Value,
+                        Translations = t.Item3
+                    }
+                ).ToList();
 
-			// Merge translated columns with organisation type columns and user organisation columns
-			// Keeping index & hidden from most specific to least specific
-			var completeColumns = translatedColumns
-				.GroupJoin(organisationTypeColumns, tc => tc.Column.Id, otc => otc.ColumnId, (tc, otcs) =>
-				{
-					var otc = otcs.FirstOrDefault();
-					return new
-					{
-						tc.Column.Id,
-						tc.Column.Value,
-						tc.Column.Sortable,
-						tc.Column.Filterable,
-						Index = otc?.Index ?? tc.Column.Index,
-						Hidden = otc?.Hidden ?? tc.Column.Hidden,
-						tc.Label,
-						Disabled = otc?.Disabled ?? tc.Column.Disabled
-					};
-				})
-				.Where(c => !c.Disabled)
-				.GroupJoin(userOrganisationColumns, c => c.Id, c => c.ColumnId, (tc, uocs) =>
-				{
-					var uoc = uocs.FirstOrDefault();
-					return new CompleteUserOrganisationColumnInfos()
-					{
-						ColumnId = tc.Id,
-						Value = tc.Value,
-						Sortable = tc.Sortable,
-						Filterable = tc.Filterable,
-						Index = uoc?.Index ?? tc.Index,
-						Hidden = uoc?.Hidden ?? tc.Hidden,
-						Label = tc.Label
-					};
-				}).ToList();
+            var userOrganisationTable = await _userOrganisationTableRepository.Find(table.Code, _context.ActorOrganisationId.Value);
 
-			var userOrganisationTable = await _userOrganisationTableRepository.Find(table.Code, _context.ActorOrganisationId.Value);
+            if (userOrganisationTable != null)
+            {
+                return new UserOrganisationTableDetails()
+                {
+                    Id = userOrganisationTable.Id,
+                    Code = table.Code,
+                    Mode = userOrganisationTable.Mode,
+                    RowsPerPage = userOrganisationTable.RowsPerPage,
+                    SortByKey = userOrganisationTable.SortByKey,
+                    SortByOrder = userOrganisationTable.SortByOrder,
+                    Columns = translatedColumns
+                };
+            }
 
-			if (userOrganisationTable != null)
-			{
-				return new UserOrganisationTableDetails()
-				{
-					Id = userOrganisationTable.Id,
-					Code = table.Code,
-					Mode = userOrganisationTable.Mode,
-					RowsPerPage = userOrganisationTable.RowsPerPage,
-					SortByKey = userOrganisationTable.SortByKey,
-					SortByOrder = userOrganisationTable.SortByOrder,
-					Columns = completeColumns
-				};
-			}
-			else
-			{
-				return new UserOrganisationTableDetails()
-				{
-					Id = Guid.NewGuid(),
-					Code = table.Code,
-					Mode = "table",
-					RowsPerPage = 10,
-					SortByKey = null,
-					SortByOrder = null,
-					Columns = completeColumns
-				};
-			}
-		}
-	}
+            return new UserOrganisationTableDetails()
+            {
+                Id = Guid.NewGuid(),
+                Code = table.Code,
+                Mode = null,
+                RowsPerPage = 10,
+                SortByKey = null,
+                SortByOrder = null,
+                Columns = translatedColumns
+            };
+        }
+    }
 }

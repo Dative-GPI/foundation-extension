@@ -17,20 +17,26 @@ namespace Foundation.Context.Migrations.Shared
 
 			var fixtureService = new FixtureService();
 
-			var foundationTranslationCodes = fixtureService.GetTranslations().Select(t => t.Code).ToList();
-            
+			properties = properties.Concat(fixtureService.GetEntityProperties().Select(
+                p => new EntityProperty()
+                {
+                    Code = p.Code,
+                    EntityType = p.EntityType,
+                    TranslationCode = p.TranslationCode,
+                }
+            ));
+
             var propertyTranslations = translations.Where(t =>
                 t.Code.StartsWith(EntityPropertyHelper.ENTITY_PROPERTY_PREFIX)
                 && !Enum.TryParse(t.Code.Split(".")[2], true, out PropertyKind _)
-                && !foundationTranslationCodes.Contains(t.Code)
             ).ToList();
-
-            //Récupère les translations qui n'ont aucune propriété associée ou hérité
+            
+            //Récupère les translations qui n'ont aucune propriété associée ou héritée
             var missingPropertyTranslations = propertyTranslations.Where(t =>
             {
                 return (
                     !properties.Any(p => p.TranslationCode == t.Code)
-                    || (EntityPropertyHelper.IsForeignProperty(t.Code) && EntityPropertyHelper.GetHeritedProperty(t.Code, properties) == null)
+                    && !(EntityPropertyHelper.IsForeignProperty(t.Code) && EntityPropertyHelper.GetHeritedProperty(t.Code, properties) == null)
                 );
             }).ToList();
 

@@ -19,7 +19,7 @@ namespace Foundation.Extension.Fixtures
 
 		public static List<EntityProperty> GetAllEntities(List<Assembly> assemblies, List<string> namespaces)
 		{
-			var result = assemblies.SelectMany(a => a.GetTypes())
+			var properties = assemblies.SelectMany(a => a.GetTypes())
 				.Where(t => namespaces.Any(n => t.Namespace?.StartsWith(n) ?? false))
 				.Where(t => t.IsDefined(typeof(EntityDescriptionAttribute), false))
 				.GroupBy(t => t.GetCustomAttribute<EntityDescriptionAttribute>().EntityType)
@@ -44,9 +44,27 @@ namespace Foundation.Extension.Fixtures
 							})
 					)
 				)
-				.Where(e => !e.Code.EndsWith("id") || e.Code.EndsWith("image-id"))
-				.DistinctBy(e => e.Code)
-				.ToList();
+				.DistinctBy(e => e.Code);
+
+			var fixtureService = new FixtureService();
+
+            var propertiesWithFoundation = properties.Concat(fixtureService.GetEntityProperties().Select(
+                p => new EntityProperty()
+                {
+                    Code = p.Code,
+                    EntityType = p.EntityType,
+                    TranslationCode = p.TranslationCode,
+                }
+            ));
+
+            var result = properties.Select(p => {
+                if(string.IsNullOrWhiteSpace(p.LabelDefault))
+                {
+                    var heritedProperty = GetHeritedProperty(p.TranslationCode, propertiesWithFoundation);
+                    p.LabelDefault = heritedProperty != null ? $"{heritedProperty.EntityType} {heritedProperty.LabelDefault.ToLower()}" : p.Value;
+                }
+                return p;
+            }).ToList();
 
 			return result;
 		}

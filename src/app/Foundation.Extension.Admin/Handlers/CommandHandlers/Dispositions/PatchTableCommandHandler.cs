@@ -45,6 +45,7 @@ namespace Foundation.Extension.Admin.Handlers
             });
 
             var missingEntityProperty = entityProperties
+                .Where(ep => ep.EntityKind == EntityKind.Infos)
                 .ExceptBy(
                     columns.Where(c => c.EntityPropertyId.HasValue).Select(c => c.EntityPropertyId.Value),
                     ep => ep.Id)

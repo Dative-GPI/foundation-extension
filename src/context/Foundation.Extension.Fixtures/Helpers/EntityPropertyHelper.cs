@@ -46,21 +46,10 @@ namespace Foundation.Extension.Fixtures
 				)
 				.DistinctBy(e => e.Code);
 
-			var fixtureService = new FixtureService();
-
-            var propertiesWithFoundation = properties.Concat(fixtureService.GetEntityProperties().Select(
-                p => new EntityProperty()
-                {
-                    Code = p.Code,
-                    EntityType = p.EntityType,
-                    TranslationCode = p.TranslationCode,
-                }
-            ));
-
             var result = properties.Select(p => {
                 if(string.IsNullOrWhiteSpace(p.LabelDefault))
                 {
-                    var heritedProperty = GetHeritedProperty(p.TranslationCode, propertiesWithFoundation);
+                    var heritedProperty = GetHeritedProperty(p.TranslationCode, properties);
                     p.LabelDefault = heritedProperty != null ? $"{heritedProperty.EntityType} {heritedProperty.LabelDefault.ToLower()}" : p.Value;
                 }
                 return p;

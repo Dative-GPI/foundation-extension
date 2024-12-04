@@ -27,12 +27,13 @@ namespace Foundation.Extension.Context.Repositories
             var query = _dbSet
                 .AsQueryable();
 
-            var dtos = await query.AsNoTracking().ToListAsync();
-            
-            if (filter?.Codes != null)
+            if (filter.Codes != null)
             {
                 query = query.Where(t => filter.Codes.Contains(t.Code));
             }
+
+            var dtos = await query.AsNoTracking().ToListAsync();
+            
 
             return dtos.Select(t => new Translation()
             {

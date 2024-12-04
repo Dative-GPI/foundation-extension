@@ -7,7 +7,7 @@ using Foundation.Extension.Fixtures;
 using Microsoft.Extensions.Logging;
 using Foundation.Clients.Fixtures.Services;
 
-namespace Foundation.Context.Migrations.Shared
+namespace Foundation.Extension.Fixtures
 {
     public static class VerificationHelper
     {

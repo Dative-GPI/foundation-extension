@@ -24,17 +24,17 @@
             gap="4px"
           >
             <FSSpan>
-              {{ $tr("remove-dialog.body-regular", "This action is") }}
+              {{ $tr("dialog-remove.body-regular", "This action is") }}
             </FSSpan>
             <FSSpan
               font="text-button"
             >
-              {{ $tr("remove-dialog.body-bold", "definitive") }}
+              {{ $tr("dialog-remove.body-bold", "definitive") }}
             </FSSpan>
           </FSRow>
         </FSRow>
         <FSSpan>
-          {{ $tr("remove-dialog.final-warning", "Once removed, entities won't be retrievable") }}
+          {{ $tr("dialog-remove.final-warning", "Once removed, entities won't be retrievable") }}
         </FSSpan>
       </FSCol>
     </template>

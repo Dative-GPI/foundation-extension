@@ -2,7 +2,7 @@
   <FEDialogSubmit
     v-if="dialogId"
     :title="title"
-    :submitButtonLabel="$tr('ui.button.remove', 'Remove')"
+    :submitButtonLabel="$tr('ui.common.remove', 'Remove')"
     :submitButtonColor="ColorEnum.Error"
     @submit="removing = true"
     v-model="dialog"
@@ -21,20 +21,20 @@
             mdi-alert-outline
           </FSIcon>
           <FSRow
-            gap="2px"
+            gap="4px"
           >
             <FSSpan>
-              {{ $tr("ui.remove-dialog.body-regular", "This action is") }}
+              {{ $tr("remove-dialog.body-regular", "This action is") }}
             </FSSpan>
             <FSSpan
               font="text-button"
             >
-              {{ $tr("ui.remove-dialog.body-bold", "definitive") }}
+              {{ $tr("remove-dialog.body-bold", "definitive") }}
             </FSSpan>
           </FSRow>
         </FSRow>
         <FSSpan>
-          {{ $tr("ui.remove-dialog.final-warning", "Once removed, entities won't be retrievable") }}
+          {{ $tr("remove-dialog.final-warning", "Once removed, entities won't be retrievable") }}
         </FSSpan>
       </FSCol>
     </template>
@@ -93,10 +93,10 @@ export default defineComponent({
 
     const title = computed((): string => {
       if (removeTotal.value > 1) {
-        return $tr("ui.dialog-remove.remove-plural", "Remove {0} entities", removeTotal.value.toString());
+        return $tr("dialog-remove.remove-plural", "Remove {0} entities", removeTotal.value.toString());
       }
       else {
-        return $tr("ui.dialog-remove.remove-singular", "Remove an entity");
+        return $tr("dialog-remove.remove-singular", "Remove an entity");
       }
     });
 

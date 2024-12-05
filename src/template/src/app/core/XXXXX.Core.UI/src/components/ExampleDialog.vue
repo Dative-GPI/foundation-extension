@@ -33,6 +33,7 @@
             :modelValue="labelDefault"
             :translations="translations"
           />
+          {{ timeZone ?? 'No time zone' }}
         </template>
       </FSDialogFormBody>
     </template>
@@ -44,6 +45,7 @@ import { defineComponent,ref } from "vue";
 
 import { TextRules } from "@dative-gpi/foundation-shared-components/models";
 import { useExtensionCommunicationBridge } from "@dative-gpi/foundation-extension-shared-ui/composables";
+import { useAppTimeZone } from "@dative-gpi/foundation-shared-services/composables";
 
 
 import FEDialog from "@dative-gpi/foundation-extension-shared-ui/components/FEDialog.vue";
@@ -60,6 +62,8 @@ export default defineComponent({
 
     const labelDefault = ref("");
     const translations = ref([]); 
+
+    const { timeZone } = useAppTimeZone();
 
     const onSubmit = () => {
       let program = {
@@ -88,7 +92,8 @@ export default defineComponent({
       fieldValue,
       TextRules,
       dialog,
-      onSubmit
+      onSubmit,
+      timeZone
     };
   },
 });

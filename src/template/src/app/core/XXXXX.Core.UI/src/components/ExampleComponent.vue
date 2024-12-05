@@ -27,6 +27,7 @@
     />
     <FSRow
       height="1000px"
+      style="background-color: brown;"
     >
       1000px row for scroll
     </FSRow>

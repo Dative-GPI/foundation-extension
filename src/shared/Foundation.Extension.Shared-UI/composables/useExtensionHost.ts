@@ -13,6 +13,9 @@ const token = ref<string | null>(null);
 const host = ref<string | null>(null);
 
 export const useExtensionHost = () => {
+  let unsubscribeRouterHook: () => void;
+  let intervalId: NodeJS.Timeout;
+
   onMounted(async () => {
     if (done.value) {
       return;
@@ -33,23 +36,19 @@ export const useExtensionHost = () => {
     const router = useRouter();
     const route = useRoute();
 
-    const unsubscribeRouterHook = router.afterEach((to, from) => {
-      // inital route, no need to notify the host about the change
+    unsubscribeRouterHook = router.afterEach((to, from) => {
       if (!from || !from.name) {
         return;
       }
-
-      // embedded route, no need to notify the host about the change
       if (to.meta && to.meta.overlay) {
         return;
       }
-
       goTo(to.path);
     });
 
-    const intervalId = setInterval(() => {
+    intervalId = setInterval(() => {
       setHeight(document.body.scrollHeight, route.path);
-    }, 10)
+    }, 10);
 
     if (languageCode.value) {
       setAppLanguageCode(languageCode.value);
@@ -69,12 +68,16 @@ export const useExtensionHost = () => {
       setAppLanguages(languages.value);
     }
 
-    onUnmounted(() => {
-      unsubscribeRouterHook();
-      clearInterval(intervalId);
-    });
-
     done.value = true;
+  });
+
+  onUnmounted(() => {
+    if (unsubscribeRouterHook) {
+      unsubscribeRouterHook();
+    }
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
   });
 
   return {

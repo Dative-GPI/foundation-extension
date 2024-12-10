@@ -1,46 +1,36 @@
-// Plugins
-import vue from '@vitejs/plugin-vue'
-import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
-import FoundationSharedAutoImport from "@dative-gpi/foundation-shared-loader"
-
-// Utilities
-import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
+
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import vuetify from 'vite-plugin-vuetify'
+
+import FoundationSharedAutoImport from '@dative-gpi/foundation-shared-loader'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue({
-      template: { transformAssetUrls }
-    }),
-    // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
-    vuetify({
-      autoImport: true,
-    }),
-    FoundationSharedAutoImport({
-      skipCore: true
-    })
+    vue(),
+    vuetify(),
+    FoundationSharedAutoImport({ skipShared: false, skipCore: true, skipAdmin: false })
   ],
-  define: { 'process.env': {} },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
-    },
-    extensions: [
-      '.js',
-      '.json',
-      '.jsx',
-      '.mjs',
-      '.ts',
-      '.tsx',
-      '.vue',
-    ],
+    }
   },
   server: {
-    port: 3000,
+    port: 8080,
+    host: '0.0.0.0'
   },
   optimizeDeps: {
-    include: ["ajv", "axios", "lodash", "color", "@lexical/selection"],
+    include: [
+      "ajv",
+      "@lexical/selection", 
+      "lexical",
+      "axios",
+      "lodash",
+      "color"
+    ],
   },
   build: {
     commonjsOptions: {

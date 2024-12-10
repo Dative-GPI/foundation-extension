@@ -15,7 +15,7 @@ namespace XXXXX.Context.Migrations.Shared
 		public FixtureManager(ILogger<FixtureManager> logger, IFixtureHelper helper) : base(logger, helper)
 		{
 			Add<TranslationDTO, Translation>(
-				TranslationProvider.GetAllTranslations,
+				TranslationProvider.GetAllDistinctTranslations,
 				fixture => new TranslationDTO()
 				{
 					Id = Guid.NewGuid(),

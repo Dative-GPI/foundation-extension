@@ -89,17 +89,12 @@ services:
       args:
         PROJECT: "src/app/core/XXXXX.Core.UI"
     volumes: # hot reload
-      - ../src/app/core/XXXXX.Core.UI/public:/app/src/app/core/XXXXX.Core.UI/public:delegated
-      - ../src/app/core/XXXXX.Core.UI/src:/app/src/app/core/XXXXX.Core.UI/src:delegated
-      - ../src/app/core/XXXXX.Core.UI/index.html:/app/src/app/core/XXXXX.Core.UI/index.html:delegated
-      - ../src/app/core/XXXXX.Core.UI/.env:/app/src/app/core/XXXXX.Core.UI/.env:delegated
-      - ../src/app/core/XXXXX.Core.UI/tsconfig.json:/app/src/app/core/XXXXX.Core.UI/tsconfig.json:delegated
-      - ../src/app/core/XXXXX.Core.UI/tsconfig.node.json:/app/src/app/core/XXXXX.Core.UI/tsconfig.node.json:delegated
-      - ../src/app/core/XXXXX.Core.UI/vite.config.ts:/app/src/app/core/XXXXX.Core.UI/vite.config.ts:delegated
+      - ../src/app/core/XXXXX.Core.UI:/app/src/app/core/XXXXX.Core.UI:delegated
+      - /app/src/app/core/XXXXX.Core.UI/node_modules/
     labels:
       - "custom.label=extension"
       - "traefik.enable=true"
-      - "traefik.http.services.extension-frontend.loadbalancer.server.port=3000"
+      - "traefik.http.services.extension-frontend.loadbalancer.server.port=8080"
       - "traefik.http.routers.extension-frontend.rule=Host(`extension.localhost`) && PathPrefix(`/`)"
       - "traefik.http.routers.extension-frontend.entrypoints=websecure"
       - "traefik.http.routers.extension-frontend.tls=true"
@@ -111,17 +106,12 @@ services:
       args:
         PROJECT: "src/app/admin/XXXXX.Admin.UI"
     volumes: # hot reload
-      - ../src/app/admin/XXXXX.Admin.UI/public:/app/src/app/admin/XXXXX.Admin.UI/public:delegated
-      - ../src/app/admin/XXXXX.Admin.UI/src:/app/src/app/admin/XXXXX.Admin.UI/src:delegated
-      - ../src/app/admin/XXXXX.Admin.UI/index.html:/app/src/app/admin/XXXXX.Admin.UI/index.html:delegated
-      - ../src/app/admin/XXXXX.Admin.UI/.env:/app/src/app/admin/XXXXX.Admin.UI/.env:delegated
-      - ../src/app/admin/XXXXX.Admin.UI/tsconfig.json:/app/src/app/admin/XXXXX.Admin.UI/tsconfig.json:delegated
-      - ../src/app/admin/XXXXX.Admin.UI/tsconfig.node.json:/app/src/app/admin/XXXXX.Admin.UI/tsconfig.node.json:delegated
-      - ../src/app/admin/XXXXX.Admin.UI/vite.config.ts:/app/src/app/admin/XXXXX.Admin.UI/vite.config.ts:delegated
+      - ../src/app/admin/XXXXX.Admin.UI:/app/src/app/admin/XXXXX.Admin.UI:delegated
+      - /app/src/app/admin/XXXXX.Admin.UI/node_modules/
     labels:
       - "custom.label=extension"
       - "traefik.enable=true"
-      - "traefik.http.services.extension-frontend-admin.loadbalancer.server.port=3000"
+      - "traefik.http.services.extension-frontend-admin.loadbalancer.server.port=8080"
       - "traefik.http.routers.extension-frontend-admin.rule=Host(`extension.localhost`) && PathPrefix(`/admin`)"
       - "traefik.http.routers.extension-frontend-admin.entrypoints=websecure"
       - "traefik.http.routers.extension-frontend-admin.tls=true"

@@ -31,6 +31,7 @@ namespace Foundation.Extension.Admin.Controllers
         public async Task<IActionResult> Update([FromRoute] Guid roleId, [FromBody] UpdateRolePermissionOrganisationViewModel payload)
         {
             var result = await _roleOrganisationService.Update(roleId, payload);
+
             return Ok(result);
         }
     }

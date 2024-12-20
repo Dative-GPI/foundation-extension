@@ -13,9 +13,7 @@ namespace Foundation.Extension.Core.Handlers {
     {
         private readonly IPermissionOrganisationCategoryRepository _permissionOrganisationCategoryRepository;
 
-        public PermissionCategoriesQueryHandler(
-            IPermissionOrganisationCategoryRepository permissionOrganisationCategoryRepository
-        )
+        public PermissionCategoriesQueryHandler(IPermissionOrganisationCategoryRepository permissionOrganisationCategoryRepository)
         {
             _permissionOrganisationCategoryRepository = permissionOrganisationCategoryRepository;
         }
@@ -23,6 +21,7 @@ namespace Foundation.Extension.Core.Handlers {
         public async Task<IEnumerable<PermissionOrganisationCategory>> HandleAsync(PermissionOrganisationCategoriesQuery request, Func<Task<IEnumerable<PermissionOrganisationCategory>>> next, CancellationToken cancellationToken)
         {
             var categories = await _permissionOrganisationCategoryRepository.GetMany();
+
             return categories;
         }
     }

@@ -8,8 +8,6 @@ using Foundation.Extension.Domain.Repositories.Filters;
 using Foundation.Extension.Domain.Repositories.Interfaces;
 using Foundation.Extension.Core.Abstractions;
 using Foundation.Extension.Domain.Abstractions;
-using System.Text.Json;
-
 
 namespace Foundation.Extension.Core.Tools
 {

@@ -1,15 +1,14 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Bones.Flow;
 
-using Foundation.Clients;
 using Foundation.Extension.Domain.Models;
 
 namespace Foundation.Extension.Core
 {
     public class PermissionOrganisationCategoriesQuery : ICoreRequest, IRequest<IEnumerable<PermissionOrganisationCategory>>
     {
-        public IEnumerable<string> Authorizations => new string[] {};
+        public IEnumerable<string> Authorizations => Enumerable.Empty<string>();
     }
 }

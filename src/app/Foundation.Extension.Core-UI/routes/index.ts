@@ -2,6 +2,13 @@ import type { RouteRecordRaw } from "vue-router";
 
 export const routes: RouteRecordRaw[] = [
   {
+    path: "/organisations/:organisationId/admin-permission-organisations",
+    name: "admin-permission-organisations",
+    components: {
+      default: () => import("../views/AdminPermissionOrganisations.vue")
+    }
+  },
+  {
     path: "/organisations/:organisationId/service-account-role-organisations/:roleId",
     name: "service-account-role-organisation",
     components: {

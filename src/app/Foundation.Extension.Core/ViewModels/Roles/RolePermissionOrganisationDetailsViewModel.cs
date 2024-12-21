@@ -5,6 +5,7 @@ namespace Foundation.Extension.Core.ViewModels
 {
     public class RolePermissionOrganisationDetailsViewModel
     {
+        public Guid Id { get; set; }
         public List<Guid> PermissionIds { get; set; }
     }
 }

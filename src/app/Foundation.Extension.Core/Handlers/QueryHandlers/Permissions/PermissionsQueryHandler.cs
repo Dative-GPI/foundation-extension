@@ -11,25 +11,22 @@ using Foundation.Extension.Domain.Repositories.Filters;
 using Foundation.Extension.Domain.Repositories.Interfaces;
 
 using Foundation.Extension.Core.Abstractions;
-using Microsoft.Extensions.Logging;
 
 namespace Foundation.Extension.Core.Handlers
 {
     public class PermissionsQueryHandler : IMiddleware<PermissionOrganisationsQuery, IEnumerable<PermissionOrganisationInfos>>
     {
-        private readonly ILogger<PermissionsQueryHandler> _logger;
         private readonly IPermissionOrganisationTypeRepository _permissionOrganisationTypeRepository;
         private readonly IPermissionOrganisationRepository _permissionRepository;
         private readonly IRequestContextProvider _requestContextProvider;
 
-        public PermissionsQueryHandler(
+        public PermissionsQueryHandler
+        (
             IPermissionOrganisationTypeRepository permissionOrganisationTypeRepository,
             IPermissionOrganisationRepository permissionRepository,
-            IRequestContextProvider requestContextProvider,
-            ILogger<PermissionsQueryHandler> logger
+            IRequestContextProvider requestContextProvider
         )
         {
-            _logger = logger;
             _permissionOrganisationTypeRepository = permissionOrganisationTypeRepository;
             _permissionRepository = permissionRepository;
             
@@ -40,9 +37,8 @@ namespace Foundation.Extension.Core.Handlers
         {
             var context = _requestContextProvider.Context;
 
-            _logger.LogWarning("Fetching permissions for organisation type {OrganisationTypeId}", context.OrganisationTypeId);
-
-            var permissionOrganisationTypes = await _permissionOrganisationTypeRepository.GetMany(new PermissionOrganisationTypesFilter() {
+            var permissionOrganisationTypes = await _permissionOrganisationTypeRepository.GetMany(new PermissionOrganisationTypesFilter()
+            {
                 OrganisationTypeId = context.OrganisationTypeId
             });
 

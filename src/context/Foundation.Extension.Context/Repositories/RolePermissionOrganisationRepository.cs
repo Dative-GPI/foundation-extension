@@ -1,25 +1,23 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
+using Bones.Domain;
 using Bones.Repository.Interfaces;
 
 using Foundation.Extension.Domain.Models;
 using Foundation.Extension.Domain.Repositories.Commands;
-using Foundation.Extension.Domain.Repositories.Filters;
 using Foundation.Extension.Domain.Repositories.Interfaces;
 
 using Foundation.Extension.Context.DTOs;
-using Bones.Domain;
 
 namespace Foundation.Extension.Context.Repositories
 {
     public class RolePermissionOrganisationRepository : IRolePermissionOrganisationRepository
     {
-        private DbSet<RolePermissionOrganisationDTO> _dbSet;
+        private readonly DbSet<RolePermissionOrganisationDTO> _dbSet;
 
         public RolePermissionOrganisationRepository(BaseApplicationContext context)
         {
@@ -30,7 +28,7 @@ namespace Foundation.Extension.Context.Repositories
         {
             var permissions = await _dbSet
                 .Include(p => p.PermissionOrganisation)
-                .Where(p => p.RoleOrganisationId == id)
+                .Where(p => p.RoleId == id)
                 .AsNoTracking()
                 .ToListAsync();
 
@@ -47,14 +45,14 @@ namespace Foundation.Extension.Context.Repositories
 
         public async Task<IEntity<Guid>> Update(UpdateRolePermissionOrganisation payload)
         {
-            var formerPermissions = await _dbSet.Where(p => p.RoleOrganisationId == payload.Id).ToListAsync();
+            var formerPermissions = await _dbSet.Where(p => p.RoleId == payload.Id).ToListAsync();
 
             _dbSet.RemoveRange(formerPermissions);
 
             _dbSet.AddRange(payload.PermissionIds.Select(p => new RolePermissionOrganisationDTO()
             {
                 Id = Guid.NewGuid(),
-                RoleOrganisationId = payload.Id,
+                RoleId = payload.Id,
                 PermissionOrganisationId = p
             }));
 

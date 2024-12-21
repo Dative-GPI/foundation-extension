@@ -12,8 +12,8 @@ namespace XXXXX.Context.Migrations.Shared
 	{
 		static readonly List<string> PROJECTS = new List<string>()
 		{
-			"../../../src/app/admin/XXXXX.Admin.UI",
-			"../../../src/app/core/XXXXX.Core.UI",
+			"../../../src/app/admin/XXXXX.Admin.UI/src",
+			"../../../src/app/core/XXXXX.Core.UI/src",
 		};
 
         public static async Task<List<Translation>> GetAllDistinctTranslations()

@@ -1,6 +1,6 @@
 <template>
   <FEDialogSubmit
-    :load="updatingRoleOrganisationPermissions"
+    :load="updatingRoleOrganisationPermission"
     @submit="onSubmit"
     v-model="dialog"
   >
@@ -8,7 +8,7 @@
       #body
     >
       <FEEditPermissionsGrid
-        v-if="roleOrganisationPermissions"
+        v-if="roleOrganisationPermission"
         v-model="permissionsIds"
       />
     </template>
@@ -32,8 +32,8 @@ export default defineComponent({
     FEDialogSubmit,
   },
   setup() {
-    const { fetch : updateRoleOrganisationPermissions, fetching: updatingRoleOrganisationPermissions } = useUpdateRolePermissionOrganisations();
-    const { fetch: getRoleOrganisationPermissions, entity: roleOrganisationPermissions } = useRolePermissionOrganisations();
+    const { fetch : updateRoleOrganisationPermission, fetching: updatingRoleOrganisationPermission } = useUpdateRolePermissionOrganisation();
+    const { fetch: getRoleOrganisationPermission, entity: roleOrganisationPermission } = useRolePermissionOrganisation();
     const router = useRouter();
 
     const dialog = ref(true);
@@ -44,7 +44,7 @@ export default defineComponent({
     const onSubmit = async () => {
       if (roleId.value) {
         try {
-          await updateRoleOrganisationPermissions(roleId.value, {
+          await updateRoleOrganisationPermission(roleId.value, {
             permissionIds: permissionsIds.value
           });
         }
@@ -57,19 +57,19 @@ export default defineComponent({
     watch(router.currentRoute, () => {
       roleId.value = router.currentRoute.value.params["roleId"] as string | null;
       if (roleId.value) {
-        getRoleOrganisationPermissions(roleId.value);
+        getRoleOrganisationPermission(roleId.value);
       }
     }, { immediate: true });
 
-    watch(roleOrganisationPermissions, (prev, next) => {
+    watch(roleOrganisationPermission, (prev, next) => {
       if (prev != next) {
-        permissionsIds.value = roleOrganisationPermissions.value.permissionIds.slice();
+        permissionsIds.value = roleOrganisationPermission.value.permissionIds.slice();
       }
     });
 
     return {
-      updatingRoleOrganisationPermissions,
-      roleOrganisationPermissions,
+      updatingRoleOrganisationPermission,
+      roleOrganisationPermission,
       permissionsIds,
       dialog,
       onSubmit

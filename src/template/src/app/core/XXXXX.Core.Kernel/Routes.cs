@@ -31,20 +31,7 @@ namespace XXXXX.Core.Kernel
 				DrawerLabelCode = null,
 				Exact = false,
 				ShowOnDrawer = false
-			},
-			new RouteDefinition()
-			{
-				Authorizations = new string[] {},
-				Path = (ctx) => $"/organisations/{ctx.OrganisationId.Value}/role-organisations/:roleId",
-				Name = "organisation-role-permissions",
-				DrawerCategoryLabelDefault = null,
-				DrawerCategoryCode = null,
-				DrawerIcon = null,
-				DrawerLabelDefault = null,
-				DrawerLabelCode = null,
-				Exact = false,
-				ShowOnDrawer = false
-			},
+			}
 		};
 
 		public static IEnumerable<RouteDefinition> GetRoutes()

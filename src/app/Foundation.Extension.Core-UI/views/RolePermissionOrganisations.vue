@@ -1,7 +1,7 @@
 <template>
   <FEPermissionsGrid
-    v-if="roleOrganisationPermissions"
-    :permissions="roleOrganisationPermissions.permissionIds"
+    v-if="roleOrganisationPermission"
+    :permissions="roleOrganisationPermission.permissionIds"
   >
     <template
       #toolbar
@@ -24,7 +24,7 @@ import { useExtensionCommunicationBridge } from "@dative-gpi/foundation-extensio
 import { uuidv4 } from "@dative-gpi/bones-ui";
 
 import { UPDATE_ROLE_PERMISSION_ORGANISATION_DIALOG_PATH } from "../config";
-import { useRolePermissionOrganisations } from "../composables";
+import { useRolePermissionOrganisation } from "../composables";
 
 import FEPermissionsGrid from "../components/FEPermissionsGrid.vue";
 
@@ -34,7 +34,7 @@ export default defineComponent({
     FEPermissionsGrid
   },
   setup() {
-    const { fetch: getRoleOrganisationPermissions, entity: roleOrganisationPermissions } = useRolePermissionOrganisations();
+    const { fetch: getRoleOrganisationPermission, entity: roleOrganisationPermission } = useRolePermissionOrganisation();
     const { openDialog } = useExtensionCommunicationBridge();
     const router = useRouter();
     
@@ -44,13 +44,13 @@ export default defineComponent({
     watch(router.currentRoute, () => {
       roleId.value = router.currentRoute.value.params["roleId"] as string | null;
       if (roleId.value) {
-        getRoleOrganisationPermissions(roleId.value);
+        getRoleOrganisationPermission(roleId.value);
       }
       editable.value = router.currentRoute.value.query["editable"] === "true";
     }, { immediate: true });
 
     return {
-      roleOrganisationPermissions,
+      roleOrganisationPermission,
       editable,
       roleId,
       UPDATE_ROLE_PERMISSION_ORGANISATION_DIALOG_PATH,

@@ -1,6 +1,6 @@
 <template>
   <FEDialogSubmit
-    :load="updatingRoleOrganisation"
+    :load="updatingRoleOrganisationPermissions"
     @submit="onSubmit"
     v-model="dialog"
   >
@@ -8,7 +8,7 @@
       #body
     >
       <FEEditPermissionsGrid
-        v-if="roleOrganisation"
+        v-if="roleOrganisationPermissions"
         v-model="permissionsIds"
       />
     </template>
@@ -19,7 +19,7 @@
 import { defineComponent, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 
-import { useRoleOrganisation, useUpdateRoleOrganisation } from "../../composables";
+import { useRolePermissionOrganisation, useUpdateRolePermissionOrganisation } from "../../composables";
 
 import FEDialogSubmit from "@dative-gpi/foundation-extension-shared-ui/components/FEDialogSubmit.vue";
 
@@ -32,8 +32,8 @@ export default defineComponent({
     FEDialogSubmit,
   },
   setup() {
-    const { fetch : updateRoleOrganisation, fetching: updatingRoleOrganisation } = useUpdateRoleOrganisation();
-    const { fetch: getRoleOrganisation, entity: roleOrganisation } = useRoleOrganisation();
+    const { fetch : updateRoleOrganisationPermissions, fetching: updatingRoleOrganisationPermissions } = useUpdateRolePermissionOrganisations();
+    const { fetch: getRoleOrganisationPermissions, entity: roleOrganisationPermissions } = useRolePermissionOrganisations();
     const router = useRouter();
 
     const dialog = ref(true);
@@ -44,7 +44,7 @@ export default defineComponent({
     const onSubmit = async () => {
       if (roleId.value) {
         try {
-          await updateRoleOrganisation(roleId.value, {
+          await updateRoleOrganisationPermissions(roleId.value, {
             permissionIds: permissionsIds.value
           });
         }
@@ -57,19 +57,19 @@ export default defineComponent({
     watch(router.currentRoute, () => {
       roleId.value = router.currentRoute.value.params["roleId"] as string | null;
       if (roleId.value) {
-        getRoleOrganisation(roleId.value);
+        getRoleOrganisationPermissions(roleId.value);
       }
     }, { immediate: true });
 
-    watch(roleOrganisation, (prev, next) => {
+    watch(roleOrganisationPermissions, (prev, next) => {
       if (prev != next) {
-        permissionsIds.value = roleOrganisation.value.permissionIds.slice();
+        permissionsIds.value = roleOrganisationPermissions.value.permissionIds.slice();
       }
     });
 
     return {
-      updatingRoleOrganisation,
-      roleOrganisation,
+      updatingRoleOrganisationPermissions,
+      roleOrganisationPermissions,
       permissionsIds,
       dialog,
       onSubmit

@@ -9,16 +9,16 @@ using Foundation.Extension.Domain.Repositories.Interfaces;
 
 namespace Foundation.Extension.Core.Handlers
 {
-    public class RoleOrganisationPermissionOrganisationQueryHandler : IMiddleware<RoleOrganisationPermissionOrganisationQuery, RolePermissionOrganisationDetails>
+    public class RolePermissionOrganisationQueryHandler : IMiddleware<RolePermissionOrganisationQuery, RolePermissionOrganisationDetails>
     {
         private readonly IRolePermissionOrganisationRepository _rolePermissionOrganisationRepository;
 
-        public RoleOrganisationPermissionOrganisationQueryHandler(IRolePermissionOrganisationRepository rolePermissionOrganisationRepository)
+        public RolePermissionOrganisationQueryHandler(IRolePermissionOrganisationRepository rolePermissionOrganisationRepository)
         {
             _rolePermissionOrganisationRepository = rolePermissionOrganisationRepository;
         }
 
-        public async Task<RolePermissionOrganisationDetails> HandleAsync(RoleOrganisationPermissionOrganisationQuery request, Func<Task<RolePermissionOrganisationDetails>> next, CancellationToken cancellationToken)
+        public async Task<RolePermissionOrganisationDetails> HandleAsync(RolePermissionOrganisationQuery request, Func<Task<RolePermissionOrganisationDetails>> next, CancellationToken cancellationToken)
         {
             var rolePermissionOrganisation = await _rolePermissionOrganisationRepository.Get(request.RoleId);
 

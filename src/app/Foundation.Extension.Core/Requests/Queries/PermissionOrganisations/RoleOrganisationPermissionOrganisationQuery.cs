@@ -7,9 +7,9 @@ using Foundation.Extension.Domain.Models;
 
 namespace Foundation.Extension.Core
 {
-    public class RoleOrganisationPermissionOrganisationQuery : ICoreRequest, IRequest<RolePermissionOrganisationDetails>
+    public class RolePermissionOrganisationQuery : ICoreRequest, IRequest<RolePermissionOrganisationDetails>
     {
-        public IEnumerable<string> Authorizations => new string[] { "app.roleorganisation.read" };
+        public IEnumerable<string> Authorizations => Array.Empty<string>();
 
         public Guid RoleId { get; set; }
     }

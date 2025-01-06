@@ -1,7 +1,7 @@
 <template>
   <FEPermissionsGrid
-    v-if="roleOrganisation"
-    :permissions="roleOrganisation.permissionIds"
+    v-if="roleOrganisationPermissions"
+    :permissions="roleOrganisationPermissions.permissionIds"
   >
     <template
       #toolbar
@@ -10,7 +10,7 @@
         v-if="editable"
         prependIcon="mdi-shield-lock-outline"
         :label="$tr('ui.role.edit-permissions', 'Edit permissions')"
-        @click="openDialog(UPDATE_ROLE_ORGANISATION_DIALOG_PATH(roleId, uuidv4()))"
+        @click="openDialog(UPDATE_ROLE_PERMISSION_ORGANISATION_DIALOG_PATH(roleId, uuidv4()))"
       />
     </template>
   </FEPermissionsGrid>
@@ -23,8 +23,8 @@ import { useRouter } from "vue-router";
 import { useExtensionCommunicationBridge } from "@dative-gpi/foundation-extension-shared-ui/composables";
 import { uuidv4 } from "@dative-gpi/bones-ui";
 
-import { UPDATE_ROLE_ORGANISATION_DIALOG_PATH } from "../config";
-import { useRoleOrganisation } from "../composables";
+import { UPDATE_ROLE_PERMISSION_ORGANISATION_DIALOG_PATH } from "../config";
+import { useRolePermissionOrganisations } from "../composables";
 
 import FEPermissionsGrid from "../components/FEPermissionsGrid.vue";
 
@@ -34,7 +34,7 @@ export default defineComponent({
     FEPermissionsGrid
   },
   setup() {
-    const { fetch: getRoleOrganisation, entity: roleOrganisation } = useRoleOrganisation();
+    const { fetch: getRoleOrganisationPermissions, entity: roleOrganisationPermissions } = useRolePermissionOrganisations();
     const { openDialog } = useExtensionCommunicationBridge();
     const router = useRouter();
     
@@ -44,16 +44,16 @@ export default defineComponent({
     watch(router.currentRoute, () => {
       roleId.value = router.currentRoute.value.params["roleId"] as string | null;
       if (roleId.value) {
-        getRoleOrganisation(roleId.value);
+        getRoleOrganisationPermissions(roleId.value);
       }
       editable.value = router.currentRoute.value.query["editable"] === "true";
     }, { immediate: true });
 
     return {
-      roleOrganisation,
+      roleOrganisationPermissions,
       editable,
       roleId,
-      UPDATE_ROLE_ORGANISATION_DIALOG_PATH,
+      UPDATE_ROLE_PERMISSION_ORGANISATION_DIALOG_PATH,
       openDialog,
       uuidv4
     };

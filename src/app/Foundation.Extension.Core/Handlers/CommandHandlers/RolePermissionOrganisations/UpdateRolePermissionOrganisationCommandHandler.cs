@@ -10,16 +10,16 @@ using Foundation.Extension.Domain.Repositories.Interfaces;
 
 namespace Foundation.Extension.Core.Handlers
 {
-    public class UpdateServiceAccountRoleOrganisationPermissionOrganisationCommandHandler : IMiddleware<UpdateServiceAccountRoleOrganisationPermissionOrganisationCommand, IEntity<Guid>>
+    public class UpdateRolePermissionOrganisationCommandHandler : IMiddleware<UpdateRolePermissionOrganisationCommand, IEntity<Guid>>
     {
         private readonly IRolePermissionOrganisationRepository _rolePermissionOrganisationRepository;
 
-        public UpdateServiceAccountRoleOrganisationPermissionOrganisationCommandHandler(IRolePermissionOrganisationRepository rolePermissionOrganisationRepository)
+        public UpdateRolePermissionOrganisationCommandHandler(IRolePermissionOrganisationRepository rolePermissionOrganisationRepository)
         {
             _rolePermissionOrganisationRepository = rolePermissionOrganisationRepository;
         }
 
-        public async Task<IEntity<Guid>> HandleAsync(UpdateServiceAccountRoleOrganisationPermissionOrganisationCommand command, Func<Task<IEntity<Guid>>> next, CancellationToken cancellationToken)
+        public async Task<IEntity<Guid>> HandleAsync(UpdateRolePermissionOrganisationCommand command, Func<Task<IEntity<Guid>>> next, CancellationToken cancellationToken)
         {
             var entity = await _rolePermissionOrganisationRepository.Update(new UpdateRolePermissionOrganisation()
             {

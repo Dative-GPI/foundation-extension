@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Bones.Flow;
 
@@ -9,7 +10,7 @@ namespace Foundation.Extension.Core
 {
     public class RolePermissionOrganisationQuery : ICoreRequest, IRequest<RolePermissionOrganisationDetails>
     {
-        public IEnumerable<string> Authorizations => Array.Empty<string>();
+        public IEnumerable<string> Authorizations => Enumerable.Empty<string>();
 
         public Guid RoleId { get; set; }
     }

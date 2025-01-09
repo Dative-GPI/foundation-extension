@@ -16,6 +16,7 @@ namespace Foundation.Extension.Core.DI
 
 			services.AddScoped<IPermissionOrganisationService, PermissionOrganisationService>();
 			services.AddScoped<IRolePermissionOrganisationService, RolePermissionOrganisationService>();
+			services.AddScoped<IUserPermissionOrganisationService, UserPermissionOrganisationService>();
 
 			return services;
 		}

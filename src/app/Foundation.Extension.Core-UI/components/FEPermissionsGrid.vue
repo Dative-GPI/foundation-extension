@@ -57,11 +57,6 @@ import { usePermissionOrganisations, usePermissionOrganisationCategories } from 
 export default defineComponent({
   name: "FEPermissionsGrid",
   props: {
-    admin: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
     permissions: {
       type: Array as PropType<string[]>,
       required: false,
@@ -110,9 +105,6 @@ export default defineComponent({
     });
 
     const getIcon = (permissionId: string): boolean => {
-      if (props.admin) {
-        return true;
-      }
       return props.permissions.some(p => p === permissionId);
     };
 

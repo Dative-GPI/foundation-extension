@@ -30,6 +30,7 @@ namespace Foundation.Extension.Core.DI
             services.AddPermissions();
             services.AddRolePermissionOrganisations();
             services.AddTables();
+            services.AddUserPermissionOrganisations();
 
             services.AddScoped<IPermissionProvider, PermissionProvider>();
             services.AddScoped<IApplicationTableProvider, ApplicationTableProvider>();

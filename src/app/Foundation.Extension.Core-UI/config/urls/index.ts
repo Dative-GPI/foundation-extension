@@ -4,3 +4,4 @@ export * from "./permissions";
 export * from "./translations";
 export * from "./rolePermissionOrganisations";
 export * from "./tables";
+export * from "./userPermissionOrganisations";

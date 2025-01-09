@@ -2,17 +2,17 @@ import type { RouteRecordRaw } from "vue-router";
 
 export const routes: RouteRecordRaw[] = [
   {
-    path: "/organisations/:organisationId/admin-permission-organisations",
-    name: "admin-permission-organisations",
+    path: "/organisations/:organisationId/user-permission-organisations/:userId/:userType",
+    name: "user-permission-organisations",
     components: {
-      default: () => import("../views/AdminPermissionOrganisations.vue")
+      default: () => import("../views/UserPermissionOrganisation.vue")
     }
   },
   {
     path: "/organisations/:organisationId/role-permission-organisations/:roleId",
     name: "role-permission-organisations",
     components: {
-      default: () => import("../views/RolePermissionOrganisations.vue")
+      default: () => import("../views/RolePermissionOrganisation.vue")
     }
   },
   {

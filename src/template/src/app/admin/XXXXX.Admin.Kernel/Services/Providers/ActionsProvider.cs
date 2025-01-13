@@ -17,14 +17,14 @@ namespace XXXXX.Admin.Kernel.Services
 		private IPermissionProvider _permissionProvider;
 		private ITranslationsProvider _translationsProvider;
 		private IServiceProvider _serviceProvider;
-		private IExtensionMatcher _templateMatcher;
+		private ITemplateMatcher _templateMatcher;
 
 		public ActionsProvider(
 			IRequestContextProvider requestContextProvider,
 			IPermissionProvider permissionProvider,
 			ITranslationsProvider translationsProvider,
 			IServiceProvider serviceProvider,
-			IExtensionMatcher templateMatcher
+			ITemplateMatcher templateMatcher
 		)
 		{
 			_requestContextProvider = requestContextProvider;

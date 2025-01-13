@@ -8,7 +8,7 @@ using Foundation.Extension.Domain.Abstractions;
 
 namespace Foundation.Extension.CrossCutting.Services
 {
-	public class RouteExtensionMatcher : IExtensionMatcher
+	public class RouteTemplateMatcher : ITemplateMatcher
 	{
 		public bool TryMatch(string template, string value, out Dictionary<string, string> result, Dictionary<string, string> defaults = null)
 		{

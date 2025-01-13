@@ -16,7 +16,7 @@ namespace XXXXX.Core.Kernel.Services.Providers
         private readonly IPermissionProvider _permissionProvider;
         private readonly ITranslationsProvider _translationsProvider;
         private readonly IRequestContextProvider _requestContextProvider;
-        private readonly IExtensionMatcher _templateMatcher;
+        private readonly ITemplateMatcher _templateMatcher;
         private readonly IServiceProvider _serviceProvider;
 
         public ActionsProvider
@@ -24,7 +24,7 @@ namespace XXXXX.Core.Kernel.Services.Providers
             IPermissionProvider permissionProvider,
             ITranslationsProvider translationsProvider,
             IRequestContextProvider requestContextProvider,
-            IExtensionMatcher templateMatcher,
+            ITemplateMatcher templateMatcher,
             IServiceProvider serviceProvider
         )
         {

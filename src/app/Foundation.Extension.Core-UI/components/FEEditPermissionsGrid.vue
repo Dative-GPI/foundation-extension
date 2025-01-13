@@ -66,6 +66,8 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, type PropType, ref } from "vue";
 
+import { containsSearchTerm } from "@dative-gpi/foundation-shared-components/utils";
+
 import { usePermissionOrganisations, usePermissionOrganisationCategories } from "../composables";
 
 export default defineComponent({
@@ -100,7 +102,7 @@ export default defineComponent({
         let reducedGrid = { ...grid, items: [...grid.items] };
         if (search.value.length) {
           reducedGrid.items = reducedGrid.items
-            .filter(item => JSON.stringify(item).toLowerCase().includes(search.value.toLowerCase()));
+            .filter(item => containsSearchTerm(item, search.value.toLowerCase()));
         }
         if (reducedGrid.items.length) {
           acc.push(reducedGrid);

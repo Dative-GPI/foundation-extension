@@ -1,7 +1,7 @@
 <template>
   <FEDialogSubmit
     v-if="dialogId"
-    :width="700"
+    :width="708"
     :title="title"
     v-model="dialog"
     v-bind="$attrs"
@@ -24,14 +24,13 @@ import Ajv from "ajv";
 
 import { ColorEnum } from "@dative-gpi/foundation-shared-components/models";
 
+import { type DateRangePayload, dateRangePayloadSchema, type DialogReady, type SubmitDateRange} from "../domain/dialogs";
 import { useExtensionCommunicationBridge } from "../composables";
 
 import FEDialogSubmit from "./FEDialogSubmit.vue";
-import type { DateRangePayload, DialogReady, SubmitDateRange} from "../domain/dialogs";
-import { dateRangePayloadSchema } from "../domain/dialogs";
 
 export default defineComponent({
-  name: "FEDialogRemove",
+  name: "FEDialogDateRange",
   components: {
     FEDialogSubmit
   },
@@ -48,7 +47,9 @@ export default defineComponent({
     });
 
     const onSubmit = () => {
-      if(!dialogId.value) {return;}
+      if (!dialogId.value) {
+        return;
+      }
       let message: SubmitDateRange = {
         messageType: "dialog-submit-date-range",
         dialogId: dialogId.value,
@@ -62,12 +63,14 @@ export default defineComponent({
       subscribeUnsafe(
         location.href,
         (payload: DateRangePayload) => {
-          if(payload.dialogId !== dialogId.value) {return;}
+          if (payload.dialogId !== dialogId.value) {
+            return;
+          }
           dateRange.value = payload.dateRange;
-          if(payload.title) {
+          if (payload.title) {
             title.value = payload.title;
           }
-          if(payload.color) {
+          if (payload.color) {
             color.value = payload.color;
           }
         },
@@ -76,7 +79,9 @@ export default defineComponent({
     })
 
     watch(() => dialogId.value, () => {
-      if(!dialogId.value) {return;}
+      if (!dialogId.value) {
+        return;
+      }
       let message: DialogReady = {
         messageType: "dialog-ready",
         dialogId: dialogId.value
@@ -94,5 +99,5 @@ export default defineComponent({
       title
     };
   }
-})
+});
 </script>

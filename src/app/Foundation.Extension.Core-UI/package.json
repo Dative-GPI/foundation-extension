@@ -15,11 +15,11 @@
     "@dative-gpi/foundation-extension-shared-ui": "1.0.0"
   },
   "peerDependencies": {
-    "@dative-gpi/foundation-core-components": "^1.0.125",
-    "@dative-gpi/foundation-core-services": "^1.0.125",
-    "@dative-gpi/foundation-admin-components": "^1.0.125",
-    "@dative-gpi/foundation-shared-components": "^1.0.125",
-    "@dative-gpi/foundation-shared-loader": "^1.0.125",
+    "@dative-gpi/foundation-core-components": "^1.0.131",
+    "@dative-gpi/foundation-core-services": "^1.0.131",
+    "@dative-gpi/foundation-admin-components": "^1.0.131",
+    "@dative-gpi/foundation-shared-components": "^1.0.131",
+    "@dative-gpi/foundation-shared-loader": "^1.0.131",
     "@types/lodash": "^4.14.197",
     "axios": "^1.7.2",
     "lodash": "^4.17.21",

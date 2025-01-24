@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 using AutoMapper;
+
 using Bones.Flow;
 
 using Foundation.Extension.Domain.Models;
@@ -16,24 +15,24 @@ namespace Foundation.Extension.Core.Services
 {
     public class PermissionOrganisationService : IPermissionOrganisationService
     {
-        private readonly IPermissionProvider _permissionProvider;
-        private readonly IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategory>> _categoriesQueryHandler;
-        private readonly IQueryHandler<PermissionOrganisationsQuery, IEnumerable<PermissionOrganisationInfos>> _permissionsQueryHandler;
         private readonly IRequestContextProvider _requestContextProvider;
+        private readonly IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategory>> _permissionOrganisationCategoriesQueryHandler;
+        private readonly IQueryHandler<PermissionOrganisationsQuery, IEnumerable<PermissionOrganisationInfos>> _permissionOrganisationsQueryHandler;
+        private readonly IPermissionProvider _permissionProvider;
         private readonly IMapper _mapper;
 
-        public PermissionOrganisationService(
-            IQueryHandler<PermissionOrganisationsQuery, IEnumerable<PermissionOrganisationInfos>> permissionsQueryHandler,
-            IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategory>> categoriesQueryHandler,
+        public PermissionOrganisationService
+        (
             IRequestContextProvider requestContextProvider,
+            IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategory>> permissionOrganisationCategoriesQueryHandler,
+            IQueryHandler<PermissionOrganisationsQuery, IEnumerable<PermissionOrganisationInfos>> permissionOrganisationsQueryHandler,
             IPermissionProvider permissionProvider,
             IMapper mapper
         )
         {
-            _categoriesQueryHandler = categoriesQueryHandler;
-            _permissionsQueryHandler = permissionsQueryHandler;
-
             _requestContextProvider = requestContextProvider;
+            _permissionOrganisationCategoriesQueryHandler = permissionOrganisationCategoriesQueryHandler;
+            _permissionOrganisationsQueryHandler = permissionOrganisationsQueryHandler;
             _permissionProvider = permissionProvider;
             _mapper = mapper;
         }
@@ -47,7 +46,7 @@ namespace Foundation.Extension.Core.Services
         {
             var query = new PermissionOrganisationCategoriesQuery();
 
-            var categories = await _categoriesQueryHandler.HandleAsync(query);
+            var categories = await _permissionOrganisationCategoriesQueryHandler.HandleAsync(query);
 
             var context = _requestContextProvider.Context;
             return _mapper.Map<IEnumerable<PermissionOrganisationCategory>, IEnumerable<PermissionOrganisationCategoryViewModel>>(categories, opt => opt.Items.Add(LANGUAGE, context.LanguageCode));
@@ -57,7 +56,7 @@ namespace Foundation.Extension.Core.Services
         {
             var query = new PermissionOrganisationsQuery();
 
-            var result = await _permissionsQueryHandler.HandleAsync(query);
+            var result = await _permissionOrganisationsQueryHandler.HandleAsync(query);
 
             return _mapper.Map<IEnumerable<PermissionOrganisationInfos>, IEnumerable<PermissionOrganisationInfosViewModel>>(result);
         }

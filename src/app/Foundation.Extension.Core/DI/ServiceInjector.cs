@@ -14,9 +14,10 @@ namespace Foundation.Extension.Core.DI
 			services.AddScoped<IRoleOrganisationService, RoleOrganisationService>();
 			services.AddScoped<IRoleOrganisationTypeService, RoleOrganisationTypeService>();
 			services.AddScoped<IRouteService, RouteService>();
+			services.AddScoped<IServiceAccountOrganisationService, ServiceAccountOrganisationService>();
 			services.AddScoped<IServiceAccountRoleOrganisationService, ServiceAccountRoleOrganisationService>();
+			services.AddScoped<IUserOrganisationService, UserOrganisationService>();
 			services.AddScoped<IUserOrganisationTableService, UserOrganisationTableService>();
-			services.AddScoped<IUserPermissionOrganisationService, UserPermissionOrganisationService>();
 
 			return services;
 		}

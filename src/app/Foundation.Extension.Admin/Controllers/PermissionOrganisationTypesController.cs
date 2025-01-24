@@ -9,7 +9,7 @@ using Foundation.Extension.Admin.ViewModels;
 
 namespace Foundation.Extension.Admin.Controllers
 {
-    [Route("api/admin/v1")]
+    [Route("api/admin/v1/permission-organisation-types")]
     public class PermissionOrganisationTypesController : ControllerBase
     {
         private readonly IPermissionOrganisationTypeService _permissionOrganisationTypeService;
@@ -19,7 +19,6 @@ namespace Foundation.Extension.Admin.Controllers
             _permissionOrganisationTypeService = permissionOrganisationTypeService;
         }
         
-        [Route("permission-organisation-types")]
         [HttpGet]
         public async Task<IActionResult> GetMany([FromQuery] PermissionOrganisationTypesFilterViewModel filter)
         {
@@ -27,7 +26,6 @@ namespace Foundation.Extension.Admin.Controllers
             return Ok(result);
         }
 
-        [Route("permission-organisation-types")]
         [HttpPatch]
         public async Task<ActionResult<IEnumerable<PermissionOrganisationTypeInfosViewModel>>> Upsert([FromBody] List<UpsertPermissionOrganisationTypesViewModel> payload)
         {

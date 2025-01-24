@@ -1,6 +1,6 @@
 namespace Foundation.Extension.Core.ViewModels
 {
-    public class ServiceAccountRoleOrganisationDetailsViewModel : BaseRoleDetailsViewModel
+    public class ServiceAccountRoleOrganisationDetailsViewModel : BasePermissionDetailsViewModel
     {
     }
 }

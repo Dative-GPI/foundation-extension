@@ -19,14 +19,14 @@ namespace Foundation.Extension.Core.Controllers
         }
 
         [HttpGet("{serviceAccountRoleOrganisationId:Guid}")]
-        public async Task<IActionResult> Get([FromRoute] Guid serviceAccountRoleOrganisationId)
+        public async Task<ActionResult<ServiceAccountRoleOrganisationDetailsViewModel>> Get([FromRoute] Guid serviceAccountRoleOrganisationId)
         {
             var result = await _serviceAccountRoleOrganisationService.Get(serviceAccountRoleOrganisationId);
             return Ok(result);
         }
 
         [HttpPost("{serviceAccountRoleOrganisationId:Guid}")]
-        public async Task<IActionResult> Update([FromRoute] Guid serviceAccountRoleOrganisationId, [FromBody] UpdateServiceAccountRoleOrganisationViewModel payload)
+        public async Task<ActionResult<ServiceAccountRoleOrganisationDetailsViewModel>> Update([FromRoute] Guid serviceAccountRoleOrganisationId, [FromBody] UpdateServiceAccountRoleOrganisationViewModel payload)
         {
             var result = await _serviceAccountRoleOrganisationService.Update(serviceAccountRoleOrganisationId, payload);
             return Ok(result);

@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
@@ -7,39 +6,27 @@ using Foundation.Extension.Core.Abstractions;
 
 namespace Foundation.Extension.Core.Controllers
 {
-    [Route("api/core/v1")]
+    [Route("api/core/v1/organisations/{organisationId:Guid}/permissions")]
     public class PermissionOrganisationsController : ControllerBase
     {
-        private readonly IPermissionOrganisationService _permissionService;
+        private readonly IPermissionOrganisationService _permissionOrganisationService;
 
-        public PermissionOrganisationsController(IPermissionOrganisationService permissionService)
+        public PermissionOrganisationsController(IPermissionOrganisationService permissionOrganisationService)
         {
-            _permissionService = permissionService;
+            _permissionOrganisationService = permissionOrganisationService;
         }
 
-        [Route("organisations/{organisationId:Guid}/permissions/current")]
-        [HttpGet]
-        public async Task<IActionResult> GetCurrent()
+        [HttpGet("categories")]
+        public async Task<IActionResult> GetCategories()
         {
-            var result = await _permissionService.GetCurrent();
+            var result = await _permissionOrganisationService.GetCategories();
             return Ok(result);
         }
 
-
-        [Route("organisations/{organisationId:Guid}/permissions")]
         [HttpGet]
         public async Task<IActionResult> GetMany()
         {
-            var result = await _permissionService.GetMany();
-            return Ok(result);
-        }
-
-
-        [Route("organisations/{organisationId:Guid}/permissions/categories")]
-        [HttpGet]
-        public async Task<IActionResult> GetCategories()
-        {
-            var result = await _permissionService.GetCategories();
+            var result = await _permissionOrganisationService.GetMany();
             return Ok(result);
         }
     }

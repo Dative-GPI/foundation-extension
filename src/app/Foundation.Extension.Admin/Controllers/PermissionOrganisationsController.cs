@@ -1,6 +1,4 @@
-using System;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,21 +7,20 @@ using Foundation.Extension.Admin.ViewModels;
 
 namespace Foundation.Extension.Admin.Controllers
 {
-    [Route("api/admin/v1")]
+    [Route("api/admin/v1/permission-organisations")]
     public class PermissionOrganisationsController : ControllerBase
     {
-        private readonly IPermissionOrganisationService _permissionService;
+        private readonly IPermissionOrganisationService _permissionOrganisationService;
 
-        public PermissionOrganisationsController(IPermissionOrganisationService permissionService)
+        public PermissionOrganisationsController(IPermissionOrganisationService permissionOrganisationService)
         {
-            _permissionService = permissionService;
+            _permissionOrganisationService = permissionOrganisationService;
         }
 
-        [Route("permission-organisations")]
         [HttpGet]
-        public async Task<IActionResult> GetMany([FromQuery] PermissionsFilterViewModel filter)
+        public async Task<IActionResult> GetMany([FromQuery] PermissionOrganisationsFilterViewModel filter)
         {
-            var result = await _permissionService.GetMany(filter);
+            var result = await _permissionOrganisationService.GetMany(filter);
             return Ok(result);
         }
     }

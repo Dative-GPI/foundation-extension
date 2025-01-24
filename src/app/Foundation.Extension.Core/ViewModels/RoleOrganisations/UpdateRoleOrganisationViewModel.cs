@@ -1,6 +1,6 @@
 namespace Foundation.Extension.Core.ViewModels
 {
-    public class UpdateRoleOrganisationViewModel : UpdateBaseRoleViewModel
+    public class UpdateRoleOrganisationViewModel : UpdateBasePermissionViewModel
     {
     }
 }

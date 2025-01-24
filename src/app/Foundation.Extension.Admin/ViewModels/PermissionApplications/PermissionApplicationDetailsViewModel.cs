@@ -8,6 +8,6 @@ namespace Foundation.Extension.Admin.ViewModels
         public Guid Id { get; set; }
         public string Code { get; set; }
         public string Label { get; set; }
-        public List<TranslationPermissionApplicationViewModel> Translations { get; set; }
+        public List<TranslationPermissionViewModel> Translations { get; set; }
     }
 }

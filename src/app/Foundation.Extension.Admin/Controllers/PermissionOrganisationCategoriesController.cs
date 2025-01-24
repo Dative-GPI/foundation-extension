@@ -6,7 +6,7 @@ using Foundation.Extension.Admin.Abstractions;
 
 namespace Foundation.Extension.Admin.Controllers
 {
-    [Route("api/admin/v1")]
+    [Route("api/admin/v1/permission-organisation-categories")]
     public class PermissionOrganisationCategoriesController : ControllerBase
     {
         private readonly IPermissionOrganisationCategoryService _permissionOrganisationCategoryService;
@@ -16,7 +16,6 @@ namespace Foundation.Extension.Admin.Controllers
             _permissionOrganisationCategoryService = permissionOrganisationCategoryService;
         }
 
-        [Route("permission-organisation-categories")]
         [HttpGet]
         public async Task<IActionResult> GetMany()
         {

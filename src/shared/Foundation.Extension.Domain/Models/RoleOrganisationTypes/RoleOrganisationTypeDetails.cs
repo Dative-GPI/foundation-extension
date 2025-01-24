@@ -1,6 +1,6 @@
 namespace Foundation.Extension.Domain.Models
 {
-    public class RoleOrganisationTypeDetails : BaseRoleDetails
+    public class RoleOrganisationTypeDetails : BasePermissionDetails
     {
     }
 }

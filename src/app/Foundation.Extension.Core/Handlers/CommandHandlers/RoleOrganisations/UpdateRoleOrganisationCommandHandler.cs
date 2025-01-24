@@ -21,11 +21,13 @@ namespace Foundation.Extension.Core.Handlers
 
         public async Task<IEntity<Guid>> HandleAsync(UpdateRoleOrganisationCommand command, Func<Task<IEntity<Guid>>> next, CancellationToken cancellationToken)
         {
-            var baseRole = await _rolePermissionOrganisationRepository.Update(new UpdateRolePermissionOrganisation()
+            var update = new UpdateRolePermissionOrganisation()
             {
                 Id = command.RoleOrganisationId,
                 PermissionIds = command.PermissionIds
-            });
+            };
+
+            var baseRole = await _rolePermissionOrganisationRepository.Update(update);
 
             return baseRole;
         }

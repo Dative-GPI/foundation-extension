@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
@@ -15,10 +14,11 @@ namespace Foundation.Extension.Admin.Services
 {
     public class PermissionOrganisationCategoryService : IPermissionOrganisationCategoryService
     {
-        private IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategory>> _permissionCategoriesQueryHandler;
-        private IMapper _mapper;
+        private readonly IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategory>> _permissionCategoriesQueryHandler;
+        private readonly IMapper _mapper;
 
-        public PermissionOrganisationCategoryService(
+        public PermissionOrganisationCategoryService
+        (
             IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategory>> permissionCategoriesQueryHandler,
             IMapper mapper
         )
@@ -29,8 +29,7 @@ namespace Foundation.Extension.Admin.Services
 
         public async Task<IEnumerable<PermissionOrganisationCategoryViewModel>> GetMany()
         {
-            var query = new PermissionOrganisationCategoriesQuery() {
-            };
+            var query = new PermissionOrganisationCategoriesQuery();
 
             var result = await _permissionCategoriesQueryHandler.HandleAsync(query);
 

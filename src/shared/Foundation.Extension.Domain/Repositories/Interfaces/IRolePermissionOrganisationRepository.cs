@@ -10,7 +10,7 @@ namespace Foundation.Extension.Domain.Repositories.Interfaces
 {
     public interface IRolePermissionOrganisationRepository
     {
-        Task<BaseRoleDetails> Get(Guid roleId);
+        Task<BasePermissionDetails> Get(Guid roleId);
         Task<IEntity<Guid>> Update(UpdateRolePermissionOrganisation payload);
     }
 }

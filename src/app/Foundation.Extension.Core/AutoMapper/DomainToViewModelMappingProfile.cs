@@ -29,15 +29,18 @@ namespace Foundation.Extension.Core.AutoMapper
 
 			CreateMap<RouteInfos, RouteInfosViewModel>();
 
+			CreateMap<ServiceAccountOrganisationDetails, ServiceAccountOrganisationDetailsViewModel>()
+				.ForMember(vm => vm.PermissionIds, opt => opt.MapFrom(p => p.Permissions.Select(p => p.Id).ToList()));
+
 			CreateMap<ServiceAccountRoleOrganisationDetails, ServiceAccountRoleOrganisationDetailsViewModel>()
 				.ForMember(vm => vm.PermissionIds, opt => opt.MapFrom(p => p.Permissions.Select(p => p.Id).ToList()));
 
 			CreateMap<CompleteUserOrganisationColumnInfos, UserOrganisationColumnInfosViewModel>();
 
-			CreateMap<UserOrganisationTableDetails, UserOrganisationTableDetailsViewModel>();
-
-			CreateMap<UserPermissionOrganisationDetails, UserPermissionOrganisationDetailsViewModel>()
+			CreateMap<UserOrganisationDetails, UserOrganisationDetailsViewModel>()
 				.ForMember(vm => vm.PermissionIds, opt => opt.MapFrom(p => p.Permissions.Select(p => p.Id).ToList()));
+
+			CreateMap<UserOrganisationTableDetails, UserOrganisationTableDetailsViewModel>();
 		}
 	}
 }

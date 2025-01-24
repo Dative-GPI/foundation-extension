@@ -26,12 +26,13 @@ namespace Foundation.Extension.Core.DI
             services.AddServices();
             services.AddMiddlewares();
 
-            services.AddPermissions();
+            services.AddPermissionOrganisations();
             services.AddRoleOrganisations();
             services.AddRoleOrganisationTypes();
+            services.AddServiceAccountOrganisations();
             services.AddServiceAccountRoleOrganisations();
             services.AddTables();
-            services.AddUserPermissionOrganisations();
+            services.AddUserOrganisations();
 
             services.AddScoped<IPermissionProvider, PermissionProvider>();
             services.AddScoped<IApplicationTableProvider, ApplicationTableProvider>();

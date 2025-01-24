@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 using Foundation.Extension.Core.Abstractions;
+using Foundation.Extension.Core.ViewModels;
 
 namespace Foundation.Extension.Core.Controllers
 {
@@ -18,7 +19,7 @@ namespace Foundation.Extension.Core.Controllers
         }
 
         [HttpGet("{roleOrganisationTypeId:Guid}")]
-        public async Task<IActionResult> Get([FromRoute] Guid roleOrganisationTypeId)
+        public async Task<ActionResult<RoleOrganisationTypeDetailsViewModel>> Get([FromRoute] Guid roleOrganisationTypeId)
         {
             var result = await _roleOrganisationTypeService.Get(roleOrganisationTypeId);
             return Ok(result);

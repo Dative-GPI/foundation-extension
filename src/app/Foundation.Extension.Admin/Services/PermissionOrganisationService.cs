@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
@@ -10,16 +9,16 @@ using Foundation.Extension.Domain.Models;
 
 using Foundation.Extension.Admin.Abstractions;
 using Foundation.Extension.Admin.ViewModels;
-using Foundation.Extension.Domain.Repositories.Interfaces;
 
 namespace Foundation.Extension.Admin.Services
 {
     public class PermissionOrganisationService : IPermissionOrganisationService
     {
-        private IQueryHandler<PermissionOrganisationsQuery, IEnumerable<PermissionOrganisationInfos>> _permissionsQueryHandler;
-        private IMapper _mapper;
+        private readonly IQueryHandler<PermissionOrganisationsQuery, IEnumerable<PermissionOrganisationInfos>> _permissionsQueryHandler;
+        private readonly IMapper _mapper;
 
-        public PermissionOrganisationService(
+        public PermissionOrganisationService
+        (
             IQueryHandler<PermissionOrganisationsQuery, IEnumerable<PermissionOrganisationInfos>> permissionsQueryHandler,
             IMapper mapper
         )
@@ -28,7 +27,7 @@ namespace Foundation.Extension.Admin.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<PermissionOrganisationInfosViewModel>> GetMany(PermissionsFilterViewModel filter)
+        public async Task<IEnumerable<PermissionOrganisationInfosViewModel>> GetMany(PermissionOrganisationsFilterViewModel filter)
         {
             var query = new PermissionOrganisationsQuery()
             {

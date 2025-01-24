@@ -24,7 +24,7 @@ namespace Foundation.Extension.Context.Repositories
             _dbSet = context.RolePermissionOrganisations;
         }
 
-        public async Task<BaseRoleDetails> Get(Guid id)
+        public async Task<BasePermissionDetails> Get(Guid id)
         {
             var permissions = await _dbSet
                 .Include(p => p.PermissionOrganisation)
@@ -32,7 +32,7 @@ namespace Foundation.Extension.Context.Repositories
                 .AsNoTracking()
                 .ToListAsync();
 
-            return new BaseRoleDetails()
+            return new BasePermissionDetails()
             {
                 Id = id,
                 Permissions = permissions.Select(p => new PermissionItem()

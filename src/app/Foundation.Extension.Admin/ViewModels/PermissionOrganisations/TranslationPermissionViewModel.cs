@@ -1,5 +1,3 @@
-using System;
-
 namespace Foundation.Extension.Admin.ViewModels
 {
     public class TranslationPermissionViewModel

@@ -1,9 +1,10 @@
+using System.Linq;
+
 using AutoMapper;
 using AutoMapper.Internal;
 
 using Foundation.Extension.Domain.Models;
 using Foundation.Extension.Core.ViewModels;
-using System.Linq;
 
 namespace Foundation.Extension.Core.AutoMapper
 {
@@ -13,20 +14,30 @@ namespace Foundation.Extension.Core.AutoMapper
 		{
 			InternalApi.Internal(this).ForAllMaps(TranslationMapper.Map);
 
-			CreateMap<RouteInfos, RouteInfosViewModel>();
-
-			CreateMap<PermissionOrganisationInfos, PermissionOrganisationInfosViewModel>();
-			CreateMap<PermissionOrganisationCategory, PermissionOrganisationCategoryViewModel>();
-			CreateMap<RolePermissionOrganisationDetails, RolePermissionOrganisationDetailsViewModel>()
-				.ForMember(vm => vm.PermissionIds, opt => opt.MapFrom(p => p.Permissions.Select(p => p.Id).ToList()));
-			CreateMap<UserPermissionOrganisationDetails, UserPermissionOrganisationDetailsViewModel>()
-				.ForMember(vm => vm.PermissionIds, opt => opt.MapFrom(p => p.Permissions.Select(p => p.Id).ToList()));
 			CreateMap<ActionInfos, ActionInfosViewModel>();
 
+			CreateMap<PathCrumb, PathCrumbViewModel>();
+
+			CreateMap<PermissionOrganisationCategory, PermissionOrganisationCategoryViewModel>();
+			CreateMap<PermissionOrganisationInfos, PermissionOrganisationInfosViewModel>();
+
+			CreateMap<RoleOrganisationDetails, RoleOrganisationDetailsViewModel>()
+				.ForMember(vm => vm.PermissionIds, opt => opt.MapFrom(p => p.Permissions.Select(p => p.Id).ToList()));
+
+			CreateMap<RoleOrganisationTypeDetails, RoleOrganisationTypeDetailsViewModel>()
+				.ForMember(vm => vm.PermissionIds, opt => opt.MapFrom(p => p.Permissions.Select(p => p.Id).ToList()));
+
+			CreateMap<RouteInfos, RouteInfosViewModel>();
+
+			CreateMap<ServiceAccountRoleOrganisationDetails, ServiceAccountRoleOrganisationDetailsViewModel>()
+				.ForMember(vm => vm.PermissionIds, opt => opt.MapFrom(p => p.Permissions.Select(p => p.Id).ToList()));
+
 			CreateMap<CompleteUserOrganisationColumnInfos, UserOrganisationColumnInfosViewModel>();
+
 			CreateMap<UserOrganisationTableDetails, UserOrganisationTableDetailsViewModel>();
 
-			CreateMap<PathCrumb, PathCrumbViewModel>();
+			CreateMap<UserPermissionOrganisationDetails, UserPermissionOrganisationDetailsViewModel>()
+				.ForMember(vm => vm.PermissionIds, opt => opt.MapFrom(p => p.Permissions.Select(p => p.Id).ToList()));
 		}
 	}
 }

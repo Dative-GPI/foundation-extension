@@ -1,18 +1,18 @@
 using System;
-using System.Collections.Generic;
+
 using Microsoft.Extensions.DependencyInjection;
 
 using Bones.Flow;
+using Bones.Repository.Interfaces;
 
 using Foundation.Extension.Domain.Models;
 using Foundation.Extension.Admin.Handlers;
-using Bones.Repository.Interfaces;
 
 namespace Foundation.Extension.Admin.DI
 {
     public static class RoleApplicationInjector
     {
-        public static IServiceCollection AddRoleApplication(this IServiceCollection services)
+        public static IServiceCollection AddRoleApplications(this IServiceCollection services)
         {
             services.AddScoped<RoleApplicationQueryHandler>();
             services.AddScoped<IQueryHandler<RoleApplicationQuery, RoleApplicationDetails>>(sp =>
@@ -24,7 +24,6 @@ namespace Foundation.Extension.Admin.DI
 
                 return pipeline;
             });
-
 
             services.AddScoped<UpdateRoleApplicationCommandHandler>();
             services.AddScoped<ICommandHandler<UpdateRoleApplicationCommand, IEntity<Guid>>>(sp =>

@@ -15,26 +15,26 @@ using Foundation.Extension.Context.DTOs;
 
 namespace Foundation.Extension.Context.Repositories
 {
-    public class RolePermissionOrganisationRepository : IRolePermissionOrganisationRepository
+    public class RoleOrganisationTypeRepository : IRoleOrganisationTypeRepository
     {
         private readonly DbSet<RolePermissionOrganisationDTO> _dbSet;
 
-        public RolePermissionOrganisationRepository(BaseApplicationContext context)
+        public RoleOrganisationTypeRepository(BaseApplicationContext context)
         {
             _dbSet = context.RolePermissionOrganisations;
         }
 
-        public async Task<BasePermissionDetails> Get(Guid id)
+        public async Task<RoleOrganisationTypeDetails> Get(Guid roleOrganisationTypeId)
         {
             var permissions = await _dbSet
                 .Include(p => p.PermissionOrganisation)
-                .Where(p => p.RoleId == id)
+                .Where(p => p.RoleId == roleOrganisationTypeId)
                 .AsNoTracking()
                 .ToListAsync();
 
-            return new BasePermissionDetails()
+            return new RoleOrganisationTypeDetails()
             {
-                Id = id,
+                Id = roleOrganisationTypeId,
                 Permissions = permissions.Select(p => new PermissionItem()
                 {
                     Id = p.PermissionOrganisationId,
@@ -43,7 +43,7 @@ namespace Foundation.Extension.Context.Repositories
             };
         }
 
-        public async Task<IEntity<Guid>> Update(UpdateRolePermissionOrganisation payload)
+        public async Task<IEntity<Guid>> Update(UpdateRoleOrganisationType payload)
         {
             var formerPermissions = await _dbSet.Where(p => p.RoleId == payload.Id).ToListAsync();
 

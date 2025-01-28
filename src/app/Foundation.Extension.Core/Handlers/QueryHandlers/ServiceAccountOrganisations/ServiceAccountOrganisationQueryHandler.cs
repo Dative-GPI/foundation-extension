@@ -18,20 +18,20 @@ namespace Foundation.Extension.Core.Handlers
     {
 		private readonly IFoundationClientFactory _foundationClientFactory;
 		private readonly IPermissionOrganisationTypeRepository _permissionOrganisationTypeRepository;
-        private readonly IRolePermissionOrganisationRepository _rolePermissionOrganisationRepository;
+        private readonly IServiceAccountRoleOrganisationRepository _serviceAccountRoleOrganisationRepository;
 		private readonly IRequestContextProvider _requestContextProvider;
 
         public ServiceAccountOrganisationQueryHandler
         (
             IFoundationClientFactory foundationClientFactory,
             IPermissionOrganisationTypeRepository permissionOrganisationTypeRepository,
-            IRolePermissionOrganisationRepository rolePermissionOrganisationRepository,
+            IServiceAccountRoleOrganisationRepository serviceAccountRoleOrganisationRepository,
             IRequestContextProvider requestContextProvider
         )
         {
             _foundationClientFactory = foundationClientFactory;
             _permissionOrganisationTypeRepository = permissionOrganisationTypeRepository;
-            _rolePermissionOrganisationRepository = rolePermissionOrganisationRepository;
+            _serviceAccountRoleOrganisationRepository = serviceAccountRoleOrganisationRepository;
             _requestContextProvider = requestContextProvider;
         }
 
@@ -61,7 +61,7 @@ namespace Foundation.Extension.Core.Handlers
             
 			var permissionOrganisationTypes = await _permissionOrganisationTypeRepository.GetMany(permissionOrganisationTypesFilter);
 
-            var serviceAccountRoleOrganisation = await _rolePermissionOrganisationRepository.Get(serviceAccountOrganisation.RoleId.Value);
+            var serviceAccountRoleOrganisation = await _serviceAccountRoleOrganisationRepository.Get(serviceAccountOrganisation.RoleId.Value);
 
 			return new ServiceAccountOrganisationDetails()
             {

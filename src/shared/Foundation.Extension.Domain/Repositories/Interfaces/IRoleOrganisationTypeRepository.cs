@@ -8,9 +8,9 @@ using Foundation.Extension.Domain.Repositories.Commands;
 
 namespace Foundation.Extension.Domain.Repositories.Interfaces
 {
-    public interface IRoleApplicationRepository
+    public interface IRoleOrganisationTypeRepository
     {
-        Task<RoleApplicationDetails> Get(Guid roleApplicationId);
-        Task<IEntity<Guid>> Update(UpdateRoleApplication payload);
+        Task<RoleOrganisationTypeDetails> Get(Guid roleOrganisationTypeId);
+        Task<IEntity<Guid>> Update(UpdateRoleOrganisationType payload);
     }
 }

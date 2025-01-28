@@ -23,8 +23,10 @@ namespace Foundation.Extension.Context.DI
             services.AddScoped<IPermissionApplicationRepository, PermissionApplicationRepository>();
             services.AddScoped<IPermissionApplicationCategoryRepository, PermissionApplicationCategoryRepository>();
 
-            services.AddScoped<IRolePermissionOrganisationRepository, RolePermissionOrganisationRepository>();
             services.AddScoped<IRoleApplicationRepository, RoleApplicationRepository>();
+            services.AddScoped<IRoleOrganisationRepository, RoleOrganisationRepository>();
+            services.AddScoped<IRoleOrganisationTypeRepository, RoleOrganisationTypeRepository>();
+            services.AddScoped<IServiceAccountRoleOrganisationRepository, ServiceAccountRoleOrganisationRepository>();
 
             services.AddScoped<IApplicationTranslationRepository, ApplicationTranslationRepository>();
             services.AddScoped<ITranslationRepository, TranslationRepository>();

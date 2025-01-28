@@ -12,24 +12,24 @@ namespace Foundation.Extension.Admin.Handlers
 {
     public class UpdateRoleOrganisationTypeCommandHandler : IMiddleware<UpdateRoleOrganisationTypeCommand, IEntity<Guid>>
     {
-        private readonly IRolePermissionOrganisationRepository _rolePermissionOrganisationRepository;
+        private readonly IRoleOrganisationTypeRepository _roleOrganisationTypeRepository;
 
-        public UpdateRoleOrganisationTypeCommandHandler(IRolePermissionOrganisationRepository rolePermissionOrganisationRepository)
+        public UpdateRoleOrganisationTypeCommandHandler(IRoleOrganisationTypeRepository roleOrganisationTypeRepository)
         {
-            _rolePermissionOrganisationRepository = rolePermissionOrganisationRepository;
+            _roleOrganisationTypeRepository = roleOrganisationTypeRepository;
         }
 
         public async Task<IEntity<Guid>> HandleAsync(UpdateRoleOrganisationTypeCommand command, Func<Task<IEntity<Guid>>> next, CancellationToken cancellationToken)
         {
-            var update = new UpdateRolePermissionOrganisation()
+            var update = new UpdateRoleOrganisationType()
             {
                 Id = command.RoleOrganisationTypeId,
                 PermissionIds = command.PermissionIds
             };
 
-            var baseRole = await _rolePermissionOrganisationRepository.Update(update);
+            var roleOrganisationType = await _roleOrganisationTypeRepository.Update(update);
 
-            return baseRole;
+            return roleOrganisationType;
         }
     }
 }

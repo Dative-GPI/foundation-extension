@@ -19,20 +19,20 @@ namespace Foundation.Extension.Admin.Services
     {
         private readonly IQueryHandler<RoleOrganisationTypeQuery, RoleOrganisationTypeDetails> _roleOrganisationTypeQueryHandler;
         private readonly ICommandHandler<UpdateRoleOrganisationTypeCommand, IEntity<Guid>> _updateRoleOrganisationTypeCommandHandler;
-        private readonly IRolePermissionOrganisationRepository _rolePermissionOrganisationRepository;
+        private readonly IRoleOrganisationTypeRepository _roleOrganisationTypeRepository;
         private readonly IMapper _mapper;
 
         public RoleOrganisationTypeService
         (
             IQueryHandler<RoleOrganisationTypeQuery, RoleOrganisationTypeDetails> roleOrganisationTypeQueryHandler,
             ICommandHandler<UpdateRoleOrganisationTypeCommand, IEntity<Guid>> updateRoleOrganisationTypeCommandHandler,
-            IRolePermissionOrganisationRepository rolePermissionOrganisationRepository,
+            IRoleOrganisationTypeRepository roleOrganisationTypeRepository,
             IMapper mapper
         )
         {
             _roleOrganisationTypeQueryHandler = roleOrganisationTypeQueryHandler;
             _updateRoleOrganisationTypeCommandHandler = updateRoleOrganisationTypeCommandHandler;
-            _rolePermissionOrganisationRepository = rolePermissionOrganisationRepository;
+            _roleOrganisationTypeRepository = roleOrganisationTypeRepository;
             _mapper = mapper;
         }
 
@@ -58,13 +58,7 @@ namespace Foundation.Extension.Admin.Services
             };
 
             var entity = await _updateRoleOrganisationTypeCommandHandler.HandleAsync(command);
-            var baseRole = await _rolePermissionOrganisationRepository.Get(entity.Id);
-
-            var result = new RoleOrganisationTypeDetails()
-            {
-                Id = roleOrganisationTypeId,
-                Permissions = baseRole.Permissions
-            };
+            var result = await _roleOrganisationTypeRepository.Get(entity.Id);
 
             return _mapper.Map<RoleOrganisationTypeDetails, RoleOrganisationTypeDetailsViewModel>(result);
         }

@@ -11,22 +11,18 @@ namespace Foundation.Extension.Core.Handlers
 {
     public class ServiceAccountRoleOrganisationQueryHandler : IMiddleware<ServiceAccountRoleOrganisationQuery, ServiceAccountRoleOrganisationDetails>
     {
-        private readonly IRolePermissionOrganisationRepository _rolePermissionOrganisationRepository;
+        private readonly IServiceAccountRoleOrganisationRepository _serviceAccountRoleOrganisationRepository;
 
-        public ServiceAccountRoleOrganisationQueryHandler(IRolePermissionOrganisationRepository rolePermissionOrganisationRepository)
+        public ServiceAccountRoleOrganisationQueryHandler(IServiceAccountRoleOrganisationRepository serviceAccountRoleOrganisationRepository)
         {
-            _rolePermissionOrganisationRepository = rolePermissionOrganisationRepository;
+            _serviceAccountRoleOrganisationRepository = serviceAccountRoleOrganisationRepository;
         }
 
         public async Task<ServiceAccountRoleOrganisationDetails> HandleAsync(ServiceAccountRoleOrganisationQuery request, Func<Task<ServiceAccountRoleOrganisationDetails>> next, CancellationToken cancellationToken)
         {
-            var baseRole = await _rolePermissionOrganisationRepository.Get(request.ServiceAccountRoleOrganisationId);
+            var serviceAccountRoleOrganisation = await _serviceAccountRoleOrganisationRepository.Get(request.ServiceAccountRoleOrganisationId);
 
-            return new ServiceAccountRoleOrganisationDetails()
-            {
-                Id = request.ServiceAccountRoleOrganisationId,
-                Permissions = baseRole.Permissions
-            };
+            return serviceAccountRoleOrganisation;
         }
     }
 }

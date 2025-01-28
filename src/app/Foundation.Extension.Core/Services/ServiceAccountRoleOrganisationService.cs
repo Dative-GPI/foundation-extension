@@ -20,7 +20,7 @@ namespace Foundation.Extension.Core.Services
     {
         private readonly IQueryHandler<ServiceAccountRoleOrganisationQuery, ServiceAccountRoleOrganisationDetails> _serviceAccountRoleOrganisationQueryHandler;
         private readonly ICommandHandler<UpdateServiceAccountRoleOrganisationCommand, IEntity<Guid>> _updateServiceAccountRoleOrganisationCommandHandler;
-        private readonly IRolePermissionOrganisationRepository _rolePermissionOrganisationRepository;
+        private readonly IServiceAccountRoleOrganisationRepository _serviceAccountRoleOrganisationRepository;
         private readonly IRequestContextProvider _requestContextProvider;
         private readonly IMapper _mapper;
 
@@ -28,14 +28,14 @@ namespace Foundation.Extension.Core.Services
         (
             IQueryHandler<ServiceAccountRoleOrganisationQuery, ServiceAccountRoleOrganisationDetails> serviceAccountRoleOrganisationQueryHandler,
             ICommandHandler<UpdateServiceAccountRoleOrganisationCommand, IEntity<Guid>> updateServiceAccountRoleOrganisationCommandHandler,
-            IRolePermissionOrganisationRepository rolePermissionOrganisationRepository,
+            IServiceAccountRoleOrganisationRepository serviceAccountRoleOrganisationRepository,
             IRequestContextProvider requestContextProvider,
             IMapper mapper
         )
         {
             _serviceAccountRoleOrganisationQueryHandler = serviceAccountRoleOrganisationQueryHandler;
             _updateServiceAccountRoleOrganisationCommandHandler = updateServiceAccountRoleOrganisationCommandHandler;
-            _rolePermissionOrganisationRepository = rolePermissionOrganisationRepository;
+            _serviceAccountRoleOrganisationRepository = serviceAccountRoleOrganisationRepository;
             _requestContextProvider = requestContextProvider;
             _mapper = mapper;
         }
@@ -63,13 +63,7 @@ namespace Foundation.Extension.Core.Services
             };
 
             var entity = await _updateServiceAccountRoleOrganisationCommandHandler.HandleAsync(command);
-            var baseRole = await _rolePermissionOrganisationRepository.Get(entity.Id);
-
-            var result = new ServiceAccountRoleOrganisationDetails()
-            {
-                Id = serviceAccountRoleOrganisationId,
-                Permissions = baseRole.Permissions
-            };
+            var result = await _serviceAccountRoleOrganisationRepository.Get(entity.Id);
 
             var context = _requestContextProvider.Context;
             return _mapper.Map<ServiceAccountRoleOrganisationDetails, ServiceAccountRoleOrganisationDetailsViewModel>(result, opt => opt.Items.Add(LANGUAGE, context.LanguageCode));

@@ -14,19 +14,23 @@ namespace Foundation.Extension.Core.Tools
 	public class PermissionProvider : IPermissionProvider
 	{
 		private readonly IFoundationClientFactory _foundationClientFactory;
-		private readonly IRolePermissionOrganisationRepository _roleOrganisationRepository;
+		private readonly IRoleOrganisationRepository _roleOrganisationRepository;
+		private readonly IRoleOrganisationTypeRepository _roleOrganisationTypeRepository;
 		private readonly IPermissionOrganisationTypeRepository _permissionOrganisationTypeRepository;
 		private readonly IRequestContextProvider _requestContextProvider;
 
-		public PermissionProvider(
+		public PermissionProvider
+		(
 			IFoundationClientFactory foundationClientFactory,
-			IRolePermissionOrganisationRepository roleOrganisationRepository,
+			IRoleOrganisationRepository roleOrganisationRepository,
+			IRoleOrganisationTypeRepository roleOrganisationTypeRepository,
 			IPermissionOrganisationTypeRepository permissionOrganisationTypeRepository,
 			IRequestContextProvider requestContextProvider
 		)
 		{
 			_foundationClientFactory = foundationClientFactory;
 			_roleOrganisationRepository = roleOrganisationRepository;
+			_roleOrganisationTypeRepository = roleOrganisationTypeRepository;
 			_permissionOrganisationTypeRepository = permissionOrganisationTypeRepository;
 			_requestContextProvider = requestContextProvider;
 		}
@@ -34,10 +38,11 @@ namespace Foundation.Extension.Core.Tools
 
 		public async Task<bool> HasPermissions(params string[] permissions)
 		{
+			// Checking if permissions is a subset of grantedPermissions
+			// Code from https://stackoverflow.com/a/333034
+			// Interesting conversation under this comment : https://stackoverflow.com/a/26697119
 			var grantedPermissions = await GetPermissions();
-			return !permissions.Except(grantedPermissions).Any(); // Checking if permissions is a subset of grantedPermissions
-																  // Code from https://stackoverflow.com/a/333034
-																  // Interesting conversation under this comment : https://stackoverflow.com/a/26697119
+			return !permissions.Except(grantedPermissions).Any(); 
 		}
 
 
@@ -53,19 +58,34 @@ namespace Foundation.Extension.Core.Tools
 			var permissionOrganisationTypes = await GetPermissionOrganisationTypes(organisation.OrganisationTypeId);
 
 			if (organisation.AdminId == context.ActorId)
+			{
 				return foundationPermissions.Concat(permissionOrganisationTypes).ToList();
+			}
 
 			var userOrganisation = await client.Core.UserOrganisations.GetCurrent(organisationId);
 			if (userOrganisation == default || !userOrganisation.RoleId.HasValue)
+			{
 				return foundationPermissions;
+			}
 
-			var rolePermissionOrganisations = await GetRolePermissionOrganisations(userOrganisation.RoleId.Value);
+			var permissions = new List<string>();
 
+            switch (userOrganisation.RoleType) {
+                case Clients.Core.FoundationModels.RoleType.Organisation: {
+                    permissions = await GetRoleOrganisationPermissions(userOrganisation.RoleId.Value);
+                    break;
+                }
+                case Clients.Core.FoundationModels.RoleType.OrganisationType: {
+                    permissions = await GetRoleOrganisationTypePermissions(userOrganisation.RoleId.Value);
+                    break;
+                }
+            }
+
+			// Use of intersect to make sure that the permissions of a role is a subset of
+			// the permissions of an organisation type 
 			return foundationPermissions.Concat(
-				rolePermissionOrganisations.Intersect(permissionOrganisationTypes).ToList()
+				permissions.Intersect(permissionOrganisationTypes).ToList()
 			).ToList();
-			// use of intersect to make sure that the permissions of a role is a subset of
-			// the permissions of an organisationType 
 		}
 
 		private async Task<IEnumerable<string>> GetFoundationPermissions(IFoundationClient client, Guid organisationId)
@@ -76,21 +96,28 @@ namespace Foundation.Extension.Core.Tools
 
 		private async Task<IEnumerable<string>> GetPermissionOrganisationTypes(Guid organisationTypeId)
 		{
-			var permissionOrganisationTypes = await _permissionOrganisationTypeRepository.GetMany(
-				new PermissionOrganisationTypesFilter()
-				{
-					OrganisationTypeId = organisationTypeId
-				}
-			);
+			var filter = new PermissionOrganisationTypesFilter()
+			{
+				OrganisationTypeId = organisationTypeId
+			};
+
+			var permissionOrganisationTypes = await _permissionOrganisationTypeRepository.GetMany(filter);
 
 			return permissionOrganisationTypes.Select(otp => otp.PermissionCode).ToList();
 		}
 
-		private async Task<IEnumerable<string>> GetRolePermissionOrganisations(Guid roleId)
+		private async Task<List<string>> GetRoleOrganisationPermissions(Guid roleOrganisationId)
 		{
-			var role = await _roleOrganisationRepository.Get(roleId);
+			var roleOrganisation = await _roleOrganisationRepository.Get(roleOrganisationId);
 
-			return role.Permissions.Select(rp => rp.Code).ToList();
+			return roleOrganisation.Permissions.Select(rp => rp.Code).ToList();
+		}
+
+		private async Task<List<string>> GetRoleOrganisationTypePermissions(Guid roleOrganisationTypeId)
+		{
+			var roleOrganisationType = await _roleOrganisationTypeRepository.Get(roleOrganisationTypeId);
+
+			return roleOrganisationType.Permissions.Select(rp => rp.Code).ToList();
 		}
 	}
 }

@@ -18,20 +18,23 @@ namespace Foundation.Extension.Core.Handlers
     {
 		private readonly IFoundationClientFactory _foundationClientFactory;
 		private readonly IPermissionOrganisationTypeRepository _permissionOrganisationTypeRepository;
-        private readonly IRolePermissionOrganisationRepository _rolePermissionOrganisationRepository;
+        private readonly IRoleOrganisationRepository _roleOrganisationRepository;
+        private readonly IRoleOrganisationTypeRepository _roleOrganisationTypeRepository;
 		private readonly IRequestContextProvider _requestContextProvider;
 
         public CurrentUserOrganisationQueryHandler
         (
             IFoundationClientFactory foundationClientFactory,
             IPermissionOrganisationTypeRepository permissionOrganisationTypeRepository,
-            IRolePermissionOrganisationRepository rolePermissionOrganisationRepository,
+            IRoleOrganisationRepository roleOrganisationRepository,
+            IRoleOrganisationTypeRepository roleOrganisationTypeRepository,
             IRequestContextProvider requestContextProvider
         )
         {
             _foundationClientFactory = foundationClientFactory;
             _permissionOrganisationTypeRepository = permissionOrganisationTypeRepository;
-            _rolePermissionOrganisationRepository = rolePermissionOrganisationRepository;
+            _roleOrganisationRepository = roleOrganisationRepository;
+            _roleOrganisationTypeRepository = roleOrganisationTypeRepository;
             _requestContextProvider = requestContextProvider;
         }
 
@@ -74,14 +77,29 @@ namespace Foundation.Extension.Core.Handlers
                 };
             }
 
-			var rolePermissionOrganisations = await _rolePermissionOrganisationRepository.Get(userOrganisation.RoleId.Value);
+			var permissions = new List<PermissionItem>();
+
+            switch (userOrganisation.RoleType) {
+                case Clients.Core.FoundationModels.RoleType.Organisation: {
+                    var roleOrganisation = await _roleOrganisationRepository.Get(userOrganisation.RoleId.Value);
+                    permissions = roleOrganisation.Permissions
+                        .Where(p => permissionOrganisationTypes.Select(pot => pot.PermissionCode).Contains(p.Code))
+                        .ToList();
+                    break;
+                }
+                case Clients.Core.FoundationModels.RoleType.OrganisationType: {
+                    var roleOrganisationType = await _roleOrganisationTypeRepository.Get(userOrganisation.RoleId.Value);
+                    permissions = roleOrganisationType.Permissions
+                        .Where(p => permissionOrganisationTypes.Select(pot => pot.PermissionCode).Contains(p.Code))
+                        .ToList();
+                    break;
+                }
+            }
 
 			return new UserOrganisationDetails()
             {
                 Id = context.ActorOrganisationId.Value,
-                Permissions = rolePermissionOrganisations.Permissions
-                    .Where(p => permissionOrganisationTypes.Select(pot => pot.PermissionCode).Contains(p.Code))
-                    .ToList()
+                Permissions = permissions
             };
         }
     }

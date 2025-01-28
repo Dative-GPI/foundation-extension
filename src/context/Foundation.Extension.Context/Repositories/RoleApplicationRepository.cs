@@ -17,7 +17,7 @@ namespace Foundation.Extension.Context.Repositories
 {
     public class RoleApplicationRepository : IRoleApplicationRepository
     {
-        private DbSet<RolePermissionApplicationDTO> _dbSet;
+        private readonly DbSet<RolePermissionApplicationDTO> _dbSet;
 
         public RoleApplicationRepository(BaseApplicationContext context)
         {

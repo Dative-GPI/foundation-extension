@@ -20,7 +20,7 @@ namespace Foundation.Extension.Core.Services
     {
         private readonly IQueryHandler<RoleOrganisationQuery, RoleOrganisationDetails> _roleOrganisationQueryHandler;
         private readonly ICommandHandler<UpdateRoleOrganisationCommand, IEntity<Guid>> _updateRoleOrganisationCommandHandler;
-        private readonly IRolePermissionOrganisationRepository _rolePermissionOrganisationRepository;
+        private readonly IRoleOrganisationRepository _rolePermissionOrganisationRepository;
         private readonly IRequestContextProvider _requestContextProvider;
         private readonly IMapper _mapper;
 
@@ -28,7 +28,7 @@ namespace Foundation.Extension.Core.Services
         (
             IQueryHandler<RoleOrganisationQuery, RoleOrganisationDetails> roleOrganisationQueryHandler,
             ICommandHandler<UpdateRoleOrganisationCommand, IEntity<Guid>> updateRoleOrganisationCommandHandler,
-            IRolePermissionOrganisationRepository rolePermissionOrganisationRepository,
+            IRoleOrganisationRepository rolePermissionOrganisationRepository,
             IRequestContextProvider requestContextProvider,
             IMapper mapper
         )

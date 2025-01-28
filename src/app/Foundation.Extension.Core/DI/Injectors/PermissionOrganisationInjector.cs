@@ -9,16 +9,16 @@ using Foundation.Extension.Core.Handlers;
 
 namespace Foundation.Extension.Core.DI
 {
-    public static class PermissionInjector
+    public static class PermissionOrganisationInjector
     {
         public static IServiceCollection AddPermissionOrganisations(this IServiceCollection services)
         {
-            services.AddScoped<PermissionOrganisationCategoriesQueryHandler>();
-            services.AddScoped<IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategory>>>(sp =>
+            services.AddScoped<CurrentPermissionOrganisationsQueryHandler>();
+            services.AddScoped<IQueryHandler<CurrentPermissionOrganisationsQuery, IEnumerable<string>>>(sp =>
             {
-                var pipeline = sp.GetPipelineFactory<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategory>>()
+                var pipeline = sp.GetPipelineFactory<CurrentPermissionOrganisationsQuery, IEnumerable<string>>()
                     .With<PermissionsMiddleware>()
-                    .Add<PermissionOrganisationCategoriesQueryHandler>()
+                    .Add<CurrentPermissionOrganisationsQueryHandler>()
                     .Build();
 
                 return pipeline;

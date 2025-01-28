@@ -42,10 +42,12 @@ namespace Foundation.Extension.Core.Handlers
                 OrganisationTypeId = context.OrganisationTypeId
             });
 
-            var permissionOrganisations = await _permissionOrganisationRepository.GetMany(new PermissionsFilter()
+            var filter = new PermissionsFilter()
             {
                 PermissionIds = permissionOrganisationTypes.Select(p => p.PermissionId).ToList()
-            });
+            };
+
+            var permissionOrganisations = await _permissionOrganisationRepository.GetMany(filter);
 
             return permissionOrganisations;
         }

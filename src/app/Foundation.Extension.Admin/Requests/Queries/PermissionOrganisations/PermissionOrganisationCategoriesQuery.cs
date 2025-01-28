@@ -8,7 +8,7 @@ using static Foundation.Clients.AdminAuthorizations;
 
 namespace Foundation.Extension.Admin
 {
-    public class PermissionOrganisationCategoriesQuery : ICoreRequest, IRequest<IEnumerable<PermissionOrganisationCategory>>
+    public class PermissionOrganisationCategoriesQuery : ICoreRequest, IRequest<IEnumerable<PermissionOrganisationCategoryInfos>>
     {
         public IEnumerable<string> Authorizations => new[] { ADMIN_PERMISSION_CATEGORY };
     }

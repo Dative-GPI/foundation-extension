@@ -7,7 +7,7 @@ using Foundation.Extension.Domain.Models;
 
 namespace Foundation.Extension.Core
 {
-    public class PermissionOrganisationCategoriesQuery : ICoreRequest, IRequest<IEnumerable<PermissionOrganisationCategory>>
+    public class PermissionOrganisationCategoriesQuery : ICoreRequest, IRequest<IEnumerable<PermissionOrganisationCategoryInfos>>
     {
         public IEnumerable<string> Authorizations => Enumerable.Empty<string>();
     }

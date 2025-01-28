@@ -18,7 +18,7 @@ namespace Foundation.Extension.Core.AutoMapper
 
 			CreateMap<PathCrumb, PathCrumbViewModel>();
 
-			CreateMap<PermissionOrganisationCategory, PermissionOrganisationCategoryViewModel>();
+			CreateMap<PermissionOrganisationCategoryInfos, PermissionOrganisationCategoryInfosViewModel>();
 			CreateMap<PermissionOrganisationInfos, PermissionOrganisationInfosViewModel>();
 
 			CreateMap<RoleOrganisationDetails, RoleOrganisationDetailsViewModel>()

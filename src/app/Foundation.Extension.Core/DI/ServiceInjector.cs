@@ -10,6 +10,7 @@ namespace Foundation.Extension.Core.DI
 		public static IServiceCollection AddServices(this IServiceCollection services)
 		{
 			services.AddScoped<IActionService, ActionService>();
+			services.AddScoped<IPermissionOrganisationCategoryService, PermissionOrganisationCategoryService>();
 			services.AddScoped<IPermissionOrganisationService, PermissionOrganisationService>();
 			services.AddScoped<IRoleOrganisationService, RoleOrganisationService>();
 			services.AddScoped<IRoleOrganisationTypeService, RoleOrganisationTypeService>();

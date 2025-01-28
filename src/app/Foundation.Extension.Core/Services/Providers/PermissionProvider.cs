@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Foundation.Clients.Abstractions;
+using Foundation.Extension.Core.Abstractions;
 using Foundation.Extension.Domain.Repositories.Filters;
 using Foundation.Extension.Domain.Repositories.Interfaces;
-using Foundation.Extension.Core.Abstractions;
 using Foundation.Extension.Domain.Abstractions;
 
 namespace Foundation.Extension.Core.Tools
@@ -88,7 +88,7 @@ namespace Foundation.Extension.Core.Tools
 			).ToList();
 		}
 
-		private async Task<IEnumerable<string>> GetFoundationPermissions(IFoundationClient client, Guid organisationId)
+		private static async Task<IEnumerable<string>> GetFoundationPermissions(IFoundationClient client, Guid organisationId)
 		{
 			var permissions = await client.Core.Permissions.GetCurrent(organisationId);
 			return permissions.Select(permission => permission.Code).ToList();

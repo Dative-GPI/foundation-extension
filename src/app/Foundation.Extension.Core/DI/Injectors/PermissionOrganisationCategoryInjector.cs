@@ -5,9 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Bones.Flow;
 
 using Foundation.Extension.Domain.Models;
-using Foundation.Extension.Admin.Handlers;
+using Foundation.Extension.Core.Handlers;
 
-namespace Foundation.Extension.Admin.DI
+namespace Foundation.Extension.Core.DI
 {
     public static class PermissionOrganisationCategoryInjector
     {
@@ -17,7 +17,7 @@ namespace Foundation.Extension.Admin.DI
             services.AddScoped<IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategoryInfos>>>(sp =>
             {
                 var pipeline = sp.GetPipelineFactory<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategoryInfos>>()
-                    .With<PermissionApplicationsMiddleware>()
+                    .With<PermissionsMiddleware>()
                     .Add<PermissionOrganisationCategoriesQueryHandler>()
                     .Build();
 

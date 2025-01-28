@@ -14,9 +14,9 @@ namespace Foundation.Extension.Admin.DI
         public static IServiceCollection AddPermissionApplicationCategories(this IServiceCollection services)
         {
             services.AddScoped<PermissionApplicationCategoriesQueryHandler>();
-            services.AddScoped<IQueryHandler<PermissionApplicationCategoriesQuery, IEnumerable<PermissionApplicationCategory>>>(sp =>
+            services.AddScoped<IQueryHandler<PermissionApplicationCategoriesQuery, IEnumerable<PermissionApplicationCategoryInfos>>>(sp =>
             {
-                var pipeline = sp.GetPipelineFactory<PermissionApplicationCategoriesQuery, IEnumerable<PermissionApplicationCategory>>()
+                var pipeline = sp.GetPipelineFactory<PermissionApplicationCategoriesQuery, IEnumerable<PermissionApplicationCategoryInfos>>()
                     .With<PermissionApplicationsMiddleware>()
                     .Add<PermissionApplicationCategoriesQueryHandler>()
                     .Build();

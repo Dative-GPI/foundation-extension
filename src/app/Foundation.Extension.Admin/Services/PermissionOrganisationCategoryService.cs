@@ -14,12 +14,12 @@ namespace Foundation.Extension.Admin.Services
 {
     public class PermissionOrganisationCategoryService : IPermissionOrganisationCategoryService
     {
-        private readonly IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategory>> _permissionCategoriesQueryHandler;
+        private readonly IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategoryInfos>> _permissionCategoriesQueryHandler;
         private readonly IMapper _mapper;
 
         public PermissionOrganisationCategoryService
         (
-            IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategory>> permissionCategoriesQueryHandler,
+            IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategoryInfos>> permissionCategoriesQueryHandler,
             IMapper mapper
         )
         {
@@ -33,7 +33,7 @@ namespace Foundation.Extension.Admin.Services
 
             var result = await _permissionCategoriesQueryHandler.HandleAsync(query);
 
-            return _mapper.Map<IEnumerable<PermissionOrganisationCategory>, IEnumerable<PermissionOrganisationCategoryViewModel>>(result);
+            return _mapper.Map<IEnumerable<PermissionOrganisationCategoryInfos>, IEnumerable<PermissionOrganisationCategoryViewModel>>(result);
         }
     }
 }

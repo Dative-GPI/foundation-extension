@@ -21,11 +21,11 @@ namespace Foundation.Extension.Context.Repositories
             _categorySet = context.PermissionOrganisationCategories;
         }
 
-        public async Task<IEnumerable<PermissionOrganisationCategory>> GetMany()
+        public async Task<IEnumerable<PermissionOrganisationCategoryInfos>> GetMany()
         {
             var dtos = await _categorySet.AsNoTracking().ToListAsync();
 
-            return dtos.Select(c => new PermissionOrganisationCategory()
+            return dtos.Select(c => new PermissionOrganisationCategoryInfos()
             {
                 Label = c.LabelDefault,
                 Prefix = c.Prefix,

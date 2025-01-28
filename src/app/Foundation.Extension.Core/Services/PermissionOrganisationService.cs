@@ -15,41 +15,32 @@ namespace Foundation.Extension.Core.Services
 {
     public class PermissionOrganisationService : IPermissionOrganisationService
     {
-        private readonly IRequestContextProvider _requestContextProvider;
-        private readonly IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategory>> _permissionOrganisationCategoriesQueryHandler;
+        private readonly IQueryHandler<CurrentPermissionOrganisationsQuery, IEnumerable<string>> _currentPermissionOrganisationsQueryHandler;
         private readonly IQueryHandler<PermissionOrganisationsQuery, IEnumerable<PermissionOrganisationInfos>> _permissionOrganisationsQueryHandler;
-        private readonly IPermissionProvider _permissionProvider;
+        private readonly IRequestContextProvider _requestContextProvider;
         private readonly IMapper _mapper;
 
         public PermissionOrganisationService
         (
-            IRequestContextProvider requestContextProvider,
-            IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategory>> permissionOrganisationCategoriesQueryHandler,
+            IQueryHandler<CurrentPermissionOrganisationsQuery, IEnumerable<string>> currentPermissionOrganisationsQueryHandler,
             IQueryHandler<PermissionOrganisationsQuery, IEnumerable<PermissionOrganisationInfos>> permissionOrganisationsQueryHandler,
-            IPermissionProvider permissionProvider,
+            IRequestContextProvider requestContextProvider,
             IMapper mapper
         )
         {
-            _requestContextProvider = requestContextProvider;
-            _permissionOrganisationCategoriesQueryHandler = permissionOrganisationCategoriesQueryHandler;
+            _currentPermissionOrganisationsQueryHandler = currentPermissionOrganisationsQueryHandler;
             _permissionOrganisationsQueryHandler = permissionOrganisationsQueryHandler;
-            _permissionProvider = permissionProvider;
+            _requestContextProvider = requestContextProvider;
             _mapper = mapper;
         }
 
         public async Task<IEnumerable<string>> GetCurrent()
         {
-            return await _permissionProvider.GetPermissions();
-        }
+            var query = new CurrentPermissionOrganisationsQuery();
 
-        public async Task<IEnumerable<PermissionOrganisationCategoryViewModel>> GetCategories()
-        {
-            var query = new PermissionOrganisationCategoriesQuery();
+            var result = await _currentPermissionOrganisationsQueryHandler.HandleAsync(query);
 
-            var categories = await _permissionOrganisationCategoriesQueryHandler.HandleAsync(query);
-
-            var context = _requestContextProvider.Context;
-            return _mapper.Map<IEnumerable<PermissionOrganisationCategory>, IEnumerable<PermissionOrganisationCategoryViewModel>>(categories, opt => opt.Items.Add(LANGUAGE, context.LanguageCode));
+            return result;
         }
 
         public async Task<IEnumerable<PermissionOrganisationInfosViewModel>> GetMany()
@@ -58,7 +49,8 @@ namespace Foundation.Extension.Core.Services
 
             var result = await _permissionOrganisationsQueryHandler.HandleAsync(query);
 
-            return _mapper.Map<IEnumerable<PermissionOrganisationInfos>, IEnumerable<PermissionOrganisationInfosViewModel>>(result);
+            var context = _requestContextProvider.Context;
+            return _mapper.Map<IEnumerable<PermissionOrganisationInfos>, IEnumerable<PermissionOrganisationInfosViewModel>>(result, opt => opt.Items.Add(LANGUAGE, context.LanguageCode));
         }
     }
 }

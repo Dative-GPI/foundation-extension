@@ -26,6 +26,7 @@ namespace Foundation.Extension.Core.DI
             services.AddServices();
             services.AddMiddlewares();
 
+            services.AddPermissionOrganisationCategories();
             services.AddPermissionOrganisations();
             services.AddRoleOrganisations();
             services.AddRoleOrganisationTypes();

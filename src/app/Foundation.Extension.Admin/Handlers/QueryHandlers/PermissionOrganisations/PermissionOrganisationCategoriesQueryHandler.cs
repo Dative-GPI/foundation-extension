@@ -10,7 +10,7 @@ using Foundation.Extension.Domain.Repositories.Interfaces;
 
 namespace Foundation.Extension.Admin.Handlers
 {
-    public class PermissionOrganisationCategoriesQueryHandler : IMiddleware<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategory>>
+    public class PermissionOrganisationCategoriesQueryHandler : IMiddleware<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategoryInfos>>
     {
         private readonly IPermissionOrganisationCategoryRepository _permissionOrganisationCategoryRepository;
         
@@ -19,7 +19,7 @@ namespace Foundation.Extension.Admin.Handlers
             _permissionOrganisationCategoryRepository = permissionOrganisationCategoryRepository;
         }
 
-        public async Task<IEnumerable<PermissionOrganisationCategory>> HandleAsync(PermissionOrganisationCategoriesQuery request, Func<Task<IEnumerable<PermissionOrganisationCategory>>> next, CancellationToken cancellationToken)
+        public async Task<IEnumerable<PermissionOrganisationCategoryInfos>> HandleAsync(PermissionOrganisationCategoriesQuery request, Func<Task<IEnumerable<PermissionOrganisationCategoryInfos>>> next, CancellationToken cancellationToken)
         {
             var permissionOrganisationCategories = await _permissionOrganisationCategoryRepository.GetMany();
 

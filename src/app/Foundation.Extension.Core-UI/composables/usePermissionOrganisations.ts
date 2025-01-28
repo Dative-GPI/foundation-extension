@@ -4,9 +4,9 @@ import { PERMISSION_ORGANISATIONS_CURRENT_URL, PERMISSION_ORGANISATIONS_URL } fr
 import { PermissionOrganisationInfos, type PermissionOrganisationInfosDTO } from "../domain";
 
 const PermissionServiceFactory = new ServiceFactory<PermissionOrganisationInfosDTO, PermissionOrganisationInfos>("permissionOrganisation", PermissionOrganisationInfos).create(factory => factory.build(
-  factory.addGetMany(PERMISSION_ORGANISATIONS_URL, PermissionOrganisationInfos),  
+  factory.addGetMany(PERMISSION_ORGANISATIONS_URL, PermissionOrganisationInfos),
   ServiceFactory.addCustom("getCurrent", (axios) => axios.get(PERMISSION_ORGANISATIONS_CURRENT_URL()), (dtos: string[]) => dtos),
-  factory.addNotify()    
+  factory.addNotify()
 ));
 
 export const usePermissionOrganisations = ComposableFactory.getMany(PermissionServiceFactory);

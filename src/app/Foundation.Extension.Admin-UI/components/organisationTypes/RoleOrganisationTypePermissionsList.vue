@@ -4,25 +4,28 @@
     :gap="24"
   >
     <FSRow
-      align="left-center"
+      align="bottom-left"
     >
-      <FSTextField
-        label="Search"
-        v-model="search"
-        clearable
-      ></FSTextField>
+      <FSCol
+        style="max-width: 300px !important"
+      >
+        <FSSearchField
+          :hideHeader="true"
+          v-model="search"
+        />
+      </FSCol>
       <FSButton
-        label="Select all"
-        color="primary"
         v-if="editMode"
+        label="Enable all"
+        color="primary"
         @click="updateAll(true)"
-      > </FSButton>
+      />
       <FSButton
+        v-if="editMode"
         label="Disable all"
         color="primary"
-        v-if="editMode"
         @click="updateAll(false)"
-      > </FSButton>
+      />
     </FSRow>
     <FSRow
       v-for="category in categoriesAndPermissions"
@@ -33,22 +36,22 @@
       >
         <FSRow
           font="text-title"
-        > {{ category.label }} </FSRow>
+        >
+          {{ category.label }}
+        </FSRow>
         <FSRow>
           <FSButton
-            label="Select all"
-            color="primary"
             v-if="editMode"
+            label="Enable all"
+            color="primary"
             @click="updateCategory(true, category.id)"
-          >
-          </FSButton>
+          />
           <FSButton
+            v-if="editMode"
             label="Disable all"
             color="primary"
-            v-if="editMode"
             @click="updateCategory(false, category.id)"
-          >
-          </FSButton>
+          />
         </FSRow>
         <FSRow
           v-for="permission in category.options"
@@ -56,14 +59,15 @@
         >
           <FSSpan
             font="text-body align-self-center"
-          > {{ permission.label }} </FSSpan>
-          <v-spacer></v-spacer>
+          >
+            {{ permission.label }}
+          </FSSpan>
+          <v-spacer />
           <FSSwitch
             v-if="editMode"
-            ref="element"
+            color="success"
             :modelValue="permissionIds.includes(permission.id)"
             @update:modelValue="updatePermissionIds(permission.id)"
-            color="success"
           />
           <template
             v-else
@@ -71,13 +75,17 @@
             <FSIcon
               v-if="permissionIds.includes(permission.id)"
               color="success"
-            > mdi-checkbox-marked-circle</FSIcon>
+            >
+              mdi-checkbox-marked-circle
+            </FSIcon>
             <FSIcon
               v-else
               color="error"
-            > mdi-close-circle</FSIcon>
+            >
+              mdi-close-circle
+            </FSIcon>
           </template>
-          <v-divider></v-divider>
+          <v-divider />
         </FSRow>
       </FSCol>
     </FSRow>
@@ -85,45 +93,33 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, onMounted, computed, watch } from "vue";
-import { useRoute } from "vue-router";
 import _ from "lodash";
 
-import {
-  usePermissionOrganisationCategories,
-  usePermissionOrganisationTypes,
-  useRolePermissionOrganisations,
-  useUpdateRolePermissionOrganisations,
-} from "../../composables";
+import { usePermissionOrganisationCategories, usePermissionOrganisationTypes, useRoleOrganisationType, useUpdateRoleOrganisationType, } from "../../composables";
 
 export default defineComponent({
-  name: "RolePermissionOrganisationsList",
+  name: "RoleOrganisationTypePermissionsList",
   props: {
-    editMode: {
-      type: Boolean,
-      default: true,
-    },
-    roleId: {
-      type: String,
-      required: true
-    },
     organisationTypeId: {
       type: String,
       required: true
     },
+    roleOrganisationTypeId: {
+      type: String,
+      required: true
+    },
+    editMode: {
+      type: Boolean,
+      default: true,
+    }
   },
   setup(props) {
-    const { fetch: getPermissionOrganisationCategories, entity: categories } = usePermissionOrganisationCategories();
-    const { getMany: getPermissionOrganisationTypes, entities: permissionOrganisationTypes } =
-      usePermissionOrganisationTypes();
-    const { get: getRolePermissionOrganisations, entity: rolePermissionOrganisations } =
-      useRolePermissionOrganisations();
-    const { fetch: update } = useUpdateRolePermissionOrganisations();
-    const route = useRoute();
-
-    const element = ref<HTMLElement | null>(null);
+    const { getMany: getPermissionOrganisationCategories, entities: permissionOrganisationCategories } = usePermissionOrganisationCategories();
+    const { getMany: getPermissionOrganisationTypes, entities: permissionOrganisationTypes } = usePermissionOrganisationTypes();
+    const { get: getRoleOrganisationType, entity: roleOrganisationType, getting: fetching } = useRoleOrganisationType();
+    const { update: updateRoleOrganisationType } = useUpdateRoleOrganisationType();
 
     const search = ref("");
-    const fetching = ref(true);
 
     const permissionIds = ref<string[]>([]);
 
@@ -131,54 +127,51 @@ export default defineComponent({
       await getPermissionOrganisationCategories();
       await getPermissionOrganisationTypes({ organisationTypeId: props.organisationTypeId  });
 
-      fetchRoleOrganisation();
-    };
-
-    const fetchRoleOrganisation = async () => {
-      fetching.value = true;
-      await getRolePermissionOrganisations(props.roleId);
-      permissionIds.value = rolePermissionOrganisations.value!.permissionIds.map((p) => p);
-      fetching.value = false;
+      await getRoleOrganisationType(props.roleOrganisationTypeId);
     };
 
     const filteredPermissionOrganisationTypes = computed(() => {
-      if (search.value == null || search.value === "") {return permissionOrganisationTypes.value;}
-      return permissionOrganisationTypes.value.filter((p) => {
-        return (
-          p.permissionCode.toLowerCase().includes(search.value.toLowerCase()) ||
-          p.permissionLabel.toLowerCase().includes(search.value.toLowerCase())
-        );
-      });
+      if (search.value == null || search.value === "") {
+        return permissionOrganisationTypes.value;
+      }
+      return permissionOrganisationTypes.value.filter((p) => (
+        p.permissionCode.toLowerCase().includes(search.value.toLowerCase()) ||
+        p.permissionLabel.toLowerCase().includes(search.value.toLowerCase())
+      ));
     });
 
     const categoriesAndPermissions = computed(() => {
-      return categories.value.map((cat, index) => ({
+      return permissionOrganisationCategories.value.map((cat, index) => ({
         id: index.toString(),
         label: cat.label,
         options: filteredPermissionOrganisationTypes.value
           .filter((p) => p.permissionCode.startsWith(cat.prefix))
           .map((p) => ({
             id: p.permissionId,
-            label: p.permissionLabel,
-          })),
+            label: p.permissionLabel
+          }))
       }));
     });
 
     const updateAll = (enableAll: boolean) => {
       if (enableAll) {
         permissionIds.value = filteredPermissionOrganisationTypes.value.map((p) => p.permissionId);
-      } else {
+      }
+      else {
         permissionIds.value = [];
       }
     };
 
     const updateCategory = (enabledAll: boolean, categoryId: string) => {
       let category = categoriesAndPermissions.value.find((c) => c.id === categoryId);
-      if (!category) {return;}
+      if (!category) {
+        return;
+      }
       let permissions = category?.options.map((p) => p.id);
       if (enabledAll) {
         permissionIds.value = Array.from(new Set([...permissionIds.value, ...permissions]));
-      } else {
+      }
+      else {
         permissionIds.value = permissionIds.value.filter((p) => !permissions.includes(p));
       }
     };
@@ -186,17 +179,20 @@ export default defineComponent({
     const updatePermissionIds = (permissionId: string) => {
       if (permissionIds.value.includes(permissionId)) {
         permissionIds.value = permissionIds.value.filter((p) => p !== permissionId);
-      } else {
+      }
+      else {
         permissionIds.value = [...permissionIds.value, permissionId];
       }
     };
 
-    function save() {
-      update(props.roleId, { permissionIds: permissionIds.value });
+    async function save() {
+      await updateRoleOrganisationType(props.roleOrganisationTypeId, { permissionIds: permissionIds.value });
     }
 
     const synchronizePermissions = async () => {
-      if (!props.editMode) {return;}
+      if (!props.editMode) {
+        return;
+      }
       await save();
     };
 
@@ -204,14 +200,15 @@ export default defineComponent({
 
     watch(permissionIds, debouncedsynchronizePermissions);
 
-    watch(
-      () => props.editMode,
-      () => {
-        if (props.editMode == false) {
-          save();
-        }
+    watch(() => props.editMode, () => {
+      if (props.editMode == false) {
+        save();
       }
-    );
+    });
+
+    watch(() => roleOrganisationType.value, () => {
+      permissionIds.value = roleOrganisationType.value.permissionIds.map((p) => p);
+    });
 
     onMounted(init);
 
@@ -220,21 +217,11 @@ export default defineComponent({
       search,
       fetching,
       permissionIds,
-      element,
       filteredPermissionOrganisationTypes,
       updatePermissionIds,
-      updateAll,
       updateCategory,
+      updateAll
     };
-  },
+  }
 });
 </script>
-<style scoped>
-tbody tr {
-  cursor: pointer;
-}
-
-tbody tr:hover {
-  background-color: #e6efff;
-}
-</style>

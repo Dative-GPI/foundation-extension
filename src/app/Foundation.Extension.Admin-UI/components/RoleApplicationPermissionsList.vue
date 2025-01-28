@@ -4,34 +4,28 @@
     :gap="24"
   >
     <FSRow
-      align="left-center"
+      align="bottom-left"
     >
       <FSCol
         style="max-width: 300px !important"
       >
-        <FSTextField
+        <FSSearchField
+          :hideHeader="true"
           v-model="search"
-          label=""
-          prepend-inner-icon="mdi-magnify"
-          clearable
-        ></FSTextField>
+        />
       </FSCol>
       <FSButton
+        v-if="editMode"
         label="Enable all"
         color="primary"
-        v-if="editMode"
         @click="updateAll(true)"
-        class="align-self-end"
-      >
-      </FSButton>
+      />
       <FSButton
+        v-if="editMode"
         label="Disable all"
         color="primary"
-        v-if="editMode"
         @click="updateAll(false)"
-        class="align-self-end"
-      >
-      </FSButton>
+      />
     </FSRow>
     <FSRow
       v-for="category in categoriesAndPermissions"
@@ -42,22 +36,22 @@
       >
         <FSRow
           font="text-title"
-        > {{ category.label }} </FSRow>
+        >
+          {{ category.label }}
+        </FSRow>
         <FSRow>
           <FSButton
+            v-if="editMode"
             label="Enable all"
             color="primary"
-            v-if="editMode"
             @click="updateCategory(true, category.id)"
-          >
-          </FSButton>
+          />
           <FSButton
+            v-if="editMode"
             label="Disable all"
             color="primary"
-            v-if="editMode"
             @click="updateCategory(false, category.id)"
-          >
-          </FSButton>
+          />
         </FSRow>
         <FSRow
           v-for="permission in category.options"
@@ -65,14 +59,15 @@
         >
           <FSSpan
             font="text-body align-self-center"
-          > {{ permission.label }} </FSSpan>
-          <v-spacer></v-spacer>
+          >
+            {{ permission.label }}
+          </FSSpan>
+          <v-spacer />
           <FSSwitch
             v-if="editMode"
-            ref="element"
+            color="success"
             :modelValue="permissionIds.includes(permission.id)"
             @update:modelValue="updatePermissionIds(permission.id)"
-            color="success"
           />
           <template
             v-else
@@ -80,54 +75,50 @@
             <FSIcon
               v-if="permissionIds.includes(permission.id)"
               color="success"
-            > mdi-checkbox-marked-circle</FSIcon>
+            >
+              mdi-checkbox-marked-circle
+            </FSIcon>
             <FSIcon
               v-else
               color="error"
-            > mdi-close-circle</FSIcon>
+            >
+              mdi-close-circle
+            </FSIcon>
           </template>
-          <v-divider></v-divider>
+          <v-divider />
         </FSRow>
       </FSCol>
     </FSRow>
   </FSCol>
 </template>
+
 <script lang="ts">
 import { defineComponent, ref, onMounted, computed, watch } from "vue";
-import { useRoute } from "vue-router";
 import _ from "lodash";
 
-import {
-  usePermissionApplicationCategories,
-  usePermissionApplications,
-  useRolePermissionApplications,
-  useUpdateRolePermissionApplications,
-} from "../composables";
+import { usePermissionApplicationCategories, usePermissionApplications, useRoleApplication, useUpdateRoleApplication } from "../composables";
 
 export default defineComponent({
-  name: "RolePermissionApplicationsList",
+  name: "RoleApplicationPermissionsList",
   props: {
-    editMode: {
-      type: Boolean,
-      default: true,
-    },
-    roleId: {
+    roleApplicationId: {
       type: String,
       required: true,
-      default: "",
+      default: ""
     },
+    editMode: {
+      type: Boolean,
+      required: false,
+      default: true
+    }
   },
   setup(props) {
+    const { getMany: getManypermissionApplicationCategories, entities: permissionApplicationCategories } = usePermissionApplicationCategories();
     const { getMany: getManypermissionApplications, entities: permissionApplications } = usePermissionApplications();
-    const { fetch: getManypermissionApplicationCategories, entity: categories } = usePermissionApplicationCategories();
-    const { get: getRolePermissionApplications, entity: rolePermissionApplications } = useRolePermissionApplications();
-    const { update } = useUpdateRolePermissionApplications();
-    const route = useRoute();
-
-    const element = ref<HTMLElement | null>(null);
+    const { get: getRoleApplication, entity: roleApplication, getting: fetching } = useRoleApplication();
+    const { update: updateRoleApplication } = useUpdateRoleApplication();
 
     const search = ref("");
-    const fetching = ref(true);
 
     const permissionIds = ref<string[]>([]);
 
@@ -135,30 +126,21 @@ export default defineComponent({
       await getManypermissionApplications();
       await getManypermissionApplicationCategories();
 
-      await fetchRoleApplication();
-    };
-
-    const fetchRoleApplication = async () => {
-      fetching.value = true;
-      await getRolePermissionApplications(props.roleId);
-      permissionIds.value = rolePermissionApplications.value!.permissionIds.map((p) => p);
-      fetching.value = false;
+      await getRoleApplication(props.roleApplicationId);
     };
 
     const filteredPermissionApplication = computed(() => {
       if (search.value == null || search.value === "") {
         return permissionApplications.value;
       }
-      return permissionApplications.value.filter((p) => {
-        return (
-          p.code.toLowerCase().includes(search.value.toLowerCase()) ||
-          p.label.toLowerCase().includes(search.value.toLowerCase())
-        );
-      });
+      return permissionApplications.value.filter((p) => (
+        p.code.toLowerCase().includes(search.value.toLowerCase()) ||
+        p.label.toLowerCase().includes(search.value.toLowerCase())
+      ));
     });
 
     const categoriesAndPermissions = computed(() => {
-      return categories.value.map((cat, index) => ({
+      return permissionApplicationCategories.value.map((cat, index) => ({
         id: index.toString(),
         label: cat.label,
         options: filteredPermissionApplication.value
@@ -166,14 +148,15 @@ export default defineComponent({
           .map((p) => ({
             id: p.id,
             label: p.label,
-          })),
+          }))
       }));
     });
 
     const updateAll = (enableAll: boolean) => {
       if (enableAll) {
         permissionIds.value = filteredPermissionApplication.value.map((p) => p.id);
-      } else {
+      }
+      else {
         permissionIds.value = [];
       }
     };
@@ -186,7 +169,8 @@ export default defineComponent({
       let permissions = category?.options.map((p) => p.id);
       if (enabledAll) {
         permissionIds.value = Array.from(new Set([...permissionIds.value, ...permissions]));
-      } else {
+      }
+      else {
         permissionIds.value = permissionIds.value.filter((p) => !permissions.includes(p));
       }
     };
@@ -200,7 +184,7 @@ export default defineComponent({
     };
 
     async function save() {
-      await update(props.roleId, { permissionIds: permissionIds.value });
+      await updateRoleApplication(props.roleApplicationId, { permissionIds: permissionIds.value });
     }
 
     const synchronizePermissions = async () => {
@@ -214,14 +198,15 @@ export default defineComponent({
 
     watch(permissionIds, debouncedsynchronizePermissions);
 
-    watch(
-      () => props.editMode,
-      () => {
-        if (props.editMode == false) {
-          save();
-        }
+    watch(() => props.editMode, () => {
+      if (props.editMode == false) {
+        save();
       }
-    );
+    });
+
+    watch(() => roleApplication.value, () => {
+      permissionIds.value = roleApplication.value.permissionIds.map((p) => p);
+    });
 
     onMounted(init);
 
@@ -230,21 +215,11 @@ export default defineComponent({
       search,
       fetching,
       permissionIds,
-      element,
       filteredPermissionApplication,
       updatePermissionIds,
-      updateAll,
       updateCategory,
+      updateAll
     };
-  },
+  }
 });
 </script>
-<style scoped>
-tbody tr {
-  cursor: pointer;
-}
-
-tbody tr:hover {
-  background-color: #e6efff;
-}
-</style>

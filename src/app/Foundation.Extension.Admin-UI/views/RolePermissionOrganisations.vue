@@ -1,32 +1,32 @@
 <template>
-  <role-permission-organisations-list
+  <RoleOrganisationTypePermissionsList
+    :roleOrganisationTypeId="roleOrganisationTypeId"
     :organisationTypeId="organisationTypeId"  
-    :edit-mode="editMode"
-    :role-id="roleId"
+    :editMode="editMode"
   />
 </template>
 
 <script lang="ts">
 import { computed, defineComponent } from "vue";
-
 import { useRoute } from "vue-router";
 
-import RolePermissionOrganisationsList from "../components/organisationTypes/RolePermissionOrganisationsList.vue";
+import RoleOrganisationTypePermissionsList from "../components/organisationTypes/RoleOrganisationTypePermissionsList.vue";
 
 export default defineComponent({
+  name: "RoleOrganisationTypePermissions",
   components: {
-    RolePermissionOrganisationsList,
+    RoleOrganisationTypePermissionsList,
   },
-  setup(props) {
+  setup() {
     const route = useRoute();
 
     const editMode = computed(() => route.hash.includes("editMode=true"));
 
     return {
-      editMode,
-      roleId: route.params.roleId as string,
+      roleOrganisationTypeId: route.params.roleId as string,
       organisationTypeId: route.params.organisationTypeId as string,
+      editMode
     };
-  },
+  }
 });
 </script>

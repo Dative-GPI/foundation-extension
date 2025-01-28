@@ -16,10 +16,6 @@ export interface PermissionOrganisationInfosDTO {
     label: string;
 }
 
-export interface PermissionsFilter {
-    search?: string
-}
-
-export interface PermissionCategoriesFilter {
+export interface PermissionOrganisationsFilter {
     search?: string
 }

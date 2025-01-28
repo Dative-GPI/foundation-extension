@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
@@ -18,14 +19,14 @@ namespace Foundation.Extension.Core.Controllers
         }
 
         [HttpGet("current")]
-        public async Task<ActionResult<PermissionOrganisationInfosViewModel>> GetCurrent()
+        public async Task<ActionResult<IEnumerable<PermissionOrganisationInfosViewModel>>> GetCurrent()
         {
             var result = await _permissionOrganisationService.GetCurrent();
             return Ok(result);
         }
 
         [HttpGet]
-        public async Task<ActionResult<PermissionOrganisationInfosViewModel>> GetMany()
+        public async Task<ActionResult<IEnumerable<PermissionOrganisationInfosViewModel>>> GetMany()
         {
             var result = await _permissionOrganisationService.GetMany();
             return Ok(result);

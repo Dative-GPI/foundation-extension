@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ namespace Foundation.Extension.Core.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PermissionOrganisationCategoryInfosViewModel>> GetMany()
+        public async Task<ActionResult<IEnumerable<PermissionOrganisationCategoryInfosViewModel>>> GetMany()
         {
             var result = await _permissionOrganisationCategoryService.GetMany();
             return Ok(result);

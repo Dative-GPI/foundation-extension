@@ -30,6 +30,7 @@ export const useAdminExtension = () => {
       });
   
       return {
+        permissions,
         done
       };
     });

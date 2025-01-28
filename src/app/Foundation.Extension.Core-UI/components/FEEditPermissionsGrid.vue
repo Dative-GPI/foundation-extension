@@ -81,7 +81,7 @@ export default defineComponent({
   },
   emits: ["update:modelValue"],
   setup(props, { emit }) {
-    const { fetch: getManyPermissionOrganisationCategories, entity: permissionOrganisationCategories } = usePermissionOrganisationCategories();
+    const { getMany: getManyPermissionOrganisationCategories, entities: permissionOrganisationCategories } = usePermissionOrganisationCategories();
     const { getMany: getManyPermissionOrganisations, entities: permissionOrganisations } = usePermissionOrganisations();
 
     const search = ref("");

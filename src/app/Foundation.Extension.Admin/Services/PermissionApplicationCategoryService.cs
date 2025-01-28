@@ -27,13 +27,13 @@ namespace Foundation.Extension.Admin.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<PermissionApplicationCategoryViewModel>> GetMany()
+        public async Task<IEnumerable<PermissionApplicationCategoryInfosViewModel>> GetMany()
         {
             var query = new PermissionApplicationCategoriesQuery();
 
             var result = await _permissionApplicationCategoriesQueryHandler.HandleAsync(query);
 
-            return _mapper.Map<IEnumerable<PermissionApplicationCategoryInfos>, IEnumerable<PermissionApplicationCategoryViewModel>>(result);
+            return _mapper.Map<IEnumerable<PermissionApplicationCategoryInfos>, IEnumerable<PermissionApplicationCategoryInfosViewModel>>(result);
         }
     }
 }

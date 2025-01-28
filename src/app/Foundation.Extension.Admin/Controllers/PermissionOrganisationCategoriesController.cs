@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
 
 using Foundation.Extension.Admin.Abstractions;
+using Foundation.Extension.Admin.ViewModels;
 
 namespace Foundation.Extension.Admin.Controllers
 {
@@ -17,7 +19,7 @@ namespace Foundation.Extension.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetMany()
+        public async Task<ActionResult<IEnumerable<PermissionOrganisationCategoryInfosViewModel>>> GetMany()
         {
             var result = await _permissionOrganisationCategoryService.GetMany();
             return Ok(result);

@@ -7,6 +7,6 @@ namespace Foundation.Extension.Admin.Abstractions
 {
     public interface IPermissionOrganisationCategoryService
     {
-        Task<IEnumerable<PermissionOrganisationCategoryViewModel>> GetMany();
+        Task<IEnumerable<PermissionOrganisationCategoryInfosViewModel>> GetMany();
     }
 }

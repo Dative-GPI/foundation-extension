@@ -28,9 +28,9 @@ namespace Foundation.Extension.Admin.AutoMapper
 
 			CreateMap<PermissionApplicationDetails, PermissionApplicationDetailsViewModel>();
 			CreateMap<PermissionApplicationInfos, PermissionApplicationInfosViewModel>();
-			CreateMap<PermissionApplicationCategoryInfos, PermissionApplicationCategoryViewModel>();
+			CreateMap<PermissionApplicationCategoryInfos, PermissionApplicationCategoryInfosViewModel>();
 
-			CreateMap<PermissionOrganisationCategoryInfos, PermissionOrganisationCategoryViewModel>();
+			CreateMap<PermissionOrganisationCategoryInfos, PermissionOrganisationCategoryInfosViewModel>();
 			CreateMap<PermissionOrganisationDetails, PermissionOrganisationDetailsViewModel>();
 			CreateMap<PermissionOrganisationInfos, PermissionOrganisationInfosViewModel>();
 			CreateMap<PermissionOrganisationTypeInfos, PermissionOrganisationTypeInfosViewModel>()

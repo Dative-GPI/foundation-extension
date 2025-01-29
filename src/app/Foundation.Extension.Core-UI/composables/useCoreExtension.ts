@@ -39,7 +39,9 @@ export const useCoreExtension = () => {
       await getCurrentUserOrganisation();
 
       await getCurrentPermissionOrganisations();
-      setAppPermissions(currentPermissionOrganisations.value);
+      if (currentPermissionOrganisations.value != null) {
+        setAppPermissions(currentPermissionOrganisations.value);
+      }
       
       await getManyTranslations();
       setAppTranslations(translations.value);

@@ -22,7 +22,9 @@ export const useAdminExtension = () => {
         useExtensionHost();
          
         await getCurrentPermissionApplications();
-        setAppPermissions(currentPermissionApplications.value);
+        if (currentPermissionApplications.value != null) {
+          setAppPermissions(currentPermissionApplications.value);
+        }
         
         await getManyTranslations();
         setAppTranslations(translations.value);

@@ -6,7 +6,7 @@ import type { TableDetailsDTO} from "../domain";
 import { TableDetails, TableInfos } from "../domain";
 
 
-const TableServiceFactory = new ServiceFactory<TableDetails, TableDetailsDTO>("disposition", TableDetails)
+const TableServiceFactory = new ServiceFactory<TableDetails, TableDetailsDTO>("extensionDisposition", TableDetails)
     .create(f => f.build(
         f.addGet(TABLE_URL),
         f.addGetMany(TABLES_URL, TableInfos),

@@ -5,7 +5,7 @@ import { APPLICATION_TRANSLATIONS_URL, APPLICATION_TRANSLATIONS_WORKBOOK_URL, AP
 import type { ApplicationTranslationDTO, ApplicationTranslationsFilter, DownloadApplicationTranslations, UpdateApplicationTranslation, UploadApplicationTranslations } from "../domain";
 import { ApplicationTranslation } from "../domain";
 
-const ApplicationTranslationServiceFactory = new ServiceFactory<ApplicationTranslation, ApplicationTranslationDTO>("application-translation", ApplicationTranslation)
+const ApplicationTranslationServiceFactory = new ServiceFactory<ApplicationTranslation, ApplicationTranslationDTO>("extensionApplicationTranslation", ApplicationTranslation)
     .create(f => f.build(
         f.addGetMany<ApplicationTranslationDTO, ApplicationTranslation, ApplicationTranslationsFilter>(APPLICATION_TRANSLATIONS_URL, ApplicationTranslation),
         f.addNotify(notifier => ({

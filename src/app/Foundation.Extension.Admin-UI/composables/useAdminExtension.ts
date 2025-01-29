@@ -9,32 +9,32 @@ import { useCurrentPermissionApplications } from "./usePermissionApplications";
 const single = new Single();
 
 export const useAdminExtension = () => {
-    return single.call(() => {
-      const { fetch: getCurrentPermissionApplications, entity: currentPermissionApplications } = useCurrentPermissionApplications();
-      const { set: setAppPermissions } = useAppPermissions();
+  return single.call(() => {
+    const { fetch: getCurrentPermissionApplications, entity: currentPermissionApplications } = useCurrentPermissionApplications();
+    const { set: setAppPermissions } = useAppPermissions();
+    
+    const { getMany: getManyTranslations, entities: translations} = useTranslations();
+    const { set: setAppTranslations } = useAppTranslations();
+
+    const done = ref(false);
+    
+    onMounted(async () => {
+      useExtensionHost();
       
-      const { getMany: getManyTranslations, entities: translations} = useTranslations();
-      const { set: setAppTranslations } = useAppTranslations();
-  
-      const done = ref(false);
+      await getCurrentPermissionApplications();
+      if (currentPermissionApplications.value != null) {
+        setAppPermissions(currentPermissionApplications.value);
+      }
       
-      onMounted(async () => {       
-        useExtensionHost();
-         
-        await getCurrentPermissionApplications();
-        if (currentPermissionApplications.value != null) {
-          setAppPermissions(currentPermissionApplications.value);
-        }
-        
-        await getManyTranslations();
-        setAppTranslations(translations.value);
-  
-        done.value = true;
-      });
-  
-      return {
-        currentPermissionApplications,
-        done
-      };
+      await getManyTranslations();
+      setAppTranslations(translations.value);
+
+      done.value = true;
     });
-  }
+
+    return {
+      currentPermissionApplications,
+      done
+    };
+  });
+}

@@ -77,23 +77,24 @@ namespace Foundation.Extension.Core.Handlers
                 };
             }
 
-			var permissions = new List<PermissionItem>();
-
-            switch (userOrganisation.RoleType) {
-                case Clients.Core.FoundationModels.RoleType.Organisation: {
+			List<PermissionItem> permissions;
+            switch (userOrganisation.RoleType)
+            {
+                case Clients.Core.FoundationModels.RoleType.Organisation:
                     var roleOrganisation = await _roleOrganisationRepository.Get(userOrganisation.RoleId.Value);
                     permissions = roleOrganisation.Permissions
-                        .Where(p => permissionOrganisationTypes.Select(pot => pot.PermissionCode).Contains(p.Code))
+                        .IntersectBy(permissionOrganisationTypes.Select(pot => pot.PermissionCode), p => p.Code)
                         .ToList();
                     break;
-                }
-                case Clients.Core.FoundationModels.RoleType.OrganisationType: {
+                case Clients.Core.FoundationModels.RoleType.OrganisationType:
                     var roleOrganisationType = await _roleOrganisationTypeRepository.Get(userOrganisation.RoleId.Value);
                     permissions = roleOrganisationType.Permissions
-                        .Where(p => permissionOrganisationTypes.Select(pot => pot.PermissionCode).Contains(p.Code))
+                        .IntersectBy(permissionOrganisationTypes.Select(pot => pot.PermissionCode), p => p.Code)
                         .ToList();
                     break;
-                }
+                default:
+                    permissions = new List<PermissionItem>();
+                    break;
             }
 
 			return new UserOrganisationDetails()

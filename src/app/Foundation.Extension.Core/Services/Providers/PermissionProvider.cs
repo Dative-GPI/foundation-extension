@@ -68,17 +68,18 @@ namespace Foundation.Extension.Core.Tools
 				return foundationPermissions;
 			}
 
-			var permissions = new List<string>();
-
-            switch (userOrganisation.RoleType) {
-                case Clients.Core.FoundationModels.RoleType.Organisation: {
+			List<string> permissions;
+            switch (userOrganisation.RoleType)
+			{
+                case Clients.Core.FoundationModels.RoleType.Organisation:
                     permissions = await GetRoleOrganisationPermissions(userOrganisation.RoleId.Value);
                     break;
-                }
-                case Clients.Core.FoundationModels.RoleType.OrganisationType: {
+                case Clients.Core.FoundationModels.RoleType.OrganisationType:
                     permissions = await GetRoleOrganisationTypePermissions(userOrganisation.RoleId.Value);
                     break;
-                }
+				default:
+					permissions = new List<string>();
+					break;
             }
 
 			// Use of intersect to make sure that the permissions of a role is a subset of

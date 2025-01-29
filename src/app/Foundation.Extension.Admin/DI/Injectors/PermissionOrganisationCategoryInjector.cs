@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+
 using Microsoft.Extensions.DependencyInjection;
 
 using Bones.Flow;
@@ -13,9 +14,9 @@ namespace Foundation.Extension.Admin.DI
         public static IServiceCollection AddPermissionOrganisationCategories(this IServiceCollection services)
         {
             services.AddScoped<PermissionOrganisationCategoriesQueryHandler>();
-            services.AddScoped<IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategory>>>(sp =>
+            services.AddScoped<IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategoryInfos>>>(sp =>
             {
-                var pipeline = sp.GetPipelineFactory<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategory>>()
+                var pipeline = sp.GetPipelineFactory<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategoryInfos>>()
                     .With<PermissionApplicationsMiddleware>()
                     .Add<PermissionOrganisationCategoriesQueryHandler>()
                     .Build();

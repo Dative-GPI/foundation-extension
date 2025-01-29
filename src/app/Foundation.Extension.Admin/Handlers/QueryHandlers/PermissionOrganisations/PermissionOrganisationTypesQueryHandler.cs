@@ -14,14 +14,10 @@ namespace Foundation.Extension.Admin.Handlers
 {
     public class PermissionOrganisationTypesQueryHandler : IMiddleware<PermissionOrganisationTypesQuery, IEnumerable<PermissionOrganisationTypeInfos>>
     {
-        private IPermissionOrganisationRepository _permissionRepository;
-        private IPermissionOrganisationTypeRepository _permissionOrganisationTypeRepository;
+        private readonly IPermissionOrganisationTypeRepository _permissionOrganisationTypeRepository;
 
-        public PermissionOrganisationTypesQueryHandler(
-            IPermissionOrganisationTypeRepository permissionOrganisationTypeRepository,
-            IPermissionOrganisationRepository permissionRepository)
+        public PermissionOrganisationTypesQueryHandler(IPermissionOrganisationTypeRepository permissionOrganisationTypeRepository)
         {
-            _permissionRepository = permissionRepository;
             _permissionOrganisationTypeRepository = permissionOrganisationTypeRepository;
         }
 
@@ -32,9 +28,9 @@ namespace Foundation.Extension.Admin.Handlers
                 OrganisationTypeId = request.OrganisationTypeId
             };
 
-            var orgTypePermissions = await _permissionOrganisationTypeRepository.GetMany(filter);
+            var permissionOrganisationTypes = await _permissionOrganisationTypeRepository.GetMany(filter);
 
-            return orgTypePermissions;
+            return permissionOrganisationTypes;
         }
     }
 }

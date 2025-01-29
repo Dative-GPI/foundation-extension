@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+
 using Microsoft.Extensions.DependencyInjection;
 
 using Bones.Flow;
@@ -11,7 +11,7 @@ namespace Foundation.Extension.Admin.DI
 {
     public static class PermissionOrganisationInjector
     {
-        public static IServiceCollection AddPermissions(this IServiceCollection services)
+        public static IServiceCollection AddPermissionOrganisations(this IServiceCollection services)
         {
             services.AddScoped<PermissionOrganisationsQueryHandler>();
             services.AddScoped<IQueryHandler<PermissionOrganisationsQuery, IEnumerable<PermissionOrganisationInfos>>>(sp =>

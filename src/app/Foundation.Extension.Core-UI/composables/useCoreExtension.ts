@@ -6,7 +6,8 @@ import { useExtensionHost, useTranslations } from "@dative-gpi/foundation-extens
 import { useAppOrganisationId } from "@dative-gpi/foundation-core-services/composables";
 import { Single } from "@dative-gpi/foundation-shared-domain/tools";
 
-import { useCurrentPermissions } from "./useCurrentPermissions";
+import { useCurrentPermissionOrganisations } from "./usePermissionOrganisations";
+import { useCurrentUserOrganisation } from "./useUserOrganisations";
 import { ORGANISATION_ID } from "../config/literals";
 import { extractParams } from "../tools";
 
@@ -14,14 +15,13 @@ const single = new Single();
 
 export const useCoreExtension = () => {
   return single.call(() => {
+    const { fetch: getCurrentPermissionOrganisations, entity: currentPermissionOrganisations } = useCurrentPermissionOrganisations();
+    const { fetch: getCurrentUserOrganisation, entity: currentUserOrganisation } = useCurrentUserOrganisation();
     const { setAppOrganisationId, ready: organisationIdInitialized } = useAppOrganisationId();
-    const { done: hostReady } = useExtensionHost();
-    
-    const { getMany: getCurrentPermission, entities: permissions } = useCurrentPermissions();
-    const { set: setAppPermissions } = useAppPermissions();
-    
     const { getMany: getManyTranslations, entities: translations} = useTranslations();
     const { set: setAppTranslations } = useAppTranslations();
+    const { set: setAppPermissions } = useAppPermissions();
+    const { done: hostReady } = useExtensionHost();
 
     const router = useRouter();
 
@@ -36,8 +36,12 @@ export const useCoreExtension = () => {
         return;
       }
 
-      await getCurrentPermission();
-      setAppPermissions(permissions.value.map(p => p.toString()));
+      await getCurrentUserOrganisation();
+
+      await getCurrentPermissionOrganisations();
+      if (currentPermissionOrganisations.value != null) {
+        setAppPermissions(currentPermissionOrganisations.value);
+      }
       
       await getManyTranslations();
       setAppTranslations(translations.value);
@@ -54,6 +58,7 @@ export const useCoreExtension = () => {
     }, { immediate: true });
     
     return {
+      currentUserOrganisation,
       done
     };
   });

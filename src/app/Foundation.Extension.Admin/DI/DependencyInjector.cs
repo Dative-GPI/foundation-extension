@@ -19,27 +19,24 @@ namespace Foundation.Extension.Admin.DI
 			services.AddCrossCutting(configuration);
 
 			services.AddScoped<RequestContextProvider>();
-			services.AddScoped<IRequestContextProvider>(sp
-				=> sp.GetRequiredService<RequestContextProvider>());
+			services.AddScoped<IRequestContextProvider>(sp => sp.GetRequiredService<RequestContextProvider>());
 
 			services.AddFlow();
 			services.AddServices();
 			services.AddMiddlewares();
 
-			services.AddPermissions();
-			services.AddPermissionOrganisationCategories();
-			services.AddPermissionOrganisationTypes();
-			services.AddRolePermissionOrganisation();
-
-			services.AddPermissionApplications();
-			services.AddPermissionApplicationCategories();
-			services.AddRoleApplication();
-
-			services.AddTranslations();
 			services.AddApplicationTranslations();
 			services.AddDispositions();
 			services.AddEntities();
 			services.AddPages();
+			services.AddPermissionApplicationCategories();
+			services.AddPermissionApplications();
+			services.AddPermissionOrganisationCategories();
+			services.AddPermissionOrganisations();
+			services.AddPermissionOrganisationTypes();
+			services.AddRoleApplications();
+			services.AddRoleOrganisationTypes();
+			services.AddTranslations();
 
 			services.AddScoped<IPermissionProvider, PermissionProvider>();
 			services.AddScoped<IApplicationTableProvider, ApplicationTableProvider>();

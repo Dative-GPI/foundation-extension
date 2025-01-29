@@ -13,7 +13,7 @@ namespace Foundation.Extension.Admin.Handlers
 {
     public class PermissionApplicationsQueryHandler : IMiddleware<PermissionApplicationsQuery, IEnumerable<PermissionApplicationInfos>>
     {
-        private IPermissionApplicationRepository _permissionApplicationRepository;
+        private readonly IPermissionApplicationRepository _permissionApplicationRepository;
         
         public PermissionApplicationsQueryHandler(IPermissionApplicationRepository permissionApplicationRepository)
         {
@@ -27,7 +27,9 @@ namespace Foundation.Extension.Admin.Handlers
                 Search = request.Search
             };
 
-            return await _permissionApplicationRepository.GetMany(filter);
+            var permissionApplications = await _permissionApplicationRepository.GetMany(filter);
+
+            return permissionApplications;
         }
     }
 }

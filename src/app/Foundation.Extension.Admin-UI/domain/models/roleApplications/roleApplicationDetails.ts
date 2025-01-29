@@ -1,15 +1,18 @@
 export class RoleApplicationDetails {
-    permissionIds: string[];
+  id: string;
+  permissionIds: string[];
 
-    constructor(params: RoleApplicationDetailsDTO) {
-        this.permissionIds = params.permissionIds;
-    }
+  constructor(params: RoleApplicationDetailsDTO) {
+    this.id = params.id;
+    this.permissionIds = params.permissionIds;
+  }
 }
 
 export interface RoleApplicationDetailsDTO {
-    permissionIds: string[];
+  id: string;
+  permissionIds: string[];
 }
 
 export interface UpdateRoleApplicationDTO {
-    permissionIds: string[];
+  permissionIds: string[];
 }

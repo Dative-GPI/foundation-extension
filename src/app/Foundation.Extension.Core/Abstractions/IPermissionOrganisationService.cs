@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,6 +9,5 @@ namespace Foundation.Extension.Core.Abstractions
     {
         Task<IEnumerable<string>> GetCurrent();
         Task<IEnumerable<PermissionOrganisationInfosViewModel>> GetMany();
-        Task<IEnumerable<PermissionOrganisationCategoryViewModel>> GetCategories();
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,6 +7,6 @@ namespace Foundation.Extension.Admin.Abstractions
 {
     public interface IPermissionApplicationCategoryService
     {
-        Task<IEnumerable<PermissionApplicationCategoryViewModel>> GetMany();
+        Task<IEnumerable<PermissionApplicationCategoryInfosViewModel>> GetMany();
     }
 }

@@ -20,16 +20,20 @@ namespace Foundation.Extension.Core.DI
             services.AddCrossCutting(configuration);
 
             services.AddScoped<RequestContextProvider>();
-            services.AddScoped<IRequestContextProvider>(sp
-                => sp.GetRequiredService<RequestContextProvider>());
+            services.AddScoped<IRequestContextProvider>(sp => sp.GetRequiredService<RequestContextProvider>());
 
             services.AddFlow();
             services.AddServices();
             services.AddMiddlewares();
 
-            services.AddPermissions();
-            services.AddRolePermissionOrganisations();
+            services.AddPermissionOrganisationCategories();
+            services.AddPermissionOrganisations();
+            services.AddRoleOrganisations();
+            services.AddRoleOrganisationTypes();
+            services.AddServiceAccountOrganisations();
+            services.AddServiceAccountRoleOrganisations();
             services.AddTables();
+            services.AddUserOrganisations();
 
             services.AddScoped<IPermissionProvider, PermissionProvider>();
             services.AddScoped<IApplicationTableProvider, ApplicationTableProvider>();

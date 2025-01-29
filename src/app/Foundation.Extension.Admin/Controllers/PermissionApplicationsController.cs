@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,7 @@ using Foundation.Extension.Admin.ViewModels;
 
 namespace Foundation.Extension.Admin.Controllers
 {
-    [Route("api/admin/v1")]
+    [Route("api/admin/v1/permission-applications")]
     public class PermissionApplicationsController : ControllerBase
     {
         private readonly IPermissionApplicationService _permissionApplicationService;
@@ -17,19 +18,17 @@ namespace Foundation.Extension.Admin.Controllers
             _permissionApplicationService = permissionApplicationService;
         }
 
-        [Route("permission-applications")]
-        [HttpGet]
-        public async Task<IActionResult> GetMany([FromQuery] PermissionApplicationFilterViewModel filter)
+        [HttpGet("current")]
+        public async Task<ActionResult<IEnumerable<string>>> GetCurrent()
         {
-            var result = await _permissionApplicationService.GetMany(filter);
+            var result = await _permissionApplicationService.GetCurrent();
             return Ok(result);
         }
 
-        [Route("permission-applications/current")]
         [HttpGet]
-        public async Task<IActionResult> GetCurrent()
+        public async Task<ActionResult<IEnumerable<PermissionApplicationInfosViewModel>>> GetMany([FromQuery] PermissionApplicationFilterViewModel filter)
         {
-            var result = await _permissionApplicationService.GetCurrent();
+            var result = await _permissionApplicationService.GetMany(filter);
             return Ok(result);
         }
     }

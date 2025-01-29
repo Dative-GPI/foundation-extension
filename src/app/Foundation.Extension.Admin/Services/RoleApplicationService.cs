@@ -1,29 +1,28 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using AutoMapper;
 
 using Bones.Flow;
+using Bones.Repository.Interfaces;
 
 using Foundation.Extension.Domain.Models;
 using Foundation.Extension.Domain.Repositories.Interfaces;
 
 using Foundation.Extension.Admin.Abstractions;
 using Foundation.Extension.Admin.ViewModels;
-using Foundation.Extension.Domain.Repositories.Filters;
-using Bones.Repository.Interfaces;
 
 namespace Foundation.Extension.Admin.Services
 {
     public class RoleApplicationService : IRoleApplicationService
     {
-        private IRoleApplicationRepository _roleApplicationRepository;
-        private IQueryHandler<RoleApplicationQuery, RoleApplicationDetails> _roleApplicationQueryHandler;
-        private ICommandHandler<UpdateRoleApplicationCommand, IEntity<Guid>> _updateRoleApplicationCommandHandler;
-        private IMapper _mapper;
+        private readonly IQueryHandler<RoleApplicationQuery, RoleApplicationDetails> _roleApplicationQueryHandler;
+        private readonly ICommandHandler<UpdateRoleApplicationCommand, IEntity<Guid>> _updateRoleApplicationCommandHandler;
+        private readonly IRoleApplicationRepository _roleApplicationRepository;
+        private readonly IMapper _mapper;
 
-        public RoleApplicationService(
+        public RoleApplicationService
+        (
             IQueryHandler<RoleApplicationQuery, RoleApplicationDetails> roleQueryHandler,
             ICommandHandler<UpdateRoleApplicationCommand, IEntity<Guid>> updateRoleCommandHandler,
             IRoleApplicationRepository roleApplicationRepository,
@@ -32,16 +31,15 @@ namespace Foundation.Extension.Admin.Services
         {
             _roleApplicationQueryHandler = roleQueryHandler;
             _updateRoleApplicationCommandHandler = updateRoleCommandHandler;
-            
             _roleApplicationRepository = roleApplicationRepository;
             _mapper = mapper;
         }
 
-        public async Task<RoleApplicationDetailsViewModel> Get(Guid id)
+        public async Task<RoleApplicationDetailsViewModel> Get(Guid roleApplicationId)
         {
             var query = new RoleApplicationQuery()
             {
-                RoleApplicationId = id
+                RoleApplicationId = roleApplicationId
             };
 
             var result = await _roleApplicationQueryHandler.HandleAsync(query);
@@ -49,11 +47,11 @@ namespace Foundation.Extension.Admin.Services
             return _mapper.Map<RoleApplicationDetails, RoleApplicationDetailsViewModel>(result);
         }
 
-        public async Task<RoleApplicationDetailsViewModel> Update(Guid id, UpdateRoleApplicationViewModel payload)
+        public async Task<RoleApplicationDetailsViewModel> Update(Guid roleApplicationId, UpdateRoleApplicationViewModel payload)
         {
             var command = new UpdateRoleApplicationCommand()
             {
-                RoleApplicationId = id,
+                RoleApplicationId = roleApplicationId,
                 PermissionIds = payload.PermissionIds,
                 ExtensionData = payload.ExtensionData
             };

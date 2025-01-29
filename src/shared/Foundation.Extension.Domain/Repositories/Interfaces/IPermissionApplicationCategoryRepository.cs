@@ -7,6 +7,6 @@ namespace Foundation.Extension.Domain.Repositories.Interfaces
 {
     public interface IPermissionApplicationCategoryRepository
     {
-        Task<IEnumerable<PermissionApplicationCategory>> GetMany();
+        Task<IEnumerable<PermissionApplicationCategoryInfos>> GetMany();
     }
 }

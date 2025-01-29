@@ -1,15 +1,16 @@
 import { onMounted, ref } from "vue";
-import { useExtensionHost, useTranslations } from "@dative-gpi/foundation-extension-shared-ui";
+
 import { usePermissions as useAppPermissions, useTranslations as useAppTranslations } from "@dative-gpi/bones-ui";
+import { useExtensionHost, useTranslations } from "@dative-gpi/foundation-extension-shared-ui";
 import { Single } from "@dative-gpi/foundation-shared-domain/tools";
 
-import { useCurrentPermissions } from "./useCurrentPermissions";
+import { useCurrentPermissionApplications } from "./usePermissionApplications";
 
 const single = new Single();
 
 export const useAdminExtension = () => {
     return single.call(() => {
-      const { getMany: getCurrentPermission, entities: permissions } = useCurrentPermissions();
+      const { fetch: getCurrentPermissionApplications, entity: currentPermissionApplications } = useCurrentPermissionApplications();
       const { set: setAppPermissions } = useAppPermissions();
       
       const { getMany: getManyTranslations, entities: translations} = useTranslations();
@@ -20,8 +21,10 @@ export const useAdminExtension = () => {
       onMounted(async () => {       
         useExtensionHost();
          
-        await getCurrentPermission();
-        setAppPermissions(permissions.value.map(p => p.toString()));
+        await getCurrentPermissionApplications();
+        if (currentPermissionApplications.value != null) {
+          setAppPermissions(currentPermissionApplications.value);
+        }
         
         await getManyTranslations();
         setAppTranslations(translations.value);
@@ -30,6 +33,7 @@ export const useAdminExtension = () => {
       });
   
       return {
+        currentPermissionApplications,
         done
       };
     });

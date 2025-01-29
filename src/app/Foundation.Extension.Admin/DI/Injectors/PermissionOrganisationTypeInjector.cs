@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+
 using Microsoft.Extensions.DependencyInjection;
 
 using Bones.Flow;
@@ -23,7 +23,6 @@ namespace Foundation.Extension.Admin.DI
 
                 return pipeline;
             });
-
 
             services.AddScoped<UpsertPermissionOrganisationTypesCommandHandler>();
             services.AddScoped<ICommandHandler<UpsertPermissionOrganisationTypesCommand>>(sp =>

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
@@ -9,30 +8,28 @@ using Foundation.Extension.Core.ViewModels;
 
 namespace Foundation.Extension.Core.Controllers
 {
-    [Route("api/core/v1")]
-    public class RolePermissionOrganisationsController : ControllerBase
+    [Route("api/core/v1/organisations/{organisationId:Guid}/role-organisations")]
+    public class RoleOrganisationsController : ControllerBase
     {
-        private readonly IRolePermissionOrganisationService _roleOrganisationService;
+        private readonly IRoleOrganisationService _roleOrganisationService;
 
-        public RolePermissionOrganisationsController(IRolePermissionOrganisationService roleOrganisationService)
+        public RoleOrganisationsController(IRoleOrganisationService roleOrganisationService)
         {
             _roleOrganisationService = roleOrganisationService;
         }
 
-        [Route("organisations/{organisationId:Guid}/roles/{roleId:Guid}")]
-        [HttpGet]
-        public async Task<IActionResult> Get([FromRoute] Guid roleId)
+        [HttpGet("{roleOrganisationId:Guid}")]
+        public async Task<ActionResult<RoleOrganisationDetailsViewModel>> Get([FromRoute] Guid roleOrganisationId)
         {
-            var result = await _roleOrganisationService.Get(roleId);
+            var result = await _roleOrganisationService.Get(roleOrganisationId);
             return Ok(result);
         }
 
-        [Route("organisations/{organisationId:Guid}/roles/{roleId:Guid}")]
-        [HttpPost]
-        public async Task<IActionResult> Update([FromRoute] Guid organisationId, [FromRoute] Guid roleId, [FromBody] UpdateRolePermissionOrganisationViewModel payload)
+        [HttpPost("{roleOrganisationId:Guid}")]
+        public async Task<ActionResult<RoleOrganisationDetailsViewModel>> Update([FromRoute] Guid roleOrganisationId, [FromBody] UpdateRoleOrganisationViewModel payload)
         {
-            await _roleOrganisationService.Update(roleId, payload);
-            return Ok();
+            var result = await _roleOrganisationService.Update(roleOrganisationId, payload);
+            return Ok(result);
         }
     }
 }

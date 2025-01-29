@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
@@ -15,11 +14,12 @@ namespace Foundation.Extension.Admin.Services
 {
     public class PermissionOrganisationCategoryService : IPermissionOrganisationCategoryService
     {
-        private IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategory>> _permissionCategoriesQueryHandler;
-        private IMapper _mapper;
+        private readonly IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategoryInfos>> _permissionCategoriesQueryHandler;
+        private readonly IMapper _mapper;
 
-        public PermissionOrganisationCategoryService(
-            IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategory>> permissionCategoriesQueryHandler,
+        public PermissionOrganisationCategoryService
+        (
+            IQueryHandler<PermissionOrganisationCategoriesQuery, IEnumerable<PermissionOrganisationCategoryInfos>> permissionCategoriesQueryHandler,
             IMapper mapper
         )
         {
@@ -27,14 +27,13 @@ namespace Foundation.Extension.Admin.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<PermissionOrganisationCategoryViewModel>> GetMany()
+        public async Task<IEnumerable<PermissionOrganisationCategoryInfosViewModel>> GetMany()
         {
-            var query = new PermissionOrganisationCategoriesQuery() {
-            };
+            var query = new PermissionOrganisationCategoriesQuery();
 
             var result = await _permissionCategoriesQueryHandler.HandleAsync(query);
 
-            return _mapper.Map<IEnumerable<PermissionOrganisationCategory>, IEnumerable<PermissionOrganisationCategoryViewModel>>(result);
+            return _mapper.Map<IEnumerable<PermissionOrganisationCategoryInfos>, IEnumerable<PermissionOrganisationCategoryInfosViewModel>>(result);
         }
     }
 }

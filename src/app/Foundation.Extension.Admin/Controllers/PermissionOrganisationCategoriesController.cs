@@ -1,12 +1,14 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
 
 using Foundation.Extension.Admin.Abstractions;
+using Foundation.Extension.Admin.ViewModels;
 
 namespace Foundation.Extension.Admin.Controllers
 {
-    [Route("api/admin/v1")]
+    [Route("api/admin/v1/permission-organisation-categories")]
     public class PermissionOrganisationCategoriesController : ControllerBase
     {
         private readonly IPermissionOrganisationCategoryService _permissionOrganisationCategoryService;
@@ -16,9 +18,8 @@ namespace Foundation.Extension.Admin.Controllers
             _permissionOrganisationCategoryService = permissionOrganisationCategoryService;
         }
 
-        [Route("permission-organisation-categories")]
         [HttpGet]
-        public async Task<IActionResult> GetMany()
+        public async Task<ActionResult<IEnumerable<PermissionOrganisationCategoryInfosViewModel>>> GetMany()
         {
             var result = await _permissionOrganisationCategoryService.GetMany();
             return Ok(result);

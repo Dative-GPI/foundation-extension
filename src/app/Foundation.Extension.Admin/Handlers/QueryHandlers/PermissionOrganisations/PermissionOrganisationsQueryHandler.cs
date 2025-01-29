@@ -13,11 +13,11 @@ namespace Foundation.Extension.Admin.Handlers
 {
     public class PermissionOrganisationsQueryHandler : IMiddleware<PermissionOrganisationsQuery, IEnumerable<PermissionOrganisationInfos>>
     {
-        private IPermissionOrganisationRepository _permissionRepository;
+        private readonly IPermissionOrganisationRepository _permissionOrganisationRepository;
         
-        public PermissionOrganisationsQueryHandler(IPermissionOrganisationRepository permissionRepository)
+        public PermissionOrganisationsQueryHandler(IPermissionOrganisationRepository permissionOrganisationRepository)
         {
-            _permissionRepository = permissionRepository;
+            _permissionOrganisationRepository = permissionOrganisationRepository;
         }
 
         public async Task<IEnumerable<PermissionOrganisationInfos>> HandleAsync(PermissionOrganisationsQuery request, Func<Task<IEnumerable<PermissionOrganisationInfos>>> next, CancellationToken cancellationToken)
@@ -27,7 +27,9 @@ namespace Foundation.Extension.Admin.Handlers
                 Search = request.Search
             };
 
-            return await _permissionRepository.GetMany(filter);
+            var permissionOrganisations = await _permissionOrganisationRepository.GetMany(filter);
+        
+            return permissionOrganisations;
         }
     }
 }

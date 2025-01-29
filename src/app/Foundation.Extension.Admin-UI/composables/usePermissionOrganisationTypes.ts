@@ -2,12 +2,12 @@ import { ComposableFactory, ServiceFactory } from "@dative-gpi/bones-ui";
 
 import { PERMISSION_ORGANISATION_TYPES_URL } from "../config";
 
-import type { PermissionOrganisationTypeInfosDTO, UpsertPermissionOrganisation, PermissionOrganisationTypeFilter } from "../domain";
+import type { PermissionOrganisationTypeInfosDTO, UpsertPermissionOrganisation, PermissionOrganisationTypesFilter } from "../domain";
 import { PermissionOrganisationTypeInfos } from "../domain";
 
 const PermissionServiceFactory = new ServiceFactory<PermissionOrganisationTypeInfosDTO, PermissionOrganisationTypeInfos>("permission-organisation-type", PermissionOrganisationTypeInfos)
     .create(f => f.build(
-        f.addGetMany<PermissionOrganisationTypeInfosDTO, PermissionOrganisationTypeInfos, PermissionOrganisationTypeFilter>(PERMISSION_ORGANISATION_TYPES_URL, PermissionOrganisationTypeInfos),
+        f.addGetMany<PermissionOrganisationTypeInfosDTO, PermissionOrganisationTypeInfos, PermissionOrganisationTypesFilter>(PERMISSION_ORGANISATION_TYPES_URL, PermissionOrganisationTypeInfos),
         f.addNotify(
             notifier => ({
                 upsert: async (payload: UpsertPermissionOrganisation[]) => {

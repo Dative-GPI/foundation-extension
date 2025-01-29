@@ -9,13 +9,16 @@ namespace Foundation.Extension.Core.DI
 	{
 		public static IServiceCollection AddServices(this IServiceCollection services)
 		{
-			services.AddScoped<IRouteService, RouteService>();
 			services.AddScoped<IActionService, ActionService>();
-
-			services.AddScoped<IUserOrganisationTableService, UserOrganisationTableService>();
-
+			services.AddScoped<IPermissionOrganisationCategoryService, PermissionOrganisationCategoryService>();
 			services.AddScoped<IPermissionOrganisationService, PermissionOrganisationService>();
-			services.AddScoped<IRolePermissionOrganisationService, RolePermissionOrganisationService>();
+			services.AddScoped<IRoleOrganisationService, RoleOrganisationService>();
+			services.AddScoped<IRoleOrganisationTypeService, RoleOrganisationTypeService>();
+			services.AddScoped<IRouteService, RouteService>();
+			services.AddScoped<IServiceAccountOrganisationService, ServiceAccountOrganisationService>();
+			services.AddScoped<IServiceAccountRoleOrganisationService, ServiceAccountRoleOrganisationService>();
+			services.AddScoped<IUserOrganisationService, UserOrganisationService>();
+			services.AddScoped<IUserOrganisationTableService, UserOrganisationTableService>();
 
 			return services;
 		}

@@ -22,7 +22,7 @@ export interface PermissionOrganisationTypeInfosDTO {
     permissionId: string;
 }
 
-export interface PermissionOrganisationTypeFilter {
+export interface PermissionOrganisationTypesFilter {
     organisationTypeId?: string
     search?: string
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,21 +17,22 @@ namespace Foundation.Extension.Admin.Services
 {
     public class PermissionOrganisationTypeService : IPermissionOrganisationTypeService
     {
-		private IPermissionOrganisationTypeRepository _permissionOrganisationTypeRepository;
-		private IQueryHandler<PermissionOrganisationTypesQuery, IEnumerable<PermissionOrganisationTypeInfos>> _permissionOrganisationTypesQueryHandler;
-        private ICommandHandler<UpsertPermissionOrganisationTypesCommand> _updatePermissionOrganisationTypesCommand;
-        private IMapper _mapper;
+		private readonly IQueryHandler<PermissionOrganisationTypesQuery, IEnumerable<PermissionOrganisationTypeInfos>> _permissionOrganisationTypesQueryHandler;
+        private readonly ICommandHandler<UpsertPermissionOrganisationTypesCommand> _updatePermissionOrganisationTypesCommand;
+		private readonly IPermissionOrganisationTypeRepository _permissionOrganisationTypeRepository;
+        private readonly IMapper _mapper;
 
-        public PermissionOrganisationTypeService(
-			IPermissionOrganisationTypeRepository permissionOrganisationTypeRepository,
+        public PermissionOrganisationTypeService
+        (
             IQueryHandler<PermissionOrganisationTypesQuery, IEnumerable<PermissionOrganisationTypeInfos>> permissionOrganisationTypesQuery,
             ICommandHandler<UpsertPermissionOrganisationTypesCommand> updatePermissionOrganisationTypesCommand,
+			IPermissionOrganisationTypeRepository permissionOrganisationTypeRepository,
             IMapper mapper
         )
         {
-			_permissionOrganisationTypeRepository = permissionOrganisationTypeRepository;
             _permissionOrganisationTypesQueryHandler = permissionOrganisationTypesQuery;
             _updatePermissionOrganisationTypesCommand = updatePermissionOrganisationTypesCommand;
+			_permissionOrganisationTypeRepository = permissionOrganisationTypeRepository;
             _mapper = mapper;
         }
 
@@ -60,10 +60,13 @@ namespace Foundation.Extension.Admin.Services
             };
 
             await _updatePermissionOrganisationTypesCommand.HandleAsync(command);
-			var result = await _permissionOrganisationTypeRepository.GetMany(new PermissionOrganisationTypesFilter()
+
+            var filter = new PermissionOrganisationTypesFilter()
             {
 				OrganisationTypeIds = payload.Select(x => x.OrganisationTypeId).Distinct().ToList()
-            });
+            };
+
+			var result = await _permissionOrganisationTypeRepository.GetMany(filter);
 
 			return _mapper.Map<IEnumerable<PermissionOrganisationTypeInfos>, IEnumerable<PermissionOrganisationTypeInfosViewModel>>(result);
         }

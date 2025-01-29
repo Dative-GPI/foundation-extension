@@ -6,7 +6,7 @@ import type { EntityPropertyDTO } from "../domain";
 import { EntityPropertyInfos } from "../domain";
 
 
-const EntityPropertyServiceFactory = new ServiceFactory<EntityPropertyInfos, EntityPropertyDTO>("entity-property", EntityPropertyInfos)
+const EntityPropertyServiceFactory = new ServiceFactory<EntityPropertyInfos, EntityPropertyDTO>("extensionEntityProperty", EntityPropertyInfos)
     .create(f => f.build(
         f.addGetMany(ENTITYPROPERTIES_URL, EntityPropertyInfos),
         f.addNotify()

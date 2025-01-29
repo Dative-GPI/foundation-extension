@@ -7,7 +7,7 @@ import { OrganisationTypeTableDetails } from "../domain";
 
 import axios from "axios";
 
-const OrganisationTypeTableServiceFactory = new ServiceFactory<OrganisationTypeTableDetails, OrganisationTypeTableDetailsDTO>("organisation-type-table", OrganisationTypeTableDetails)
+const OrganisationTypeTableServiceFactory = new ServiceFactory<OrganisationTypeTableDetails, OrganisationTypeTableDetailsDTO>("extensionOrganisationTypeTable", OrganisationTypeTableDetails)
     .create(f => f.build(
         f.addNotify(
             notifier => ({

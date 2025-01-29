@@ -5,7 +5,7 @@ import { PERMISSION_ORGANISATION_TYPES_URL } from "../config";
 import type { PermissionOrganisationTypeInfosDTO, UpsertPermissionOrganisation, PermissionOrganisationTypesFilter } from "../domain";
 import { PermissionOrganisationTypeInfos } from "../domain";
 
-const PermissionServiceFactory = new ServiceFactory<PermissionOrganisationTypeInfosDTO, PermissionOrganisationTypeInfos>("permission-organisation-type", PermissionOrganisationTypeInfos)
+const PermissionServiceFactory = new ServiceFactory<PermissionOrganisationTypeInfosDTO, PermissionOrganisationTypeInfos>("extensionPermissionOrganisationType", PermissionOrganisationTypeInfos)
     .create(f => f.build(
         f.addGetMany<PermissionOrganisationTypeInfosDTO, PermissionOrganisationTypeInfos, PermissionOrganisationTypesFilter>(PERMISSION_ORGANISATION_TYPES_URL, PermissionOrganisationTypeInfos),
         f.addNotify(

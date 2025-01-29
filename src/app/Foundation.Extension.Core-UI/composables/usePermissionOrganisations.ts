@@ -3,7 +3,7 @@ import { ServiceFactory, ComposableFactory } from "@dative-gpi/bones-ui";
 import { PERMISSION_ORGANISATIONS_CURRENT_URL, PERMISSION_ORGANISATIONS_URL } from "../config";
 import { PermissionOrganisationInfos, type PermissionOrganisationInfosDTO } from "../domain";
 
-const PermissionServiceFactory = new ServiceFactory<PermissionOrganisationInfosDTO, PermissionOrganisationInfos>("permissionOrganisation", PermissionOrganisationInfos).create(factory => factory.build(
+const PermissionServiceFactory = new ServiceFactory<PermissionOrganisationInfosDTO, PermissionOrganisationInfos>("extensionPermissionOrganisation", PermissionOrganisationInfos).create(factory => factory.build(
   factory.addGetMany(PERMISSION_ORGANISATIONS_URL, PermissionOrganisationInfos),
   ServiceFactory.addCustom("getCurrent", (axios) => axios.get(PERMISSION_ORGANISATIONS_CURRENT_URL()), (dtos: string[]) => dtos),
   factory.addNotify()

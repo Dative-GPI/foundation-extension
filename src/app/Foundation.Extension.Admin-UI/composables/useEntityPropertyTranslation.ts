@@ -5,7 +5,7 @@ import { ENTITYPROPERTY_TRANSLATIONS_URL, ENTITYPROPERTY_TRANSLATION_URL, ENTITY
 import type { EntityPropertyTranslationDTO, DownloadEntityPropertyTranslations, UpdateEntityPropertyTranslation, UploadEntityPropertyTranslations } from "../domain";
 import { EntityPropertyTranslationInfos } from "../domain";
 
-const EntityPropertyTranslationServiceFactory = new ServiceFactory<EntityPropertyTranslationInfos, EntityPropertyTranslationDTO>("entity-property-translation", EntityPropertyTranslationInfos)
+const EntityPropertyTranslationServiceFactory = new ServiceFactory<EntityPropertyTranslationInfos, EntityPropertyTranslationDTO>("extensionEntityPropertyTranslation", EntityPropertyTranslationInfos)
     .create(f => f.build(
         f.addGetMany(ENTITYPROPERTY_TRANSLATIONS_URL, EntityPropertyTranslationInfos),
         f.addUpdate<UpdateEntityPropertyTranslation>(ENTITYPROPERTY_TRANSLATION_URL),

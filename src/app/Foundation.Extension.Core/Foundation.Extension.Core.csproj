@@ -16,7 +16,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-    <PackageReference Include="Bones.Flow" Version="0.0.55" />
+    <PackageReference Include="Bones.Flow" Version="1.0.5" />
   </ItemGroup>
 
 </Project>

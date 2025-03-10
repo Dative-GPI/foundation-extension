@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bones" Version="0.0.55" />
-    <PackageReference Include="Bones.Flow" Version="0.0.55" />
+    <PackageReference Include="Bones" Version="1.0.5" />
+    <PackageReference Include="Bones.Flow" Version="1.0.5" />
   </ItemGroup>
 
   <ItemGroup>

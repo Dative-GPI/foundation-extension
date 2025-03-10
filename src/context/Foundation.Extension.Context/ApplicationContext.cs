@@ -45,7 +45,9 @@ namespace Foundation.Extension.Context
         public DbSet<UserOrganisationColumnDTO> UserOrganisationColumns { get; set; }
         #endregion
 
-
+        #region Widgets
+        public DbSet<WidgetTemplateDTO> WidgetTemplates { get; set; }
+        #endregion
 
         public BaseApplicationContext(DbContextOptions options) : base(options) { }
 

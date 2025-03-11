@@ -20,9 +20,9 @@ namespace Foundation.Extension.Core.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<WidgetTemplateInfosFoundationModel>>> GetMany([FromQuery] WidgetTemplatesFilterFoundationModel filter, [FromQuery] string languageCode)
+        public async Task<ActionResult<IEnumerable<WidgetTemplateInfosFoundationModel>>> GetMany([FromQuery] WidgetTemplatesFilterFoundationModel filter)
         {
-            var result = await _widgetTemplateService.GetMany(languageCode, filter);
+            var result = await _widgetTemplateService.GetMany(filter);
             return Ok(result);
         }
     }

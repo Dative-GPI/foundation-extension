@@ -175,6 +175,20 @@ namespace Foundation.Extension.Context
                     .HasForeignKey(t => t.ApplicationId);
             });
             #endregion
+
+            #region Widgets
+            modelBuilder.Entity<WidgetTemplateDTO>(m =>
+            {
+                m.HasKey(w => w.Id);
+                m.Property(w => w.Translations)
+                    .HasColumnType("jsonb");
+                m.Property(w => w.DefaultMeta)
+                    .HasColumnType("jsonb");
+                m.HasGeneratedTsVectorColumn(w => w.SearchVector, "english", w => new { w.Search })
+                    .HasIndex(w => w.SearchVector)
+                    .HasMethod("GIN");
+            });
+            #endregion
         }
     }
 }

@@ -34,6 +34,7 @@ namespace Foundation.Extension.Core.DI
             services.AddServiceAccountRoleOrganisations();
             services.AddTables();
             services.AddUserOrganisations();
+            services.AddWidgetTemplates();
 
             services.AddScoped<IPermissionProvider, PermissionProvider>();
             services.AddScoped<IApplicationTableProvider, ApplicationTableProvider>();

@@ -19,6 +19,7 @@ namespace Foundation.Extension.Core.DI
 			services.AddScoped<IServiceAccountRoleOrganisationService, ServiceAccountRoleOrganisationService>();
 			services.AddScoped<IUserOrganisationService, UserOrganisationService>();
 			services.AddScoped<IUserOrganisationTableService, UserOrganisationTableService>();
+			services.AddScoped<IWidgetTemplateService, WidgetTemplateService>();
 
 			return services;
 		}

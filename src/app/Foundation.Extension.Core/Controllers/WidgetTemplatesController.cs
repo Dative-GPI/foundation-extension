@@ -9,7 +9,7 @@ using Foundation.Extension.Core.Abstractions;
 
 namespace Foundation.Extension.Core.Controllers
 {
-    [Route("api/admin/v1")]
+    [Route("api/core/v1")]
     public class WidgetTemplatesController : ControllerBase
     {
         private readonly IWidgetTemplateService _widgetTemplateService;

@@ -9,7 +9,7 @@ using Foundation.Extension.Core.Abstractions;
 
 namespace Foundation.Extension.Core.Controllers
 {
-    [Route("api/core/v1")]
+    [Route("api/core/v1/organisations/{organisationId:Guid}/widget-templates")]
     public class WidgetTemplatesController : ControllerBase
     {
         private readonly IWidgetTemplateService _widgetTemplateService;
@@ -19,7 +19,7 @@ namespace Foundation.Extension.Core.Controllers
             _widgetTemplateService = widgetTemplateService;
         }
 
-        [HttpGet("widget-templates")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<WidgetTemplateInfosFoundationModel>>> GetMany([FromQuery] WidgetTemplatesFilterFoundationModel filter, [FromQuery] string languageCode)
         {
             var result = await _widgetTemplateService.GetMany(languageCode, filter);

@@ -5,6 +5,7 @@ using AutoMapper.Internal;
 
 using Foundation.Extension.Domain.Models;
 using Foundation.Extension.Core.ViewModels;
+using Foundation.Clients.Core.FoundationModels;
 
 namespace Foundation.Extension.Core.AutoMapper
 {
@@ -41,6 +42,8 @@ namespace Foundation.Extension.Core.AutoMapper
 				.ForMember(vm => vm.PermissionIds, opt => opt.MapFrom(p => p.Permissions.Select(p => p.Id).ToList()));
 
 			CreateMap<UserOrganisationTableDetails, UserOrganisationTableDetailsViewModel>();
+
+			CreateMap<WidgetTemplateInfos, WidgetTemplateInfosFoundationModel>();
 		}
 	}
 }

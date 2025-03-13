@@ -152,6 +152,13 @@ export function useExtensionCommunicationBridge() {
     });
   }
 
+  const setWidgetConfiguration = (path: string, widgetConfiguration: string) => {
+    notify({
+      path,
+      widgetConfiguration
+    });
+  }
+
   //Deprecated but used for foundation admin 
   const openDrawer = (path: string) => {
     notify({
@@ -199,7 +206,8 @@ export function useExtensionCommunicationBridge() {
     setDialogWidth,
     setDialogHeight,
     subscribeUnsafe,
-    setDialogMounted
+    setDialogMounted,
+    setWidgetConfiguration
   }
 }
 

@@ -1,5 +1,14 @@
 <template>
-  <slot />
+  <FSLoader
+    v-if="waitingForConfig"
+    width="100%"
+    height="100%"
+  />
+  <template
+    v-else
+  >
+    <slot />
+  </template>
 </template>
 
 <script lang="ts">
@@ -16,6 +25,7 @@ export default defineComponent({
     const { subscribe, notify, unsubscribe } = useExtensionCommunicationBridge();
     const route = useRoute();
 
+    const waitingForConfig = ref(true);
     const subcriberIds = ref<number[]>([]);
     const currentFullUrl = window.location.href;
 
@@ -33,13 +43,19 @@ export default defineComponent({
     });
 
     const onReceiveNewConfig = (config: WidgetConfigurationPayload) => {
-      emit('update:meta', JSON.parse(config.meta));
-      emit('update:dashboardSettings', JSON.parse(config.dashboardSettings));
+      const meta = JSON.parse(config.meta);
+      const dashboardSettings = JSON.parse(config.dashboardSettings);
+
+      waitingForConfig.value = false;
+
+      emit('update:meta', meta);
+      emit('update:dashboardSettings', dashboardSettings);
       emit('update:width', config.width);
       emit('update:height', config.height);
     }
 
     onMounted(() => {
+      console.log('Subscribing to widget configuration');
       subcriberIds.value.push(
         subscribe(widgetConfigurationSchema, currentFullUrl, onReceiveNewConfig)
       )
@@ -57,6 +73,7 @@ export default defineComponent({
     });
 
     return {
+      waitingForConfig
     };
   }
 });

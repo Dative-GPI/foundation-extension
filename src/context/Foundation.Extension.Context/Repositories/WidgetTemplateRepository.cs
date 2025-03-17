@@ -21,37 +21,6 @@ namespace Foundation.Extension.Context.Repositories
             _dbSet = context.WidgetTemplates;
         }
 
-        public async Task<WidgetTemplateDetails> Get(Guid widgetTemplateId)
-        {
-            var widgetTemplateDTO = await _dbSet
-                .AsNoTracking()
-                .SingleOrDefaultAsync(w => w.Id == widgetTemplateId);
-
-            if (widgetTemplateDTO == default)
-            {
-                return null;
-            }
-
-            return new WidgetTemplateDetails()
-            {
-                Id = widgetTemplateDTO.Id,
-                Code = widgetTemplateDTO.Code,
-                Icon = widgetTemplateDTO.Icon,
-                Category = widgetTemplateDTO.Category,
-                DefaultWidth = widgetTemplateDTO.DefaultWidth,
-                DefaultHeight = widgetTemplateDTO.DefaultHeight,
-                DefaultMeta = widgetTemplateDTO.DefaultMeta,
-                Label = widgetTemplateDTO.LabelDefault,
-                Description = widgetTemplateDTO.DescriptionDefault,
-                Translations = widgetTemplateDTO.Translations?.Select(t => new TranslationWidgetTemplate()
-                {
-                    LanguageCode = t.LanguageCode,
-                    Label = t.Label,
-                    Description = t.Description
-                }).ToList() ?? new List<TranslationWidgetTemplate>()
-            };
-        }
-
         public async Task<IEnumerable<WidgetTemplateInfos>> GetMany(WidgetTemplatesFilter filter)
         {
             var query = _dbSet

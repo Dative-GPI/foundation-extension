@@ -67,10 +67,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onUnmounted, ref, watch } from "vue";
+import { type PropType,computed, defineComponent, onUnmounted, ref, watch } from "vue";
 import type { JTDSchemaType } from "ajv/dist/types/jtd-schema";
 
 import { useExtensionCommunicationBridge } from '@dative-gpi/foundation-extension-shared-ui';
+
+import type { DashboardSettings, Widget, WidgetTemplateInfos } from "@dative-gpi/foundation-core-domain/models";
+
 import FEDialog from '@dative-gpi/foundation-extension-shared-ui/components/FEDialog.vue';
 
 export default defineComponent({
@@ -80,8 +83,8 @@ export default defineComponent({
   },
   props: {
     widget: {
-      type: Object,
-      required: false
+      type: Object as PropType<Widget>,
+      required: true
     }
   },
   emits: ['update:widget', 'update:widgetTemplate', 'update:dashboardSettings'],
@@ -90,9 +93,9 @@ export default defineComponent({
 
     const dialog = ref(true);
     const subcriberIds = ref<number[]>([]);
-    const widget = ref<object | null>(null);
-    const widgetTemplate = ref<object | null>(null);
-    const dashboardSettings = ref<object | null>(null);
+    const widget = ref<Widget | null>(null);
+    const widgetTemplate = ref<WidgetTemplateInfos | null>(null);
+    const dashboardSettings = ref<DashboardSettings | null>(null);
     
     const width = ref(0);
     const height = ref(0);

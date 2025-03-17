@@ -9,8 +9,6 @@ namespace Foundation.Extension.Domain.Repositories.Interfaces
 {
 	public interface IWidgetTemplateRepository
 	{
-		Task<WidgetTemplateDetails> Get(Guid id);
-
 		Task<IEnumerable<WidgetTemplateInfos>> GetMany(WidgetTemplatesFilter filter);
 	}
 }

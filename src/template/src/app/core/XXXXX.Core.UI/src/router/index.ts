@@ -24,12 +24,30 @@ const dialogs = [
   }
 ];
 
+const widgets = [
+  {
+    path: '/organisations/:organisationId/widgets/e2ba338e-e64a-427e-b886-0116a342cc15/:widgetId',
+    name: 'widget',
+    component: () => import('../views/widgets/TestWidget.vue'),
+  }
+];
+
+const widgetConfigurations = [
+  {
+    path: '/organisations/:organisationId/widgets/e2ba338e-e64a-427e-b886-0116a342cc15/configuration/:widgetId',
+    name: 'widget-configuration',
+    component: () => import('../views/widgets/TestWidgetConfiguration.vue'),
+  }
+];
+
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(process?.env.BASE_URL ?? '/'),
   routes: [
     ...extensionRoutes,
     ...routes,
-    ...dialogs
+    ...dialogs,
+    ...widgets,
+    ...widgetConfigurations
   ]
 });
 

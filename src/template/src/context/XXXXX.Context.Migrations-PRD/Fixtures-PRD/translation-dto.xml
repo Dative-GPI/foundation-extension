@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfTranslationDTO xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <TranslationDTO Id="2f42673f-2d12-4207-8107-8a927ef19e09" Code="entity.book-device.category" ValueDefault="Category" Context="The category of the book" Disabled="false">
+    <Translations>
+      <TranslationTranslationDTO LanguageCode="en-GB" />
+      <TranslationTranslationDTO LanguageCode="fr-FR" />
+      <TranslationTranslationDTO LanguageCode="es-ES" />
+      <TranslationTranslationDTO LanguageCode="it-IT" />
+      <TranslationTranslationDTO LanguageCode="de-DE" />
+    </Translations>
+  </TranslationDTO>
+  <TranslationDTO Id="2c8a6369-4073-4ef6-ad50-b2baba1d6312" Code="entity.book-device.value" ValueDefault="Value" Context="The value of the book device" Disabled="false">
+    <Translations>
+      <TranslationTranslationDTO LanguageCode="en-GB" />
+      <TranslationTranslationDTO LanguageCode="fr-FR" />
+      <TranslationTranslationDTO LanguageCode="es-ES" />
+      <TranslationTranslationDTO LanguageCode="it-IT" />
+      <TranslationTranslationDTO LanguageCode="de-DE" />
+    </Translations>
+  </TranslationDTO>
+  <TranslationDTO Id="f2801853-0522-4c08-95b1-84f48c3ae284" Code="ui.code" ValueDefault="select a date range" Disabled="false">
+    <Translations>
+      <TranslationTranslationDTO LanguageCode="en-GB" />
+      <TranslationTranslationDTO LanguageCode="fr-FR" />
+      <TranslationTranslationDTO LanguageCode="es-ES" />
+      <TranslationTranslationDTO LanguageCode="it-IT" />
+      <TranslationTranslationDTO LanguageCode="de-DE" />
+    </Translations>
+  </TranslationDTO>
+  <TranslationDTO Id="3dabeffa-ab6a-4cb0-8951-1421d32df8ec" Code="page.example" ValueDefault="Example" Disabled="false">
+    <Translations>
+      <TranslationTranslationDTO LanguageCode="en-GB" />
+      <TranslationTranslationDTO LanguageCode="fr-FR" />
+      <TranslationTranslationDTO LanguageCode="es-ES" />
+      <TranslationTranslationDTO LanguageCode="it-IT" />
+      <TranslationTranslationDTO LanguageCode="de-DE" />
+    </Translations>
+  </TranslationDTO>
+  <TranslationDTO Id="d25a22c4-8c9b-4912-bb37-518696d3643b" Code="ui.common.action" ValueDefault="Action" Disabled="false">
+    <Translations>
+      <TranslationTranslationDTO LanguageCode="en-GB" />
+      <TranslationTranslationDTO LanguageCode="fr-FR" />
+      <TranslationTranslationDTO LanguageCode="es-ES" />
+      <TranslationTranslationDTO LanguageCode="it-IT" />
+      <TranslationTranslationDTO LanguageCode="de-DE" />
+    </Translations>
+  </TranslationDTO>
+  <TranslationDTO Id="280ca767-1172-48e2-890f-8e134eed8dd6" Code="ui.common.description" ValueDefault="Description of this dialog action" Disabled="false">
+    <Translations>
+      <TranslationTranslationDTO LanguageCode="en-GB" />
+      <TranslationTranslationDTO LanguageCode="fr-FR" />
+      <TranslationTranslationDTO LanguageCode="es-ES" />
+      <TranslationTranslationDTO LanguageCode="it-IT" />
+      <TranslationTranslationDTO LanguageCode="de-DE" />
+    </Translations>
+  </TranslationDTO>
+  <TranslationDTO Id="d7ce5954-8843-4a6e-b568-319f4ac8a01f" Code="ui.common.general-conditions-of-use" ValueDefault="General conditions of use" Disabled="false">
+    <Translations>
+      <TranslationTranslationDTO LanguageCode="en-GB" />
+      <TranslationTranslationDTO LanguageCode="fr-FR" />
+      <TranslationTranslationDTO LanguageCode="es-ES" />
+      <TranslationTranslationDTO LanguageCode="it-IT" />
+      <TranslationTranslationDTO LanguageCode="de-DE" />
+    </Translations>
+  </TranslationDTO>
+  <TranslationDTO Id="cf4a631d-cef8-41c9-b9cc-84c459b1624b" Code="ui.common.privacy-policy" ValueDefault="Privacy policy" Disabled="false">
+    <Translations>
+      <TranslationTranslationDTO LanguageCode="en-GB" />
+      <TranslationTranslationDTO LanguageCode="fr-FR" />
+      <TranslationTranslationDTO LanguageCode="es-ES" />
+      <TranslationTranslationDTO LanguageCode="it-IT" />
+      <TranslationTranslationDTO LanguageCode="de-DE" />
+    </Translations>
+  </TranslationDTO>
+  <TranslationDTO Id="f5803a3b-1117-41ba-9e29-15e909762f0c" Code="ui.chart-organisation.label-default" ValueDefault="Name" Disabled="false">
+    <Translations>
+      <TranslationTranslationDTO LanguageCode="en-GB" />
+      <TranslationTranslationDTO LanguageCode="fr-FR" />
+      <TranslationTranslationDTO LanguageCode="es-ES" />
+      <TranslationTranslationDTO LanguageCode="it-IT" />
+      <TranslationTranslationDTO LanguageCode="de-DE" />
+    </Translations>
+  </TranslationDTO>
+  <TranslationDTO Id="c358c8e7-ddb7-457b-93b3-46676a6be909" Code="ui.example.label" ValueDefault="Label" Disabled="false">
+    <Translations>
+      <TranslationTranslationDTO LanguageCode="en-GB" />
+      <TranslationTranslationDTO LanguageCode="fr-FR" />
+      <TranslationTranslationDTO LanguageCode="es-ES" />
+      <TranslationTranslationDTO LanguageCode="it-IT" />
+      <TranslationTranslationDTO LanguageCode="de-DE" />
+    </Translations>
+  </TranslationDTO>
+</ArrayOfTranslationDTO>

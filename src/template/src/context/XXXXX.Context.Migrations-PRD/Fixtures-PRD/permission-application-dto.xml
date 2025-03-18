@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfPermissionApplicationDTO xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <PermissionApplicationDTO Id="ce77c13a-e57e-42de-83f6-6e00c07bc8b6" Code="admin.XXXXX.create" LabelDefault="ADMIN_XXXXX_CREATE" Disabled="false">
+    <Translations>
+      <TranslationPermissionApplicationDTO LanguageCode="en-GB" />
+      <TranslationPermissionApplicationDTO LanguageCode="fr-FR" />
+      <TranslationPermissionApplicationDTO LanguageCode="es-ES" />
+      <TranslationPermissionApplicationDTO LanguageCode="it-IT" />
+      <TranslationPermissionApplicationDTO LanguageCode="de-DE" />
+    </Translations>
+  </PermissionApplicationDTO>
+  <PermissionApplicationDTO Id="aad7724c-f3d6-4f89-9601-cf42c9476a96" Code="admin.XXXXX.update" LabelDefault="ADMIN_XXXXX_UPDATE" Disabled="false">
+    <Translations>
+      <TranslationPermissionApplicationDTO LanguageCode="en-GB" />
+      <TranslationPermissionApplicationDTO LanguageCode="fr-FR" />
+      <TranslationPermissionApplicationDTO LanguageCode="es-ES" />
+      <TranslationPermissionApplicationDTO LanguageCode="it-IT" />
+      <TranslationPermissionApplicationDTO LanguageCode="de-DE" />
+    </Translations>
+  </PermissionApplicationDTO>
+  <PermissionApplicationDTO Id="0793fa98-63a8-40b2-b06c-ac7621e5de96" Code="admin.XXXXX.remove" LabelDefault="ADMIN_XXXXX_REMOVE" Disabled="false">
+    <Translations>
+      <TranslationPermissionApplicationDTO LanguageCode="en-GB" />
+      <TranslationPermissionApplicationDTO LanguageCode="fr-FR" />
+      <TranslationPermissionApplicationDTO LanguageCode="es-ES" />
+      <TranslationPermissionApplicationDTO LanguageCode="it-IT" />
+      <TranslationPermissionApplicationDTO LanguageCode="de-DE" />
+    </Translations>
+  </PermissionApplicationDTO>
+  <PermissionApplicationDTO Id="c726d250-4c41-4aa5-baaf-bee41127e394" Code="admin.XXXXX.infos" LabelDefault="ADMIN_XXXXX_INFOS" Disabled="false">
+    <Translations>
+      <TranslationPermissionApplicationDTO LanguageCode="en-GB" />
+      <TranslationPermissionApplicationDTO LanguageCode="fr-FR" />
+      <TranslationPermissionApplicationDTO LanguageCode="es-ES" />
+      <TranslationPermissionApplicationDTO LanguageCode="it-IT" />
+      <TranslationPermissionApplicationDTO LanguageCode="de-DE" />
+    </Translations>
+  </PermissionApplicationDTO>
+  <PermissionApplicationDTO Id="eebb696c-3c94-4df6-b863-7ed30b8e7008" Code="admin.XXXXX.details" LabelDefault="ADMIN_XXXXX_DETAILS" Disabled="false">
+    <Translations>
+      <TranslationPermissionApplicationDTO LanguageCode="en-GB" />
+      <TranslationPermissionApplicationDTO LanguageCode="fr-FR" />
+      <TranslationPermissionApplicationDTO LanguageCode="es-ES" />
+      <TranslationPermissionApplicationDTO LanguageCode="it-IT" />
+      <TranslationPermissionApplicationDTO LanguageCode="de-DE" />
+    </Translations>
+  </PermissionApplicationDTO>
+</ArrayOfPermissionApplicationDTO>

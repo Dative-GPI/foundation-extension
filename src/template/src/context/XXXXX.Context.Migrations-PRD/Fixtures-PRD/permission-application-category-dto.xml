@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfPermissionApplicationCategoryDTO xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <PermissionApplicationCategoryDTO Id="964cdcf4-4ac8-4378-9078-c5f78aea22cb" Code="admin.XXXXX" LabelDefault="XXXXX" Prefix="admin.XXXXX." Disabled="false">
+    <Translations>
+      <TranslationPermissionApplicationCategoryDTO LanguageCode="en-GB" />
+      <TranslationPermissionApplicationCategoryDTO LanguageCode="fr-FR" />
+      <TranslationPermissionApplicationCategoryDTO LanguageCode="es-ES" />
+      <TranslationPermissionApplicationCategoryDTO LanguageCode="it-IT" />
+      <TranslationPermissionApplicationCategoryDTO LanguageCode="de-DE" />
+    </Translations>
+  </PermissionApplicationCategoryDTO>
+</ArrayOfPermissionApplicationCategoryDTO>

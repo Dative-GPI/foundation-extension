@@ -22,5 +22,6 @@ src/app/ui/package-lock.json
 # .vscode
 launchSettings.json
 Migrations
+Fixtures
 dist
 old

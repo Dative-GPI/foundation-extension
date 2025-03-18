@@ -27,6 +27,8 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 
+import type { ExampleMeta } from '@/models';
+
 import FEWidget from '@dative-gpi/foundation-extension-shared-ui/components/FEWidget.vue';
 
 export default defineComponent({
@@ -35,7 +37,7 @@ export default defineComponent({
     FEWidget
   },
   setup() {
-    const meta = ref<null | any>(null);
+    const meta = ref<null | ExampleMeta>(null);
 
     const width = ref(0);
     const height = ref(0);

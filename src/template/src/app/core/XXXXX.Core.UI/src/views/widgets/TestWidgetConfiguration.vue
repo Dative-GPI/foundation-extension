@@ -18,6 +18,8 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 
+import type { Widget } from "@dative-gpi/foundation-core-domain/models";
+
 import FEWidgetConfiguration from '@dative-gpi/foundation-extension-shared-ui/components/FEWidgetConfiguration.vue';
 
 export default defineComponent({
@@ -26,8 +28,8 @@ export default defineComponent({
     FEWidgetConfiguration
   },
   emits: ['update:widget'],
-  setup(props, { emit }) {
-    const widget = ref<object | null>(null);
+  setup() {
+    const widget = ref<Widget | null>(null);
 
     const onUpdateWidget = (newWidget: any) => {
       widget.value = newWidget;

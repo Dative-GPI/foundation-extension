@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfEntityPropertyDTO xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <EntityPropertyDTO Id="ab7582b3-b9f1-44c5-8c57-9cce0ae2f821" LabelDefault="Category" Code="entity.book-device.category" Value="category" EntityType="BookDevice" TranslationCode="entity.book-device.category" EntityKind="Infos" Disabled="false" />
+  <EntityPropertyDTO Id="1f6c47f5-6794-460e-a23d-adc04d6666a5" LabelDefault="Value" Code="entity.book-device.value" Value="value" EntityType="BookDevice" TranslationCode="entity.book-device.value" EntityKind="Infos" Disabled="false" />
+</ArrayOfEntityPropertyDTO>

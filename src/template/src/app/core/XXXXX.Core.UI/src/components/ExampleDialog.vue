@@ -21,13 +21,13 @@
             {{ $tr('ui.common.information','Information') }}
           </FSText>
           <FSTranslateField
-            :label="$tr('entity.chart-organisation.label-default','Name')"
+            :label="$tr('ui.chart-organisation.label-default','Name')"
             :required="true"
             :rules="[TextRules.required()]"
             v-model="fieldValue"
           />
           <FSTranslateField
-            :label="$tr('entity.example.label','Label')"
+            :label="$tr('ui.example.label','Label')"
             :required="true"
             :rules="[TextRules.required()]"
             :modelValue="labelDefault"

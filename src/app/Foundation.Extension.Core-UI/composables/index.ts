@@ -1,5 +1,4 @@
 export * from "./useCoreExtension";
-export * from "./useFiles";
 export * from "./usePermissionOrganisationCategories";
 export * from "./usePermissionOrganisations";
 export * from "./useRoleOrganisations";

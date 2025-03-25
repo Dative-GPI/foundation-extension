@@ -35,6 +35,7 @@ namespace Foundation.Extension.Gateway.DI
 
             services.AddAutoMapper(typeof(DependencyInjector).Assembly);
 
+            services.AddScoped<IFileService, FileService>();
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IApplicationService, ApplicationService>();
             services.AddScoped<IApplicationTranslationService, ApplicationTranslationService>();

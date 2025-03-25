@@ -12,6 +12,7 @@ namespace Foundation.Extension.Gateway.AutoMapper
             CreateMap<ApplicationTranslation, ApplicationTranslationViewModel>();
             CreateMap<ApplicationDetails, ApplicationDetailsViewModel>();
             CreateMap<ImageDetails, ImageDetailsViewModel>();
+            CreateMap<FileDetails, FileDetailsViewModel>();
         }
     }
 }

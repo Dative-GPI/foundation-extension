@@ -41,6 +41,7 @@
               </FSCol>
             </FSCard>
             <FSRow
+              v-if="showStandardOptions"
               align="bottom-left"
               :wrap="false"
             >
@@ -60,6 +61,16 @@
             </FSRow>
             <slot />
           </FSCol>
+        </template>
+        <template
+          v-if="showReset"
+          #left-footer
+        >
+          <FSButton
+            :label="$tr('ui.dashboard.configure-shallow-widget-reset', 'Reset configuration')"
+            color="primary"
+            @click="resetWidget"
+          />
         </template>
       </FSDialogFormBody>
     </template>
@@ -99,13 +110,17 @@ export default defineComponent({
     
     const width = ref(0);
     const height = ref(0);
+    const showReset = ref(false);
     const hideBorders = ref(false);
+    const showStandardOptions = ref(false);
     
     const widgetConfigurationSchema: JTDSchemaType<WidgetInfosPayload> = {
       properties: {
         widget: { type: "string" },
         widgetTemplate: { type: "string" },
-        dashboardSettings: { type: "string" }
+        dashboardSettings: { type: "string" },
+        showStandardOptions: { type: "boolean" },
+        showReset: { type: "boolean" }
       }
     };
 
@@ -116,6 +131,8 @@ export default defineComponent({
       const dashboardSettings = JSON.parse(config.dashboardSettings);
 
       widgetTemplate.value = JSON.parse(config.widgetTemplate);
+      showStandardOptions.value = config.showStandardOptions;
+      showReset.value = config.showReset;
 
       emit('update:widget', widget);
       emit('update:dashboardSettings', dashboardSettings);
@@ -131,6 +148,18 @@ export default defineComponent({
     const onSubmit = () => {
       const widgetUpdate: WidgetUpdate = {
         widget: JSON.stringify(widget.value)
+      };
+
+      notify(widgetUpdate);
+      dialog.value = false;
+    }
+
+    const resetWidget = () => {
+      const widgetUpdate: WidgetUpdate = {
+        widget: JSON.stringify({
+          ...widget.value,
+          meta: null
+        })
       };
 
       notify(widgetUpdate);
@@ -184,10 +213,13 @@ export default defineComponent({
       dialog,
       height,
       widget,
+      showReset,
       hideBorders,
       widgetTemplate,
       dashboardSettings,
-      onSubmit
+      showStandardOptions,
+      onSubmit,
+      resetWidget
     };
   }
 });
@@ -199,7 +231,9 @@ interface MountedPayload {
 interface WidgetInfosPayload {
   widget: string,
   widgetTemplate: string,
-  dashboardSettings: string
+  dashboardSettings: string,
+  showStandardOptions: boolean,
+  showReset: boolean
 }
 
 interface WidgetUpdate {

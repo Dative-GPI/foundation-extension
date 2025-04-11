@@ -17,23 +17,27 @@
         <template
           #body
         >
-          <FSText>
-            {{ $tr('ui.common.information','Information') }}
-          </FSText>
-          <FSTranslateField
-            :label="$tr('ui.chart-organisation.label-default','Name')"
-            :required="true"
-            :rules="[TextRules.required()]"
-            v-model="fieldValue"
-          />
-          <FSTranslateField
-            :label="$tr('ui.example.label','Label')"
-            :required="true"
-            :rules="[TextRules.required()]"
-            :modelValue="labelDefault"
-            :translations="translations"
-          />
-          {{ timeZone ?? 'No time zone' }}
+          <FSCol
+            gap="12px"
+          >
+            <FSText>
+              {{ $tr('ui.common.information','Information') }}
+            </FSText>
+            <FSTranslateField
+              :label="$tr('ui.chart-organisation.label-default','Name')"
+              :required="true"
+              :rules="[TextRules.required()]"
+              v-model="fieldValue"
+            />
+            <FSTranslateField
+              :label="$tr('ui.example.label','Label')"
+              :required="true"
+              :rules="[TextRules.required()]"
+              :modelValue="labelDefault"
+              :translations="translations"
+            />
+            {{ timeZone ?? 'No time zone' }}
+          </FSCol>
         </template>
       </FSDialogFormBody>
     </template>

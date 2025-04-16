@@ -26,7 +26,7 @@ const dialogs = [
 
 const widgets = [
   {
-    path: '/organisations/:organisationId/widgets/e2ba338e-e64a-427e-b886-0116a342cc15/:widgetId',
+    path: '/organisations/:organisationId/widget-templates/e2ba338e-e64a-427e-b886-0116a342cc15/widgets/:widgetId',
     name: 'widget',
     component: () => import('../views/widgets/TestWidget.vue'),
   }
@@ -34,14 +34,14 @@ const widgets = [
 
 const widgetConfigurations = [
   {
-    path: '/organisations/:organisationId/widgets/e2ba338e-e64a-427e-b886-0116a342cc15/configuration/:widgetId',
+    path: '/organisations/:organisationId/widget-templates/e2ba338e-e64a-427e-b886-0116a342cc15/configurations/:widgetId',
     name: 'widget-configuration',
     component: () => import('../views/widgets/TestWidgetConfiguration.vue'),
   }
 ];
 
 const router = createRouter({
-  history: createWebHistory(process?.env.BASE_URL ?? '/'),
+  history: createWebHistory('/'),
   routes: [
     ...extensionRoutes,
     ...routes,

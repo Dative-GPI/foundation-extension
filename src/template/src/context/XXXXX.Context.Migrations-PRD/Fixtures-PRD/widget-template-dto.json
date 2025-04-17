@@ -1,0 +1,29 @@
+[
+    {
+        "Id": "e2ba338e-e64a-427e-b886-0116a342cc15",
+        "Code": "ui.widgets.extension",
+        "Icon": "mdi-application-outline",
+        "DefaultWidth": 4,
+        "DefaultHeight": 2,
+        "LabelDefault": "Extension",
+        "DescriptionDefault": "Widget from an extension",
+        "DefaultMeta": {
+            "label": "Label par défaut"
+        },
+        "Translations": [
+            {
+                "Label": "Les extensions",
+                "Description": "Widget d'une extension.",
+                "LanguageCode": "fr-FR"
+            },
+            {
+                "Label": "An extension",
+                "Description": "Extensions widgets.",
+                "LanguageCode": "en-GB"
+            }
+        ],
+        "Search": "Extensions",
+        "Category": 0,
+        "Disabled": false
+    }
+]

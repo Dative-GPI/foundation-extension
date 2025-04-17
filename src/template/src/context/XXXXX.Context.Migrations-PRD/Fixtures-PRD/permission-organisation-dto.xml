@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfPermissionOrganisationDTO xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <PermissionOrganisationDTO Id="d9c722ac-bff6-4d9b-a668-2df19d8113a2" Code="teleport.history" LabelDefault="XXXXX_HISTORY" Disabled="false">
+    <Translations>
+      <TranslationPermissionOrganisationDTO LanguageCode="en-GB" />
+      <TranslationPermissionOrganisationDTO LanguageCode="fr-FR" />
+      <TranslationPermissionOrganisationDTO LanguageCode="es-ES" />
+      <TranslationPermissionOrganisationDTO LanguageCode="it-IT" />
+      <TranslationPermissionOrganisationDTO LanguageCode="de-DE" />
+    </Translations>
+  </PermissionOrganisationDTO>
+  <PermissionOrganisationDTO Id="10601638-aefc-4966-8939-6053e500efcf" Code="teleport.connect" LabelDefault="XXXXX_CONNECT" Disabled="false">
+    <Translations>
+      <TranslationPermissionOrganisationDTO LanguageCode="en-GB" />
+      <TranslationPermissionOrganisationDTO LanguageCode="fr-FR" />
+      <TranslationPermissionOrganisationDTO LanguageCode="es-ES" />
+      <TranslationPermissionOrganisationDTO LanguageCode="it-IT" />
+      <TranslationPermissionOrganisationDTO LanguageCode="de-DE" />
+    </Translations>
+  </PermissionOrganisationDTO>
+</ArrayOfPermissionOrganisationDTO>

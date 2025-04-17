@@ -3,5 +3,7 @@
 
 html {
     overflow-y: auto;
+
+    @extend .fs-hide-y-scrollbar;
 }
 

@@ -41,12 +41,15 @@ namespace XXXXX.Context.Migrations.Shared
 			_fixtureHelper.Feed<TableDTO>(modelBuilder);
 			_fixtureHelper.Feed<EntityPropertyDTO>(modelBuilder);
 			_fixtureHelper.Feed<PageDTO>(modelBuilder);
+			_fixtureHelper.Feed<WidgetTemplateDTO>(modelBuilder);
 
 			ConfigureJsonColumn<PermissionOrganisationDTO, TranslationPermissionOrganisationDTO>(modelBuilder, p => p.Translations);
 			ConfigureJsonColumn<PermissionOrganisationCategoryDTO, TranslationPermissionOrganisationCategoryDTO>(modelBuilder, p => p.Translations);
 			ConfigureJsonColumn<PermissionApplicationDTO, TranslationPermissionApplicationDTO>(modelBuilder, p => p.Translations);
 			ConfigureJsonColumn<PermissionApplicationCategoryDTO, TranslationPermissionApplicationCategoryDTO>(modelBuilder, p => p.Translations);
 			ConfigureJsonColumn<TranslationDTO, TranslationTranslationDTO>(modelBuilder, t => t.Translations);
+			ConfigureJsonColumn<WidgetTemplateDTO, TranslationWidgetTemplateDTO>(modelBuilder, t => t.Translations);
+            ConfigureJsonColumn<WidgetTemplateDTO, JsonElement>(modelBuilder, t => t.DefaultMeta);
 		}
 
 		private void ConfigureJsonColumn<TSource, TTranslation>(ModelBuilder modelBuilder, Expression<Func<TSource, List<TTranslation>>> propertyExpression)
@@ -61,5 +64,17 @@ namespace XXXXX.Context.Migrations.Shared
 					v => JsonSerializer.Deserialize<List<TTranslation>>(v, null as JsonSerializerOptions)
 				);
 		}
+
+		private void ConfigureJsonColumn<TSource, JsonElement>(ModelBuilder modelBuilder, Expression<Func<TSource, JsonElement>> propertyExpression)
+            where TSource : class
+        {
+            // Seule solution pour que ça marche bien dans les fixtures
+            modelBuilder.Entity<TSource>()
+                .Property(propertyExpression)
+                .HasConversion(
+                    v => JsonSerializer.Serialize(v, null as JsonSerializerOptions),
+                    v => JsonSerializer.Deserialize<JsonElement>(v, null as JsonSerializerOptions)
+                );
+        }
 	}
 }

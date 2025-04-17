@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfPermissionOrganisationCategoryDTO xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <PermissionOrganisationCategoryDTO Id="004ee889-4445-45ad-8f8f-381874037d57" Code="teleport" LabelDefault="CONNECT" Prefix="teleport." Disabled="false">
+    <Translations>
+      <TranslationPermissionOrganisationCategoryDTO LanguageCode="en-GB" />
+      <TranslationPermissionOrganisationCategoryDTO LanguageCode="fr-FR" />
+      <TranslationPermissionOrganisationCategoryDTO LanguageCode="es-ES" />
+      <TranslationPermissionOrganisationCategoryDTO LanguageCode="it-IT" />
+      <TranslationPermissionOrganisationCategoryDTO LanguageCode="de-DE" />
+    </Translations>
+  </PermissionOrganisationCategoryDTO>
+</ArrayOfPermissionOrganisationCategoryDTO>

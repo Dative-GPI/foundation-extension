@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Foundation.Extension.Proxy.Controllers
 {
-    [Route("api/v1")]
+    [Route("api/foundation/core/v1/organisations/{organisationId}")]
     public class CoreExtensionsController : ControllerBase
     {
         private IHttpClientFactory _httpClientFactory;
@@ -49,6 +49,8 @@ namespace Foundation.Extension.Proxy.Controllers
                 id = (Guid?)null,
                 @public = false,
                 label = "Local extension",
+                extensionId = (Guid?)null,
+                host = new Uri(_hostLocal).Host,
                 description = "Added automatically by Foundation.Extension.Proxy",
                 translations = new List<JsonElement>()
             }));

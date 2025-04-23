@@ -16,7 +16,7 @@
           ref="element"
           :modelValue="!isDisabled(item.id)"
           @update:modelValue="setDisabled(item.id, !$event)"
-          :editable="editMode"
+          :disabled="!editMode"
           color="success"
         />
       </template>
@@ -27,8 +27,7 @@
           ref="element"
           :modelValue="isDisabled(item.id) ? false : isHidden(item.id)"
           @update:modelValue="setHidden(item.id, $event)"
-          :disabled="isDisabled(item.id)"
-          :editable="editMode"
+          :disabled="isDisabled(item.id) || !editMode"
           color="success"
         />
       </template>

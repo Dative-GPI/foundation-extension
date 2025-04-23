@@ -19,7 +19,7 @@
             item.disabled = !$event;
             sortTable();
           "
-          :editable="editMode"
+          :disabled="!editMode"
           color="success"
         />
       </template>
@@ -31,7 +31,7 @@
           ref="element"
           :modelValue="item.hidden"
           @update:modelValue="item.hidden = $event"
-          :editable="editMode"
+          :disabled="!editMode"
           color="success"
         />
         <FSSwitch
@@ -39,7 +39,6 @@
           :disabled="true"
           ref="element"
           :modelValue="false"
-          :editable="editMode"
           color="success"
         />
       </template>
@@ -51,7 +50,7 @@
           ref="element"
           :modelValue="item.sortable"
           @update:modelValue="item.sortable = $event"
-          :editable="editMode"
+          :disabled="!editMode"
           color="success"
         />
       </template>
@@ -63,7 +62,7 @@
           ref="element"
           :modelValue="item.filterable"
           @update:modelValue="item.filterable = $event"
-          :editable="editMode"
+          :disabled="!editMode"
           color="success"
         />
       </template>
@@ -75,7 +74,7 @@
           ref="element"
           :modelValue="item.configurable"
           @update:modelValue="item.configurable = $event"
-          :editable="editMode"
+          :disabled="!editMode"
           color="success"
         />
       </template>

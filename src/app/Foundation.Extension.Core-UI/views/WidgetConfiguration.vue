@@ -2,7 +2,6 @@
   <FEDialog
     :title="$tr('ui.dashboard.widget-configuration', 'Widget configuration')"
     class="fe-dialog-content"
-    height="fit-content"
     width="900px"
     v-model="dialog"
   >
@@ -59,7 +58,11 @@
                 v-model="hideBorders"
               />
             </FSRow>
-            <slot />
+            <component
+              :is="widgetConfigurationComponent"
+              v-model:meta="meta"
+              v-model:settings="dashboardSettings"
+            />
           </FSCol>
         </template>
         <template
@@ -78,41 +81,38 @@
 </template>
 
 <script lang="ts">
-import { type PropType,computed, defineComponent, onUnmounted, ref, watch } from "vue";
+import { computed, defineComponent, onUnmounted, ref, watch } from "vue";
 import type { JTDSchemaType } from "ajv/dist/types/jtd-schema";
+import { useRoute } from 'vue-router';
 
 import { useExtensionCommunicationBridge } from '@dative-gpi/foundation-extension-shared-ui';
 
 import type { DashboardSettings, Widget, WidgetTemplateInfos } from "@dative-gpi/foundation-core-domain/models";
 
 import FEDialog from '@dative-gpi/foundation-extension-shared-ui/components/FEDialog.vue';
+import { useWidgetProvider } from '../composables';
 
 export default defineComponent({
-  name: "FEWidgetConfiguration",
+  name: "WidgetConfiguration",
   components: {
     FEDialog
   },
-  props: {
-    widget: {
-      type: Object as PropType<Widget>,
-      required: true
-    }
-  },
-  emits: ['update:widget', 'update:widgetTemplate', 'update:dashboardSettings'],
-  setup(props, { emit }) {
+  setup() {
     const { subscribe, notify, unsubscribe } = useExtensionCommunicationBridge();
+    const { getWidgetConfiguration } = useWidgetProvider();
+    const route = useRoute();
 
+    const width = ref(0);
+    const height = ref(0);
     const dialog = ref(true);
+    const showReset = ref(false);
+    const hideBorders = ref(false);
+    const meta = ref<object | null>(null);
+    const showStandardOptions = ref(false);
     const subcriberIds = ref<number[]>([]);
     const widget = ref<Widget | null>(null);
     const widgetTemplate = ref<WidgetTemplateInfos | null>(null);
     const dashboardSettings = ref<DashboardSettings | null>(null);
-    
-    const width = ref(0);
-    const height = ref(0);
-    const showReset = ref(false);
-    const hideBorders = ref(false);
-    const showStandardOptions = ref(false);
     
     const widgetConfigurationSchema: JTDSchemaType<WidgetInfosPayload> = {
       properties: {
@@ -124,30 +124,37 @@ export default defineComponent({
       }
     };
 
+    const widgetConfigurationComponent = computed(() => {
+      const widgetTemplateId = route.params.widgetTemplateId as string;
+      return getWidgetConfiguration(widgetTemplateId);
+    });
+
     const currentFullUrl = computed(() => window.location.href);
 
     const onReceiveNewConfig = (config: WidgetInfosPayload) => {
-      const widget = JSON.parse(config.widget);
-      const dashboardSettings = JSON.parse(config.dashboardSettings);
+      widget.value = JSON.parse(config.widget);
 
       widgetTemplate.value = JSON.parse(config.widgetTemplate);
       showStandardOptions.value = config.showStandardOptions;
       showReset.value = config.showReset;
 
-      emit('update:widget', widget);
-      emit('update:dashboardSettings', dashboardSettings);
-      emit('update:widgetTemplate', widgetTemplate.value);
-
       if(widget.value) {
-        width.value = widget.width;
-        height.value = widget.height;
-        hideBorders.value = widget.hideBorders;
+        meta.value = widget.value.meta;
+        width.value = widget.value.width;
+        height.value = widget.value.height;
+        hideBorders.value = widget.value.hideBorders;
       }
     }
 
     const onSubmit = () => {
       const widgetUpdate: WidgetUpdate = {
-        widget: JSON.stringify(widget.value)
+        widget: JSON.stringify({
+          ...widget.value,
+          meta: meta.value,
+          width: width.value,
+          height: height.value,
+          hideBorders: hideBorders.value
+        })
       };
 
       notify(widgetUpdate);
@@ -165,27 +172,6 @@ export default defineComponent({
       notify(widgetUpdate);
       dialog.value = false;
     }
-
-    watch(() => props.widget, (newWidget) => {
-      widget.value = newWidget;
-
-      if(newWidget) {
-        width.value = newWidget.width;
-        height.value = newWidget.height;
-        hideBorders.value = newWidget.hideBorders;
-      }
-    }, { deep: true });
-
-    watch([width, height, hideBorders], () => {
-      const newWidget = {
-        ...widget.value,
-        width: width.value,
-        height: height.value,
-        hideBorders: hideBorders.value
-      };
-
-      emit('update:widget', newWidget);
-    });
 
     watch(() => currentFullUrl.value, () => {
       subcriberIds.value.forEach(subscriberId => {
@@ -209,6 +195,7 @@ export default defineComponent({
     });
 
     return {
+      meta,
       width,
       dialog,
       height,
@@ -218,6 +205,7 @@ export default defineComponent({
       widgetTemplate,
       dashboardSettings,
       showStandardOptions,
+      widgetConfigurationComponent,
       onSubmit,
       resetWidget
     };

@@ -1,51 +1,49 @@
 <template>
-  <FEWidget
-    @update:meta="meta = $event"
-    @update:width="width = $event"
-    @update:height="height = $event"
+  <FSCol
+    height="100%"
+    :padding="12"
   >
-    <FSCol
-      height="100%"
-      :padding="12"
+    <FSText
+      v-if="$props.meta"
+      font="text-h2"
     >
-      <FSText
-        v-if="meta"
-        font="text-h2"
-      >
-        {{ meta.label }}
-      </FSText>
-      <FSText
-        v-if="width && height"
-        font="text-body"
-      >
-        {{ `I am a ${width} x ${height} widget.` }}
-      </FSText>
-    </FSCol>
-  </FEWidget>
+      {{ $props.meta.label }}
+    </FSText>
+    <FSText
+      v-if="$props.width && $props.height"
+      font="text-body"
+    >
+      {{ `I am a ${$props.width} x ${$props.height} widget.` }}
+    </FSText>
+  </FSCol>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, type PropType } from "vue";
 
 import type { ExampleMeta } from '@/models';
-
-import FEWidget from '@dative-gpi/foundation-extension-shared-ui/components/FEWidget.vue';
 
 export default defineComponent({
   name: "TestWidget",
   components: {
-    FEWidget
+  },
+  props: {
+    meta: {
+      type: Object as PropType<ExampleMeta | null>,
+      required: true
+    },
+    width: {
+      type: Number as PropType<number | null>,
+      required: true
+    },
+    height: {
+      type: Number as PropType<number | null>,
+      required: true
+    }
   },
   setup() {
-    const meta = ref<null | ExampleMeta>(null);
-
-    const width = ref(0);
-    const height = ref(0);
 
     return {
-      meta,
-      width,
-      height
     };
   },
 });

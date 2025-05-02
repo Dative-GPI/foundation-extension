@@ -44,6 +44,21 @@ export const routes: RouteRecordRaw[] = [
       default: () => import("../views/ServiceAccountOrganisationPermissions.vue")
     }
   },
+  {
+    path: "/organisations/:organisationId/widget-templates/:widgetTemplateId/widgets/:widgetId",
+    name: "widget",
+    components: {
+      default: () => import("../views/Widget.vue")
+    }
+  },
+  {
+    path: "/organisations/:organisationId/widget-templates/:widgetTemplateId/configurations/:widgetId",
+    name: "widget-configuration",
+    components: {
+      default: () => import("../views/WidgetConfiguration.vue")
+    }
+  },
+
   // Dialogs
   {
     path: "/organisations/:organisationId/dialogs/remove",

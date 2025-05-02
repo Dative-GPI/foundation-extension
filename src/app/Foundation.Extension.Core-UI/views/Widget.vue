@@ -7,27 +7,45 @@
   <template
     v-else
   >
-    <slot />
+    <component
+      :is="widgetComponent"
+      v-model:meta="meta"
+      :dashboardSettings="dashboardSettings"
+      :widgetWidth="width"
+      :widgetHeight="height"
+    />
   </template>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, onUnmounted, ref } from "vue";
 import type { JTDSchemaType } from "ajv/dist/types/jtd-schema";
-import { useRoute } from "vue-router";
 
+import { useRoute } from "vue-router";
+import { useWidgetProvider } from '@dative-gpi/foundation-extension-core-ui';
 import { useExtensionCommunicationBridge } from '@dative-gpi/foundation-extension-shared-ui';
 
+import type { DashboardSettings } from "@dative-gpi/foundation-core-domain/models";
+
 export default defineComponent({
-  name: "FEWidget",
-  emits: ['update:meta', 'update:dashboardSettings', 'update:width', 'update:height'],
-  setup(_props, { emit }) {
+  name: "WidgetView",
+  setup() {
     const { subscribe, notify, unsubscribe } = useExtensionCommunicationBridge();
+    const { getWidget } = useWidgetProvider();
     const route = useRoute();
 
+    const meta = ref<object | null>(null);
+    const width = ref<number | null>(null);
+    const height = ref<number | null>(null);
+    const dashboardSettings = ref<DashboardSettings | null>(null);
     const waitingForConfig = ref(true);
     const subcriberIds = ref<number[]>([]);
     const currentFullUrl = window.location.href;
+
+    const widgetComponent = computed(() => {
+      const widgetTemplateId = route.params.widgetTemplateId as string;
+      return getWidget(widgetTemplateId);
+    });
 
     const widgetConfigurationSchema: JTDSchemaType<WidgetConfigurationPayload> = {
       properties: {
@@ -43,19 +61,15 @@ export default defineComponent({
     });
 
     const onReceiveNewConfig = (config: WidgetConfigurationPayload) => {
-      const meta = JSON.parse(config.meta);
-      const dashboardSettings = JSON.parse(config.dashboardSettings);
+      meta.value = JSON.parse(config.meta);
+      dashboardSettings.value = JSON.parse(config.dashboardSettings);
+      width.value = config.width;
+      height.value = config.height;
 
       waitingForConfig.value = false;
-
-      emit('update:meta', meta);
-      emit('update:dashboardSettings', dashboardSettings);
-      emit('update:width', config.width);
-      emit('update:height', config.height);
     }
 
     onMounted(() => {
-      console.log('Subscribing to widget configuration');
       subcriberIds.value.push(
         subscribe(widgetConfigurationSchema, currentFullUrl, onReceiveNewConfig)
       )
@@ -73,7 +87,12 @@ export default defineComponent({
     });
 
     return {
-      waitingForConfig
+      meta,
+      width,
+      height,
+      widgetComponent,
+      waitingForConfig,
+      dashboardSettings
     };
   }
 });

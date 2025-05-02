@@ -1,52 +1,29 @@
 <template>
-  <FEWidgetConfiguration
-    v-model:widget="widget"
-  >
-    <FSCol
-      v-if="widget?.meta"
-      :gap="12"
-    >
-      <FSTextField
-        label="Label"
-        :modelValue="widget.meta.label ?? ''"
-        @update:modelValue="onUpdateMetadaElement('label', $event)"
-      />
-    </FSCol>
-  </FEWidgetConfiguration>
+  <FSTextField
+    v-if="$props.meta"
+    label="Label"
+    :modelValue="$props.meta.label"
+    @update:modelValue="$emit('update:meta', {...$props.meta, label: $event})"
+  />
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, type PropType } from "vue";
 
-import type { Widget } from "@dative-gpi/foundation-core-domain/models";
-
-import FEWidgetConfiguration from '@dative-gpi/foundation-extension-shared-ui/components/FEWidgetConfiguration.vue';
+import type { ExampleMeta } from '@/models';
 
 export default defineComponent({
   name: "TestWidgetConfiguration",
-  components: {
-    FEWidgetConfiguration
+  props: {
+    meta: {
+      type: Object as PropType<ExampleMeta | null>,
+      required: true
+    },
   },
-  emits: ['update:widget'],
-  setup() {
-    const widget = ref<Widget | null>(null);
-
-    const onUpdateWidget = (newWidget: any) => {
-      widget.value = newWidget;
-    }
-
-    const onUpdateMetadaElement = (key: string, value: any) => {
-      if(!widget.value) {
-        return;
-      }
-      
-      widget.value.meta[key] = value;
-    }
+  emits: ['update:meta'],
+  setup() {  
 
     return {
-      widget,
-      onUpdateWidget,
-      onUpdateMetadaElement
     };
   },
 });

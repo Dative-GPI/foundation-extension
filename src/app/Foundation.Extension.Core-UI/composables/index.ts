@@ -7,3 +7,4 @@ export * from "./useServiceAccountOrganisations";
 export * from "./useServiceAccountRoleOrganisations";
 export * from "./useUserOrganisations";
 export * from "./useUserOrganisationTables";
+export * from "./useWidgetProvider";

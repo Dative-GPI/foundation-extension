@@ -14,7 +14,9 @@
     <FEDataTable
       :tableCode="tableCode"
       :items="items"
+      v-model="selectedItems"
     />
+    Selected elements : {{ selectedItems.join(", ") }}
     <FEButtonRemove
       :removeTotal="1"
       :removeCurrent="fakeRemove"
@@ -56,6 +58,7 @@ export default defineComponent({
     const { openDialog, subscribeUnsafe } = useExtensionCommunicationBridge();
 
     const fakeRemove = ref(0);
+    const selectedItems = ref<string[]>([]);
     const dateRange = ref<number[] | null>([ 1729029600000, 1729288800000 ]);
 
     const tableCode = "ui.tables.test";
@@ -99,6 +102,7 @@ export default defineComponent({
     });
 
     return {
+      selectedItems,
       fakeRemove,
       tableCode,
       dateRange,

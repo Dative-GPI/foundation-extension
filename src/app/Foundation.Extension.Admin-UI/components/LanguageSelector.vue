@@ -1,9 +1,9 @@
 <template>
   <FSSelectField
     :items="languages"
-    :editable="editable"
+    :disabled="disabled"
     :label="trueLabel"
-    :clearable="editable"
+    :clearable="!disabled"
     item-value="code"
     :required="true"
     item-title="label"
@@ -23,10 +23,10 @@ import type { Language } from "../domain";
 export default defineComponent({
   name: "LanguageSelector",
   props: {
-    editable: {
+    disabled: {
       type: Boolean,
       required: false,
-      default: true,
+      default: false,
     },
     label: {
       type: String,

@@ -23,22 +23,24 @@ namespace Foundation.Extension.Gateway.DI
             services.AddAuthentication(JWTAuthenticationMiddleware.AuthenticationScheme);
 
             services.AddAutoMapper(typeof(DependencyInjector).Assembly);
-            
+
             services.AddCrossCutting(configuration);
             services.AddSingleton<FoundationForwarderMiddleware>();
 
             services.AddScoped<RequestContextProvider>();
-            services.AddScoped<IRequestContextProvider>(sp 
+            services.AddScoped<IRequestContextProvider>(sp
                 => sp.GetRequiredService<RequestContextProvider>());
 
             services.AddFlow();
 
             services.AddAutoMapper(typeof(DependencyInjector).Assembly);
 
+            services.AddScoped<IFileService, FileService>();
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IApplicationService, ApplicationService>();
             services.AddScoped<IApplicationTranslationService, ApplicationTranslationService>();
 
+            services.AddFiles();
             services.AddImages();
             services.AddApplications();
             services.AddApplicationTranslations();

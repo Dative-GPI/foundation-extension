@@ -10,7 +10,7 @@
     <component
       :is="widgetComponent"
       v-model:meta="meta"
-      :dashboardSettings="dashboardSettings"
+      :settings="dashboardSettings"
       :widgetWidth="width"
       :widgetHeight="height"
     />

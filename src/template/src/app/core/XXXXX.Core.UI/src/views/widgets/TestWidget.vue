@@ -2,19 +2,41 @@
   <FSCol
     height="100%"
     :padding="12"
+    gap="24"
   >
-    <FSText
-      v-if="$props.meta"
-      font="text-h2"
+    <FSCol
+      gap="6"
     >
-      {{ $props.meta.label }}
-    </FSText>
-    <FSText
-      v-if="$props.width && $props.height"
-      font="text-body"
+      <FSText
+        v-if="$props.meta"
+        font="text-h2"
+      >
+        {{ $props.meta.label }}
+      </FSText>
+      <FSText
+        v-if="$props.meta"
+        font="text-overline"
+      >
+        {{ `I am a ${ $props.widgetWidth } x ${ $props.widgetHeight } widget` }}
+      </FSText>
+    </FSCol>
+    <FSCol
+      gap="6"
     >
-      {{ `I am a ${$props.width} x ${$props.height} widget.` }}
-    </FSText>
+      <FSText
+        v-if="$props.settings"
+        font="text-button"
+      >
+        {{ `Dashboard settings :` }}
+      </FSText>
+      <FSText
+        v-if="$props.settings"
+        lineClamp="8"
+        font="text-body"
+      >
+      {{ JSON.stringify($props.settings) }}
+      </FSText>
+    </FSCol>
   </FSCol>
 </template>
 
@@ -32,12 +54,16 @@ export default defineComponent({
       type: Object as PropType<ExampleMeta | null>,
       required: true
     },
-    width: {
-      type: Number as PropType<number | null>,
+    settings: {
+      type: Object as PropType<Object | null>,
       required: true
     },
-    height: {
-      type: Number as PropType<number | null>,
+    widgetWidth: {
+      type: Number,
+      required: true
+    },
+    widgetHeight: {
+      type: Number,
       required: true
     }
   },

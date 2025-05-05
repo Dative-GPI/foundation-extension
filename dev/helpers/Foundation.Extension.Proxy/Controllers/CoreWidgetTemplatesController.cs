@@ -62,7 +62,7 @@ namespace Foundation.Extension.Proxy.Controllers
                 defaultWidth = l.GetProperty("defaultWidth"),
                 defaultHeight = l.GetProperty("defaultHeight"),
                 defaultMeta = l.GetProperty("defaultMeta"),
-                extensionId = "cba86b27-4010-4ebe-bd40-ba0cd7406c6a", //This is a temporary value to work with dev proxy, will be set to null when foundation widget accept extensionId to be null
+                extensionId = (Guid?)null,
                 extensionHost = localHost,
                 label = l.GetProperty("label"),
                 description = l.GetProperty("description"),

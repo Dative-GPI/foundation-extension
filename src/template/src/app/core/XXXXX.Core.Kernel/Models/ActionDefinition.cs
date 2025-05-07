@@ -12,6 +12,7 @@ namespace XXXXX.Core.Kernel.Models
         public string LabelDefault { get; set; }
         public string LabelCode { get; set; }
         public string Icon { get; set; }
+        public string Color { get; set; }
         public string RouteTemplate { get; set; }
         public Func<Dictionary<string, string>, IServiceProvider, Task<string>> ComputePath { get; set; }
         public ActionType ActionType { get; set; }

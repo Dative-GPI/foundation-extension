@@ -45,7 +45,9 @@ namespace Foundation.Extension.Context
         public DbSet<UserOrganisationColumnDTO> UserOrganisationColumns { get; set; }
         #endregion
 
-
+        #region Widgets
+        public DbSet<WidgetTemplateDTO> WidgetTemplates { get; set; }
+        #endregion
 
         public BaseApplicationContext(DbContextOptions options) : base(options) { }
 
@@ -171,6 +173,20 @@ namespace Foundation.Extension.Context
                 m.HasOne(t => t.Application)
                     .WithMany()
                     .HasForeignKey(t => t.ApplicationId);
+            });
+            #endregion
+
+            #region Widgets
+            modelBuilder.Entity<WidgetTemplateDTO>(m =>
+            {
+                m.HasKey(w => w.Id);
+                m.Property(w => w.Translations)
+                    .HasColumnType("jsonb");
+                m.Property(w => w.DefaultMeta)
+                    .HasColumnType("jsonb");
+                m.HasGeneratedTsVectorColumn(w => w.SearchVector, "english", w => new { w.Search })
+                    .HasIndex(w => w.SearchVector)
+                    .HasMethod("GIN");
             });
             #endregion
         }

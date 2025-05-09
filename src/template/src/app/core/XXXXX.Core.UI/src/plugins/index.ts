@@ -5,13 +5,15 @@
  */
 
 // Plugins
-import { PermissionPlugin, TranslationPlugin } from "@dative-gpi/bones-ui";
 import { LanguagePlugin, TokenPlugin } from "@dative-gpi/foundation-extension-shared-ui";
+import { WidgetProviderPlugin } from "@dative-gpi/foundation-extension-core-ui";
+import { PermissionPlugin, TranslationPlugin } from "@dative-gpi/bones-ui";
+import { OrganisationPlugin } from './organisation';
 import { loadFonts } from './webfontloader'
 import vuetify from './vuetify'
 import router from '../router'
 
-import { OrganisationPlugin } from './organisation';
+import { widgetConfigurations, widgets } from '../router/widgets';
 
 // Types
 import type { App } from 'vue'
@@ -25,4 +27,5 @@ export function registerPlugins(app: App) {
     .use(LanguagePlugin)
     .use(TokenPlugin)
     .use(OrganisationPlugin)
+    .use(WidgetProviderPlugin(widgets, widgetConfigurations))
 }

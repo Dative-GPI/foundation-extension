@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfPageDTO xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <PageDTO Id="e1535a6a-64f1-4811-b237-638c9b504c05" Code="apps.example" LabelDefault="Example" ShowOnDrawer="true" Disabled="false" />
+  <PageDTO Id="30c4d385-f044-49e0-9fbf-ed1d7b81e4a0" Code="apps.example.dialog" ShowOnDrawer="false" Disabled="false" />
+</ArrayOfPageDTO>

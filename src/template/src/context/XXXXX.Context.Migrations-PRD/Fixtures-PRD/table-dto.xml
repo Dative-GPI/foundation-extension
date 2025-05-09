@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfTableDTO xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <TableDTO Id="722f3daf-8732-446f-89d3-1316ff682351" Code="ui.tables.test" EntityType="Test" Disabled="false" />
+</ArrayOfTableDTO>

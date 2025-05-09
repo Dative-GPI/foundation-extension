@@ -39,6 +39,8 @@ namespace Foundation.Extension.Context.DI
             services.AddScoped<IUserOrganisationTableRepository, UserOrganisationTableRepository>();
             services.AddScoped<IUserOrganisationColumnRepository, UserOrganisationColumnRepository>();
 
+            services.AddScoped<IWidgetTemplateRepository, WidgetTemplateRepository>();
+
             return services;
         }
     }

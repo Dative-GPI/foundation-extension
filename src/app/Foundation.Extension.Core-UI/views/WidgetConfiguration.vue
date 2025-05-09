@@ -86,11 +86,10 @@ import type { JTDSchemaType } from "ajv/dist/types/jtd-schema";
 import { useRoute } from 'vue-router';
 
 import { useExtensionCommunicationBridge } from '@dative-gpi/foundation-extension-shared-ui';
-
-import type { DashboardSettings, Widget, WidgetTemplateInfos } from "@dative-gpi/foundation-core-domain/models";
+import { useWidgetProvider } from '@dative-gpi/foundation-extension-shared-ui/components/widgets/provider';
 
 import FEDialog from '@dative-gpi/foundation-extension-shared-ui/components/FEDialog.vue';
-import { useWidgetProvider } from '../composables';
+import type { DashboardSettings, Widget, WidgetTemplateInfos } from "@dative-gpi/foundation-core-domain/models";
 
 export default defineComponent({
   name: "WidgetConfiguration",
@@ -99,7 +98,7 @@ export default defineComponent({
   },
   setup() {
     const { subscribe, notify, unsubscribe } = useExtensionCommunicationBridge();
-    const { getWidgetConfiguration } = useWidgetProvider();
+    const { get: getWidgetConfiguration } = useWidgetProvider();
     const route = useRoute();
 
     const width = ref(0);

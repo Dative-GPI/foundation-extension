@@ -22,8 +22,8 @@ import { computed, defineComponent, onMounted, onUnmounted, ref } from "vue";
 import type { JTDSchemaType } from "ajv/dist/types/jtd-schema";
 
 import { useRoute } from "vue-router";
-import { useWidgetProvider } from '@dative-gpi/foundation-extension-core-ui';
 import { useExtensionCommunicationBridge } from '@dative-gpi/foundation-extension-shared-ui';
+import { useWidgetProvider } from '@dative-gpi/foundation-extension-shared-ui/components/widgets/provider';
 
 import type { DashboardSettings } from "@dative-gpi/foundation-core-domain/models";
 
@@ -31,7 +31,7 @@ export default defineComponent({
   name: "WidgetView",
   setup() {
     const { subscribe, notify, unsubscribe } = useExtensionCommunicationBridge();
-    const { getWidget } = useWidgetProvider();
+    const { get: getWidget } = useWidgetProvider();
     const route = useRoute();
 
     const meta = ref<object | null>(null);

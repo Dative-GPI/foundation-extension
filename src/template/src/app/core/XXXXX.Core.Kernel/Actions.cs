@@ -19,17 +19,21 @@ namespace XXXXX.Core.Kernel
             // Example
             // new ActionDefinition()
             // {
-            //     Authorizations = Array.Empty<string>(),
-            //     LabelCode = "ui.devices.action",
-            //     LabelDefault = "Action",
-            //     Icon = "mdi-wifi",
-            //     RouteTemplate = "/organisations/{organisationId}/device-organisations",
-            //     ActionType = ActionType.OpenDrawer,
-            //     ComputePath = (dico, sp) =>
+            //     LabelCode = "ui.action.documentation-link",
+            //     LabelDefault = "Documentation",
+            //     Icon = "mdi-information-outline",
+            //     Color = "#00D000",
+            //     RouteTemplate = "/organisations/{organisationId}/device-organisations/{deviceOrganisationId}",
+            //     ActionType = ActionType.OpenTabs,
+            //     Uri = "https://doc.bongard.fr",
+            //     ComputePath = async (dico, sp) =>
             //     {
-            //         return Task.FromResult($"/organisations/{Guid.Parse(dico["organisationId"])}/XXXXX/examples/action-dialog");
+            //         var ctx = sp.GetRequiredService<IRequestContextProvider>().Context;
+            //         var client = await sp.GetRequiredService<IFoundationClientFactory>().CreateAuthenticated(ctx.ApplicationId, ctx.LanguageCode, ctx.Jwt);
+            //         var device = await client.Core.DeviceOrganisations.Get(Guid.Parse(dico["deviceOrganisationId"]), ctx.OrganisationId.Value);
+            //         return $"{device.Code}&{device.ArticleCode}";
             //     }
-            // },
+            // }
         };
 
 		public static IEnumerable<ActionDefinition> GetActions()

@@ -9,5 +9,6 @@ namespace Foundation.Extension.Core.ViewModels
         public string Label { get; set; }
         public string Icon { get; set; }
         public string Uri { get; set; }
+        public string Color { get; set; }
     }
 }

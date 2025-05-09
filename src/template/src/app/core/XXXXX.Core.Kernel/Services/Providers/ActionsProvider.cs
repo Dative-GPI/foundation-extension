@@ -66,6 +66,7 @@ namespace XXXXX.Core.Kernel.Services.Providers
             {
                 ActionType = a.Action.ActionType,
                 Icon = a.Action.Icon,
+                Color = a.Action.Color,
                 Label = t.FirstOrDefault()?.Value ?? a.Action.LabelDefault,
                 Path = a.Path,
                 Uri = a.Action.Uri

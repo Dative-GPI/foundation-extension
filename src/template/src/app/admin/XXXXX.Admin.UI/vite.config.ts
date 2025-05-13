@@ -13,6 +13,7 @@ export default defineConfig({
     vuetify(),
     FoundationSharedAutoImport({ skipShared: false, skipCore: true, skipAdmin: false })
   ],
+  define: { 'process.env': {} },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

@@ -5,6 +5,9 @@
     :modelValue="$props.meta.label"
     @update:modelValue="$emit('update:meta', {...$props.meta, label: $event})"
   />
+
+  Dashboard settings: 
+  {{ $props.settings }}
 </template>
 
 <script lang="ts">
@@ -19,6 +22,11 @@ export default defineComponent({
       type: Object as PropType<ExampleMeta | null>,
       required: true
     },
+    settings: {
+      type: Object,
+      required: false,
+      default: () => ({})
+    }
   },
   emits: ['update:meta'],
   setup() {  

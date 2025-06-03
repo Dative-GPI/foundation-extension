@@ -133,6 +133,7 @@ export default defineComponent({
     const onReceiveNewConfig = (config: WidgetInfosPayload) => {
       widget.value = JSON.parse(config.widget);
 
+      dashboardSettings.value = JSON.parse(config.dashboardSettings);
       widgetTemplate.value = JSON.parse(config.widgetTemplate);
       showStandardOptions.value = config.showStandardOptions;
       showReset.value = config.showReset;

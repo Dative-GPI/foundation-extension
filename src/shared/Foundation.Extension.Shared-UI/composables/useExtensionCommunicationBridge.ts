@@ -102,9 +102,11 @@ export function useExtensionCommunicationBridge() {
 
   const notifyDebounced = _.debounce(notify, 50);
 
-  const goTo = (path: string) => {
+  const goTo = (path: string, force: boolean = false, reload: boolean = false) => {
     notify({
       path: path,
+      force: force,
+      reload: reload
     });
   }
 

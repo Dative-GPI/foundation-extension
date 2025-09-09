@@ -32,6 +32,10 @@ namespace Foundation.Extension.Admin.Middlewares
             {
                 languageCode = applicationLanguageCode.ToString();
             }
+            else if (request.Query.TryGetValue("languageCode", out var languageCodeQuery))
+            {
+                languageCode = languageCodeQuery.ToString();
+            }
             else if (request.Headers.TryGetValue("Accept-Language", out var browserLanguageCode))
             {
                 languageCode = browserLanguageCode.ToString().Split(",")[0].Split(";")[0];

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Foundation.Clients.Abstractions;
 using Foundation.Extension.Core.Abstractions;
 using Foundation.Extension.Domain.Repositories.Filters;
 using Foundation.Extension.Domain.Repositories.Interfaces;
@@ -65,9 +64,9 @@ namespace Foundation.Extension.Core.Tools
 					.ToList();
 			}
 
-			if (userOrganisation == default || !userOrganisation.RoleId.HasValue)
+			if (userOrganisation == null || !userOrganisation.RoleId.HasValue)
 			{
-				return new List<string>();
+				return Enumerable.Empty<string>();
 			}
 
 			List<string> permissions;

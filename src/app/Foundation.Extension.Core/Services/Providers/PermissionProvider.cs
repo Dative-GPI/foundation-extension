@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Foundation.Clients.Abstractions;
 using Foundation.Extension.Core.Abstractions;
 using Foundation.Extension.Domain.Repositories.Filters;
 using Foundation.Extension.Domain.Repositories.Interfaces;
@@ -50,22 +49,24 @@ namespace Foundation.Extension.Core.Tools
 		{
 			var context = _requestContextProvider.Context;
 			var organisationId = context.OrganisationId.Value;
+			var organisationTypeId = context.OrganisationTypeId.Value;
 
 			var client = await _foundationClientFactory.CreateAuthenticated(context.ApplicationId, context.LanguageCode, context.Jwt);
-			var foundationPermissions = await GetFoundationPermissions(client, organisationId);
+			var userOrganisation = await client.Core.UserOrganisations.GetCurrent(organisationId);
+			
+			var permissionOrganisationTypes = await GetPermissionOrganisationTypes(organisationTypeId);
 
-			var organisation = await client.Gateway.Organisations.Get(organisationId);
-			var permissionOrganisationTypes = await GetPermissionOrganisationTypes(organisation.OrganisationTypeId);
-
-			if (organisation.AdminId == context.ActorId)
+			if (userOrganisation.Admin)
 			{
-				return foundationPermissions.Concat(permissionOrganisationTypes).ToList();
+				return userOrganisation.Permissions
+					.Select(p => p.Code)
+					.Concat(permissionOrganisationTypes)
+					.ToList();
 			}
 
-			var userOrganisation = await client.Core.UserOrganisations.GetCurrent(organisationId);
-			if (userOrganisation == default || !userOrganisation.RoleId.HasValue)
+			if (userOrganisation == null || !userOrganisation.RoleId.HasValue)
 			{
-				return foundationPermissions;
+				return Enumerable.Empty<string>();
 			}
 
 			List<string> permissions;
@@ -84,15 +85,11 @@ namespace Foundation.Extension.Core.Tools
 
 			// Use of intersect to make sure that the permissions of a role is a subset of
 			// the permissions of an organisation type 
-			return foundationPermissions.Concat(
+			return userOrganisation.Permissions
+				.Select(p => p.Code)
+				.Concat(
 				permissions.Intersect(permissionOrganisationTypes).ToList()
 			).ToList();
-		}
-
-		private static async Task<IEnumerable<string>> GetFoundationPermissions(IFoundationClient client, Guid organisationId)
-		{
-			var permissions = await client.Core.Permissions.GetCurrent(organisationId);
-			return permissions.Select(permission => permission.Code).ToList();
 		}
 
 		private async Task<IEnumerable<string>> GetPermissionOrganisationTypes(Guid organisationTypeId)

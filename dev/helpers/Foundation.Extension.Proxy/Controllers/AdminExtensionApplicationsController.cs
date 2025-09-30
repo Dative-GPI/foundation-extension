@@ -59,8 +59,8 @@ namespace Foundation.Extension.Proxy.Controllers
 
 			var jwtResponse = await foundationClient.PostAsync(HttpContext, _foundationPrefix, "/api/shared/v1/pats", new
 			{
-				lifetime = 60 * 24 * 7, // one week
-				label = "Foundation.Extension.Proxy - Admin JWT",
+                lifetime = 7 * 24 * 60 * 60, // one week
+                label = "Foundation.Extension.Proxy - Admin JWT",
 			});
 
 			jwtResponse.EnsureSuccessStatusCode();

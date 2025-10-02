@@ -2,6 +2,7 @@ using System.Net.Http;
 using System.Collections.Generic;
 
 using Bones.AspNetCore;
+using Bones.Monitoring.Core;
 
 using Microsoft.AspNetCore.Builder;
 
@@ -13,6 +14,7 @@ using System.Net;
 using Yarp.ReverseProxy.Forwarder;
 using System.Diagnostics;
 using System;
+using Bones.Monitoring;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +30,8 @@ builder.Services.AddHttpClient(string.Empty, c => { }).ConfigurePrimaryHttpMessa
    }
 );
 builder.Services.AddScoped<LocalClient>();
+builder.Services.AddMonitoring("PROXY");
+builder.Services.AddSingleton(new ActivitySource("SOURCE:PROXY"));
 
 
 var app = builder.Build();

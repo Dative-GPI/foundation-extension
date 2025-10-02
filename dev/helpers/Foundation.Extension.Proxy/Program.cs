@@ -1,6 +1,8 @@
 using System.Net.Http;
 using System.Collections.Generic;
 
+using Bones.AspNetCore;
+
 using Microsoft.AspNetCore.Builder;
 
 using Microsoft.Extensions.Hosting;
@@ -37,6 +39,17 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseForwardedHeaders();
+
+
+// app.UseWhen(
+// 	ctx => ctx.Request.Path.StartsWithSegments("/api/shared"),
+// 	o =>
+// 	{
+// 		o.UseMiddleware<PostAsGetMiddleware>();
+// 	}
+// );
+
+app.UseMiddleware<PostAsGetMiddleware>();
 
 app.UseRouting();
 

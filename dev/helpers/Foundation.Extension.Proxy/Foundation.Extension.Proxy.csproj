@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Bones.AspNetCore" Version="1.0.9" />
     <PackageReference Include="Yarp.ReverseProxy" Version="2.0.1" />
     <PackageReference Include="Foundation.Clients" Version="2.0.12" />
   </ItemGroup>

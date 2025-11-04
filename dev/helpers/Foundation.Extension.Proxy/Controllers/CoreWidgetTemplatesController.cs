@@ -45,7 +45,7 @@ namespace Foundation.Extension.Proxy.Controllers
             var foundationResponse = await foundationClient.GetAsync(HttpContext, _foundationPrefix);
             var foundationContent = await foundationResponse.Content.ReadAsStringAsync();
             var foundationResult = JsonSerializer.Deserialize<List<JsonElement>>(foundationContent);
-            result.AddRange(foundationResult);
+            result.AddRange(foundationResult.Where(f => f.GetProperty("type").GetInt32() == (int)WidgetTemplateType.Foundation));
 
 
             var localResult = await _localClient.Get<List<JsonElement>>(HttpContext, "/api/core/v1/organisations/" + organisationId + "/widget-templates");

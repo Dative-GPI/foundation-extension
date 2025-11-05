@@ -20,6 +20,7 @@ namespace Foundation.Extension.Proxy.Controllers
         private IHttpClientFactory _httpClientFactory;
         private string _foundationPrefix;
         private string _localPrefix;
+        private bool _enableInstalledExtensions;
         private LocalClient _localClient;
 
         public CoreWidgetTemplatesController(
@@ -30,6 +31,7 @@ namespace Foundation.Extension.Proxy.Controllers
             _httpClientFactory = httpClientFactory;
             _foundationPrefix = configuration.GetConnectionString("Foundation");
             _localPrefix = configuration.GetConnectionString("Local");
+            _enableInstalledExtensions = configuration.GetValue<bool>("EnableInstalledExtensions", true);
             _localClient = localClient;
         }
 
@@ -51,6 +53,11 @@ namespace Foundation.Extension.Proxy.Controllers
             var localResult = await _localClient.Get<List<JsonElement>>(HttpContext, "/api/core/v1/organisations/" + organisationId + "/widget-templates");
             var localUrl = new Uri(_localPrefix);
             var localHost = localUrl.Host;
+
+            if (!_enableInstalledExtensions)
+            {
+                foundationResult.RemoveAll(f => f.GetProperty("type").GetInt32() == (int)WidgetTemplateType.Extension);
+            }
 
             result.AddRange(localResult.Select(l => JsonSerializer.SerializeToElement(new
             {

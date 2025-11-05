@@ -47,17 +47,16 @@ namespace Foundation.Extension.Proxy.Controllers
             var foundationResponse = await foundationClient.GetAsync(HttpContext, _foundationPrefix);
             var foundationContent = await foundationResponse.Content.ReadAsStringAsync();
             var foundationResult = JsonSerializer.Deserialize<List<JsonElement>>(foundationContent);
-            result.AddRange(foundationResult.Where(f => f.GetProperty("type").GetInt32() == (int)WidgetTemplateType.Foundation));
-
-
-            var localResult = await _localClient.Get<List<JsonElement>>(HttpContext, "/api/core/v1/organisations/" + organisationId + "/widget-templates");
-            var localUrl = new Uri(_localPrefix);
-            var localHost = localUrl.Host;
 
             if (!_enableInstalledExtensions)
             {
                 foundationResult.RemoveAll(f => f.GetProperty("type").GetInt32() == (int)WidgetTemplateType.Extension);
             }
+            result.AddRange(foundationResult);
+
+            var localResult = await _localClient.Get<List<JsonElement>>(HttpContext, "/api/core/v1/organisations/" + organisationId + "/widget-templates");
+            var localUrl = new Uri(_localPrefix);
+            var localHost = localUrl.Host;            
 
             result.AddRange(localResult.Select(l => JsonSerializer.SerializeToElement(new
             {

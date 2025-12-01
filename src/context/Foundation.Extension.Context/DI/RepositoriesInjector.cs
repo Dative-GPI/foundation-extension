@@ -14,6 +14,7 @@ namespace Foundation.Extension.Context.DI
             services.AddScoped<IApplicationRepository, ApplicationRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
             services.AddScoped<IFileRepository, FileRepository>();
+            services.AddScoped<ISecretRepository, SecretRepository>();
 
             services.AddScoped<IPageRepository, PageRepository>();
 

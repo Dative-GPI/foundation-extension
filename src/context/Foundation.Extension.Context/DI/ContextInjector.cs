@@ -1,6 +1,12 @@
+using System;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+
+using Azure.Security.KeyVault.Certificates;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 
 using Bones.Flow;
 
@@ -17,6 +23,7 @@ namespace Foundation.Extension.Context.DI
             services.Configure<FileConfiguration>(configuration.GetSection("Files"));
 
             services.AddRepositories();
+            services.AddVault(configuration);
 
             services.AddDbContext<TContext>(options =>
             {
@@ -30,6 +37,22 @@ namespace Foundation.Extension.Context.DI
 
             services.AddScoped<IImageHelper, ImageHelper>();
             services.AddScoped<IBinaryStorage, BinaryStorage>();
+
+            return services;
+        }
+
+        private static IServiceCollection AddVault(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddScoped<CertificateClient>(sp =>
+            {
+                var connstr = configuration.GetConnectionString("AZURE_KEY_VAULT");
+                return new CertificateClient(new Uri(connstr), new DefaultAzureCredential());
+            });
+
+            services.AddScoped<SecretClient>(sp => {            
+                var connstr = configuration.GetConnectionString("AZURE_KEY_VAULT");
+                return new SecretClient(new Uri(connstr), new DefaultAzureCredential());
+            });
 
             return services;
         }

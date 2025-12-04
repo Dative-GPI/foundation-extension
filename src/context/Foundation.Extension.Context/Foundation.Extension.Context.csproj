@@ -5,6 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.17.0" />
+    <PackageReference Include="Azure.Security.KeyVault.Certificates" Version="4.8.0" />
+    <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.8.0" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.17.0" />
     <PackageReference Include="Blurhash.ImageSharp" Version="3.0.0" />
     <PackageReference Include="Bones" Version="1.0.10" />

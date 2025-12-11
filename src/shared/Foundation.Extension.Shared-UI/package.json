@@ -1,5 +1,8 @@
 {
   "name": "@dative-gpi/foundation-extension-shared-ui",
+  "repository" : {
+      "url": "https://github.com/Dative-GPI/foundation-extension.git"
+  },
   "version": "1.0.0",
   "description": "",
   "publishConfig": {

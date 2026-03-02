@@ -45,7 +45,7 @@ namespace Foundation.Extension.Core.Handlers
 
 			var client = await _foundationClientFactory.CreateAuthenticated(context.ApplicationId, context.LanguageCode, context.Jwt);
 
-            var userOrganisation = await client.Core.UserOrganisations.Get(context.ActorOrganisationId.Value, organisationId);
+            var userOrganisation = await client.Core.UserOrganisations.GetCurrent(organisationId);
 			var organisation = await client.Gateway.Organisations.Get(organisationId);
 
             if (userOrganisation == null || (!userOrganisation.RoleId.HasValue && userOrganisation.UserId != organisation.AdminId))

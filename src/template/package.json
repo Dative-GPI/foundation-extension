@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "src/app/admin/XXXXX.Admin-UI",
+    "src/app/core/XXXXX.Core.UI"
+  ]
+}

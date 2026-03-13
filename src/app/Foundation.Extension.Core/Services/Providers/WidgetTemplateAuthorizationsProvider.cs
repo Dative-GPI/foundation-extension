@@ -1,12 +1,16 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Foundation.Extension.Core.Abstractions;
-using Foundation.Extension.Core.Models;
+using Foundation.Extension.Domain.Models;
 
 namespace Foundation.Extension.Core.Services.Providers
 {
     public class WidgetTemplateAuthorizationsProvider : IWidgetTemplateAuthorizationsProvider
     {
-        public IEnumerable<WidgetTemplateDefinition> Definitions => new List<WidgetTemplateDefinition>();
+        public Task<IEnumerable<WidgetTemplateInfos>> FilterAsync(IEnumerable<WidgetTemplateInfos> widgetTemplates)
+        {
+            return Task.FromResult(widgetTemplates);
+        }
     }
 }

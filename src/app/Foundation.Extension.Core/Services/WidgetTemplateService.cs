@@ -18,17 +18,20 @@ namespace Foundation.Extension.Core.Services
     {
         private readonly RequestContext _requestContext;
         private readonly IQueryHandler<WidgetTemplatesQuery, IEnumerable<WidgetTemplateInfos>> _widgetTemplatesQueryHandler;
+        private readonly IWidgetTemplateAuthorizationsProvider _widgetTemplateAuthorizationsProvider;
         private readonly IMapper _mapper;
 
         public WidgetTemplateService
         (
             IRequestContextProvider requestContextProvider,
             IQueryHandler<WidgetTemplatesQuery, IEnumerable<WidgetTemplateInfos>> widgetTemplatesQueryHandler,
+            IWidgetTemplateAuthorizationsProvider widgetTemplateAuthorizationsProvider,
             IMapper mapper
         )
         {
             _requestContext = requestContextProvider.Context;
             _widgetTemplatesQueryHandler = widgetTemplatesQueryHandler;
+            _widgetTemplateAuthorizationsProvider = widgetTemplateAuthorizationsProvider;
             _mapper = mapper;
         }
 
@@ -36,7 +39,8 @@ namespace Foundation.Extension.Core.Services
         {
             var query = new WidgetTemplatesQuery()
             {
-                Search = filter.Search
+                Search = filter.Search,
+                Authorizations = _widgetTemplateAuthorizationsProvider.Authorizations
             };
             
             var result = await _widgetTemplatesQueryHandler.HandleAsync(query);

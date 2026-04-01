@@ -7,7 +7,7 @@
     <Title>Application Dative-gpi extension</Title>
     <Authors>Dative</Authors>
     <Description>Templates to use when creating an application extension for Dative Foundation</Description>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
 
     <IncludeContentInPack>true</IncludeContentInPack>
     <IncludeBuildOutput>false</IncludeBuildOutput>

@@ -16,7 +16,7 @@ RUN find . -type d -empty -delete
 
 # ----------------------------------------
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 as nuget-build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 as nuget-build
 
 ARG TEMPLATE_VERSION
 ENV TEMPLATE_VERSION=$TEMPLATE_VERSION
@@ -53,7 +53,7 @@ RUN find . -type d -empty -delete
 
 # ----------------------------------------
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0
+FROM mcr.microsoft.com/dotnet/sdk:10.0
 
 # install debugger for NET Core
 RUN curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l ~/vsdbg

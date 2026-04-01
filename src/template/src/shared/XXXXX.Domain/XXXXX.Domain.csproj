@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bones" Version="1.0.10"/>
+    <PackageReference Include="Bones" Version="1.1.0"/>
     <PackageReference Include="Foundation.Clients" Version="2.0.12"/>
   </ItemGroup>
 

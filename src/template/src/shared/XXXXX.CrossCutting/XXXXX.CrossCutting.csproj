@@ -1,21 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="Flurl" Version="3.0.6"/>
-    <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0"/>
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0"/>
+    <PackageReference Include="Flurl" Version="3.0.6" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\XXXXX.Domain\XXXXX.Domain.csproj"/>
+    <ProjectReference Include="..\XXXXX.Domain\XXXXX.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Foundation.Clients" Version="2.0.12"/>
+    <PackageReference Include="Foundation.Clients" Version="2.0.12" />
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
 </Project>

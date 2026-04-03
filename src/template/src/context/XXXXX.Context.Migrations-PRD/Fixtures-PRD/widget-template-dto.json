@@ -8,6 +8,7 @@
         "LabelDefault": "Extension",
         "DescriptionDefault": "Widget from an extension",
         "DefaultMeta": {
+            "hideBorders": "false",
             "label": "Label par défaut"
         },
         "Translations": [
@@ -20,6 +21,21 @@
                 "Label": "An extension",
                 "Description": "Extensions widgets.",
                 "LanguageCode": "en-GB"
+            },
+            {
+                "Label": "Una extensión",
+                "Description": "Widget de una extensión.",
+                "LanguageCode": "es-ES"
+            },
+            {
+                "Label": "Eine Erweiterung",
+                "Description": "Widget von einer Erweiterung.",
+                "LanguageCode": "de-DE"
+            }, 
+            {
+                "Label": "Un'estensione",
+                "Description": "Widget da un'estensione.",
+                "LanguageCode": "it-IT"
             }
         ],
         "Search": "Extensions",

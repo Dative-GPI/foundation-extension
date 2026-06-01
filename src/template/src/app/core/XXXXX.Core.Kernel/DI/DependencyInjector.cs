@@ -27,6 +27,7 @@ namespace XXXXX.Core.Kernel.DI
         {
             services.AddScoped<IRoutesProvider, RoutesProvider>();
             services.AddScoped<IActionsProvider, ActionsProvider>();
+            services.AddScoped<IWidgetTemplateAuthorizationsProvider, WidgetTemplateAuthorizationsProvider>();
 
             return services;
         }

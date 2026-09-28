@@ -55,7 +55,7 @@ export default defineComponent({
     }
 
     watch(router.currentRoute, () => {
-      serviceAccountRoleOrganisationId.value = router.currentRoute.value.params["serviceAccountRoleOrganisationId"] as string | null;
+      serviceAccountRoleOrganisationId.value = router.currentRoute.value.params["serviceAccountRoleOrganisation"] as string | null;
       if (serviceAccountRoleOrganisationId.value) {
         getServiceAccountRoleOrganisation(serviceAccountRoleOrganisationId.value);
       }

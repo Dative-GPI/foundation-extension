@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,13 +16,16 @@ namespace Foundation.Extension.Core.Handlers
     public class WidgetTemplatesQueryHandler : IMiddleware<WidgetTemplatesQuery, IEnumerable<WidgetTemplateInfos>>
     {
         private readonly IWidgetTemplateRepository _widgetTemplateRepository;
+        private readonly IWidgetTemplateAuthorizationsProvider _widgetTemplateAuthorizationsProvider;
 
         public WidgetTemplatesQueryHandler
         (
-            IWidgetTemplateRepository widgetTemplateRepository
+            IWidgetTemplateRepository widgetTemplateRepository,
+            IWidgetTemplateAuthorizationsProvider widgetTemplateAuthorizationsProvider
         )
         {
             _widgetTemplateRepository = widgetTemplateRepository;
+            _widgetTemplateAuthorizationsProvider = widgetTemplateAuthorizationsProvider;
         }
 
         public async Task<IEnumerable<WidgetTemplateInfos>> HandleAsync(WidgetTemplatesQuery request, Func<Task<IEnumerable<WidgetTemplateInfos>>> next, CancellationToken cancellationToken)
@@ -33,9 +35,9 @@ namespace Foundation.Extension.Core.Handlers
                 Search = request.Search
             };
 
-            var WidgetTemplates = await _widgetTemplateRepository.GetMany(filter);
+            var widgetTemplates = await _widgetTemplateRepository.GetMany(filter);
 
-            return WidgetTemplates;
+            return await _widgetTemplateAuthorizationsProvider.FilterAsync(widgetTemplates);
         }
     }
 }

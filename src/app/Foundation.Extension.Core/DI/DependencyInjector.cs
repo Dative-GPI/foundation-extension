@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Configuration;
 
 using Bones.Flow;
@@ -8,6 +9,7 @@ using Foundation.Extension.CrossCutting.DI;
 using Foundation.Extension.Core.Abstractions;
 using Foundation.Extension.Core.Tools;
 using Foundation.Extension.Core.Providers;
+using Foundation.Extension.Core.Services.Providers;
 
 namespace Foundation.Extension.Core.DI
 {
@@ -39,6 +41,7 @@ namespace Foundation.Extension.Core.DI
             services.AddScoped<IPermissionProvider, PermissionProvider>();
             services.AddScoped<IApplicationTableProvider, ApplicationTableProvider>();
             services.AddScoped<IOrganisationTypeTableProvider, OrganisationTypeTableProvider>();
+            services.TryAddScoped<IWidgetTemplateAuthorizationsProvider, WidgetTemplateAuthorizationsProvider>();
 
             return services;
         }
